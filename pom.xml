@@ -7,11 +7,11 @@
 		<version>2.3.4.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.hello</groupId>
-	<artifactId>conference-demo</artifactId>
+	<groupId>com.example</groupId>
+	<artifactId>e-bank</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>conference-demo</name>
-	<description>Demo project for Spring Boot</description>
+	<name>e-bank</name>
+	<description>Example e-bank project for Spring Boot</description>
 
 	<properties>
 		<java.version>11</java.version>

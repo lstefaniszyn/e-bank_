@@ -1,13 +1,13 @@
-package com.hello.conferencedemo;
+package com.example.ebank;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ConferenceDemoApplication {
+public class EBankApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ConferenceDemoApplication.class, args);
+		SpringApplication.run(EBankApplication.class, args);
 	}
 
 }

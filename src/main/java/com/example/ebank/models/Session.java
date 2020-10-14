@@ -1,4 +1,4 @@
-package com.hello.conferencedemo.models;
+package com.example.ebank.models;
 
 import java.util.List;
 

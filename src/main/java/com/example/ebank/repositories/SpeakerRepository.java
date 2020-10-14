@@ -1,6 +1,6 @@
-package com.hello.conferencedemo.repositories;
+package com.example.ebank.repositories;
 
-import com.hello.conferencedemo.models.Speaker;
+import com.example.ebank.models.Speaker;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

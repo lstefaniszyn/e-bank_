@@ -1,9 +1,9 @@
-package com.hello.conferencedemo.controllers;
+package com.example.ebank.controllers;
 
 import java.util.List;
 
-import com.hello.conferencedemo.models.Session;
-import com.hello.conferencedemo.repositories.SessionRepository;
+import com.example.ebank.models.Session;
+import com.example.ebank.repositories.SessionRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
