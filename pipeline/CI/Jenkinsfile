@@ -1,0 +1,28 @@
+node{
+
+    stage('Checkout code'){
+        git branch: 'main', url: 'https://github.com/lstefaniszyn/e-bank_.git'
+    }
+
+
+    docker.image('maven:3.6.3-openjdk-11').inside(''){
+        stage('Compile'){
+            sh 'mvn compile'
+        }
+        stage('Test'){
+            sh 'mvn test'
+            junit 'target/surefire-reports/*.xml'
+        }
+    }
+
+    stage('Static analysis') {
+        echo 'TODO: Static analysis'
+    }
+    stage('Security scan') {
+        echo 'TODO: Security scan'
+    }
+    stage('Build docker image') {
+        echo 'TODO: Build docker image'
+    }
+
+}
