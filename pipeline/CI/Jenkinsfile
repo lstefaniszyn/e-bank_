@@ -5,7 +5,7 @@ node{
     }
 
 
-    docker.image('maven:3.6.3-openjdk-11').inside(''){
+    docker.image('maven:3.6.3-openjdk-11').inside{
         stage('Compile'){
             sh 'mvn compile'
         }
@@ -16,13 +16,23 @@ node{
     }
 
     stage('Static analysis') {
-        echo 'TODO: Static analysis'
+        docker.image('rawdee/pmd:latest').inside('-v $PWD/src/main/java:/src'){
+            sh(script: 'pmd -language java -dir . -rulesets rulesets/java/quickstart.xml -f html > pmd.html', returnStdout: true)
+            // TODO: publishHTML report (plugin not available on Jenkins)
+        }
+        // TODO: checkstyle (plugin not available on Jenkins)
+        // TODO: findbugs (plugin not available on Jenkins)
     }
     stage('Security scan') {
         echo 'TODO: Security scan'
     }
+    docker.image('maven:3.6.3-openjdk-11').inside{
+        stage('Package'){
+            sh 'mvn package -DskipTests=true'
+        }
+    }
     stage('Build docker image') {
-        echo 'TODO: Build docker image'
+        docker.build('ebank:latest', './docker/Dockerfile')
     }
 
 }
