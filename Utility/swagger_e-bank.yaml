@@ -1,0 +1,211 @@
+openapi: 3.0.1
+info:
+  title: Swagger E-Banking
+  description: >-
+    This is E-banking server.
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    email: lukasz.stefaniszyn@capgemini.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 1.0.0
+servers:
+  - url: 'http://TEST.capgemini.com/v1'
+tags:
+  - name: client
+    description: Operations about client
+  - name: account
+    description: Operations about account
+paths:
+  '/clients':
+    get:
+      tags:
+        - client
+      summary: Get all clients
+      operationId: getClients
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Client'
+        '400':
+          description: Invalid client id supplied
+          content: {}
+        '404':
+          description: Client not found
+          content: {}
+  '/clients/{id}':
+    get:
+      tags:
+        - client
+      summary: Get client by id
+      operationId: getClientById
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched. Use "1" for testing. '
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Client'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+        '400':
+          description: Invalid client id supplied
+          content: {}
+        '404':
+          description: Client not found
+          content: {}
+  '/clients/{id}/accounts':
+    get:
+      tags:
+        - account
+      summary: Get client's accounts
+      operationId: getClientAccounts
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched. Use "1" for testing. '
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+        '400':
+          description: Invalid client id supplied
+          content: {}
+        '404':
+          description: Client not found
+          content: {}        
+  '/clients/{id}/accounts/{idAccount}/transactions':
+    get:
+      tags:
+        - account
+      summary: Get account's transactions 
+      operationId: getAccountTransactions
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched. Use "1" for testing. '
+          required: true
+          schema:
+            type: string
+        - name: idAccount
+          in: path
+          description: 'The idAccount that needs to be fetched. Use "1" for testing. '
+          required: true
+          schema:
+            type: string    
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        '400':
+          description: Invalid client id supplied
+          content: {}
+        '404':
+          description: Client not found
+          content: {}        
+components:
+  schemas:
+    Currency:
+      type: object
+      properties:
+        name:
+          type: string
+          description: like, Euro
+        code:
+          type: string
+          description: like, EUR
+      xml:
+        name: Currency
+    Account:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        currency:
+          $ref: '#/components/schemas/Currency'
+      xml:
+        name: Account
+    Client:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        givenName:
+          type: string
+          description: https://schema.org/givenName
+        familyName:
+          type: string
+          description: https://schema.org/familyName
+        accounts:
+          type: array
+          xml:
+            name: account
+            wrapped: false
+          items:
+            $ref: '#/components/schemas/Account'
+      xml:
+        name: User
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        value:
+          type: object
+          properties:
+            amount:
+              type: integer
+              format: int64
+            currency:
+              $ref: '#/components/schemas/Currency'
+        iban:
+          type: string
+        date:
+          type: string
+          format: date-time
+        description:
+          type: string
+      xml:
+        name: Transaction
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
