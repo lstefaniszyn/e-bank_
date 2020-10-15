@@ -10,10 +10,10 @@ public class Account {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "customerid", nullable = false)
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @Column(name = "IBAN", length = 50)
+    @Column(name = "iban", length = 50)
     private String iban;
 
     @Enumerated(EnumType.STRING)

@@ -12,10 +12,10 @@ public class Customer {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "cust_name", length = 250)
+    @Column(name = "name", length = 250)
     private String name;
 
-    @Column(name = "identityKey", length = 50)
+    @Column(name = "identity_key", length = 50)
     private String identityKey;
 
     public Long getId() {
