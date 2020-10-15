@@ -1,7 +1,7 @@
 node{
 
     stage('Checkout code'){
-        git branch: 'main', url: 'https://github.com/lstefaniszyn/e-bank_.git', credentialsId: '6a24fa14-5cfa-4e86-916f-a4d58bd60add'
+        git branch: "${BRANCH_NAME}", url: 'https://github.com/lstefaniszyn/e-bank_.git', credentialsId: '6a24fa14-5cfa-4e86-916f-a4d58bd60add'
     }
 
 
