@@ -17,7 +17,7 @@ node{
 
     stage('Static analysis') {
         docker.image('rawdee/pmd:latest').inside('-v $PWD/src/main/java:/src'){
-            sh(script: 'pmd -language java -dir . -rulesets rulesets/java/quickstart.xml -f html > pmd.html', returnStdout: true)
+            sh(script: 'pmd -language java -dir . -rulesets rulesets/java/quickstart.xml -f html > pmd.html', returnStatus: true)
             // TODO: publishHTML report (plugin not available on Jenkins)
         }
         // TODO: checkstyle (plugin not available on Jenkins)
