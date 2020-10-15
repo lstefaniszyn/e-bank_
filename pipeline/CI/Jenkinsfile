@@ -32,7 +32,7 @@ node{
         }
     }
     stage('Build docker image') {
-        docker.build('ebank:latest', './docker/Dockerfile')
+        docker.build('ebank:latest', '-f ./docker/Dockerfile .')
     }
 
 }
