@@ -1,30 +1,29 @@
 package com.example.ebank.models;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 @Entity
 public class Account {
 
     @Id
     @GeneratedValue
-    private UUID id;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
+    @JoinColumn(name = "customerid", nullable = false)
     private Customer customer;
 
-    @Column(name = "iban", length = 50)
+    @Column(name = "IBAN", length = 50)
     private String iban;
 
     @Enumerated(EnumType.STRING)
     private Currency currency;
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

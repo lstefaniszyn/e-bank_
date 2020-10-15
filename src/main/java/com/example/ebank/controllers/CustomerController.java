@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/customers")
@@ -26,7 +25,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public Customer get(@PathVariable UUID id) {
+    public Customer get(@PathVariable Long id) {
         return customerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
