@@ -15,6 +15,15 @@
 
 	<properties>
 		<java.version>11</java.version>
+		<mrchecker-core-module.version>5.7.0.1</mrchecker-core-module.version>
+		<mrchecker-webapi-module.version>1.2.4</mrchecker-webapi-module.version>
+		<allure-junit5.version>2.13.3</allure-junit5.version>
+		<allure-java-commons.version>2.13.3</allure-java-commons.version>
+		<allure-junit-platform.version>2.13.3</allure-junit-platform.version>
+		<allure-maven.version>2.10.0</allure-maven.version>
+		<allure-attachments.version>2.13.3</allure-attachments.version>
+		<maven-site-plugin.version>3.7.1</maven-site-plugin.version>
+		<allure-cli-runner.version>2.10.0</allure-cli-runner.version>
 	</properties>
 
 	<dependencies>
@@ -45,6 +54,60 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.capgemini.mrchecker</groupId>
+			<artifactId>mrchecker-core-module</artifactId>
+			<version>${mrchecker-core-module.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.capgemini.mrchecker</groupId>
+			<artifactId>mrchecker-webapi-module</artifactId>
+			<version>${mrchecker-webapi-module.version}</version>
+		</dependency>
+
+		<dependency>
+			<!-- Test listener. Binds Junit exec to Allure annotation -->
+			<groupId>io.qameta.allure</groupId>
+			<artifactId>allure-junit5</artifactId>
+			<version>${allure-junit5.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<!-- Test listener. Binds Junit exec to Allure annotation -->
+			<groupId>io.qameta.allure</groupId>
+			<artifactId>allure-junit-platform</artifactId>
+			<version>${allure-junit-platform.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<!-- Test listener. Binds Junit exec to Allure annotation -->
+			<groupId>io.qameta.allure</groupId>
+			<artifactId>allure-maven</artifactId>
+			<version>${allure-maven.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>io.qameta.allure</groupId>
+			<artifactId>allure-java-commons</artifactId>
+			<version>${allure-java-commons.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.qameta.allure</groupId>
+			<artifactId>allure-attachments</artifactId>
+			<version>${allure-attachments.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -52,6 +115,30 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
+				<configuration>
+					<systemPropertyVariables>
+						<allure.results.directory>target/allure-results</allure.results.directory>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>${maven-site-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>io.qameta.allure</groupId>
+				<artifactId>allure-maven</artifactId>
+				<version>2.10.0</version>
+				<configuration>
+					<!-- Url to download Allure report CLI https://bintray.com/qameta/generic/allure2 -->
+					<reportVersion>${allure-cli-runner.version}</reportVersion>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
