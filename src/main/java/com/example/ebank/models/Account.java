@@ -1,5 +1,7 @@
 package com.example.ebank.models;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,6 +14,9 @@ public class Account {
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
+
+    @OneToMany(mappedBy = "account")
+    private List<Transaction> transactions;
 
     @Column(name = "iban", length = 50)
     private String iban;
@@ -50,4 +55,19 @@ public class Account {
     public void setCurrency(Currency currency) {
         this.currency = currency;
     }
+
+    /**
+     * @return List<Transaction> return the transactions
+     */
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    /**
+     * @param transactions the transactions to set
+     */
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
 }
