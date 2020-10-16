@@ -4,7 +4,7 @@ import com.example.ebank.models.Account;
 import com.example.ebank.repositories.AccountRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public class AccountService {
@@ -19,7 +19,7 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
-    public Optional<Account> findOne(Long id) {
-        return accountRepository.findById(id);
+    public Account getOne(Long id) {
+        return accountRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 }
