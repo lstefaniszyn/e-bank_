@@ -5,14 +5,19 @@ node{
     }
 
 
-    docker.image('maven:3.6.3-openjdk-11').inside{
-        stage('Compile'){
+    stage('Compile'){
+        docker.image('maven:3.6.3-openjdk-11').inside{
             sh 'mvn compile'
         }
-        stage('Test'){
+    }
+    stage('Test'){
+        docker.image('maven:3.6.3-openjdk-11').inside{
             sh 'mvn test'
             junit 'target/surefire-reports/*.xml'
+            stash includes: 'target/allure-results/*', name: 'allure-results'
         }
+        unstash 'allure-results'
+        allure includeProperties: true, jdk: '', report: 'target/site/allure-report', results: [[path: 'target/allure-results']]
     }
 
     stage('Static analysis') {
