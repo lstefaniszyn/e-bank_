@@ -4,7 +4,7 @@ import com.example.ebank.models.Customer;
 import com.example.ebank.repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public class CustomerService {
@@ -19,7 +19,7 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
-    public Optional<Customer> findOne(Long id) {
-        return customerRepository.findById(id);
+    public Customer getOne(Long id) {
+        return customerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 }
