@@ -16,7 +16,7 @@ CREATE TABLE public.account
     iban character varying(250),
     currency character varying(3),
     PRIMARY KEY (id),
-    CONSTRAINT cust_fk FOREIGN KEY (customer_id) REFERENCES public.customer (id) 
+    CONSTRAINT cust_fk FOREIGN KEY (customer_id) REFERENCES public.customer (id)
 );
 ALTER TABLE public.account  OWNER to postgres;
 
@@ -33,5 +33,7 @@ CREATE TABLE public."accountTransaction"
     CONSTRAINT account_fk FOREIGN KEY (account_id) REFERENCES public.account (id)
 );
 ALTER TABLE public."accountTransaction" OWNER to postgres;
+
+ALTER TABLE public."accountTransaction" RENAME TO account_transaction;
 
 commit;
