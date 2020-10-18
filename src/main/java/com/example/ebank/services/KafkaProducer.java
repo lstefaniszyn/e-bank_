@@ -18,7 +18,7 @@ public class KafkaProducer {
 	@Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    @Value(value = "${default.kafka.topic.name}")
+    @Value(value = "${default.kafka.input.topic.name}")
     private String _TOPIC;
     
     public void sendMessage(String message) {

@@ -18,6 +18,27 @@ tags:
   - name: account
     description: Operations about account
 paths:
+  '/api':
+    get:
+      tags:
+        - app
+      summary: Get API status
+      operationId: getStatus
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/AppStatus'
+        '400':
+          description: Error
+          content: {}
+        '404':
+          description: Error
+          content: {}
   '/clients':
     get:
       tags:
@@ -176,6 +197,14 @@ components:
             $ref: '#/components/schemas/Account'
       xml:
         name: User
+    AppStatus:
+      type: object
+      properties:
+        app-version:
+          type: string
+          description: https://schema.org/version
+      xml:
+        name: AppStatus    
     Transaction:
       type: object
       properties:

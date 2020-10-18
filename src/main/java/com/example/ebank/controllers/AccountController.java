@@ -12,36 +12,36 @@ import io.swagger.annotations.*;
 
 @Api(value = "accounts", description = "the clients API")
 @RestController
-@RequestMapping("/v1/accounts")
+@RequestMapping("/api/v1/accounts")
 public class AccountController {
 
-    private final AccountService accountService;
+        private final AccountService accountService;
 
-    public AccountController(AccountService accountService) {
-        this.accountService = accountService;
-    }
+        public AccountController(AccountService accountService) {
+                this.accountService = accountService;
+        }
 
-    @ApiOperation(value = "Get client's accounts", nickname = "list", notes = "", response = Account.class, responseContainer = "List", tags = {
-            "account", })
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful operation", response = Account.class, responseContainer = "List"),
-            @ApiResponse(code = 400, message = "Invalid client id supplied"),
-            @ApiResponse(code = 404, message = "Client not found") })
-    @RequestMapping(value = "/", produces = { "application/json" }, method = RequestMethod.GET)
-    public Iterable<Account> list() {
-        return accountService.getAll();
-    }
+        @ApiOperation(value = "Get client's accounts", nickname = "list", notes = "", response = Account.class, responseContainer = "List", tags = {
+                        "account", })
+        @ApiResponses(value = {
+                        @ApiResponse(code = 200, message = "successful operation", response = Account.class, responseContainer = "List"),
+                        @ApiResponse(code = 400, message = "Invalid client id supplied"),
+                        @ApiResponse(code = 404, message = "Client not found") })
+        @RequestMapping(value = "/", produces = { "application/json" }, method = RequestMethod.GET)
+        public Iterable<Account> list() {
+                return accountService.getAll();
+        }
 
-    @ApiOperation(value = "Get client's accounts", nickname = "get", notes = "", response = Account.class, responseContainer = "List", tags = {
-            "account", })
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful operation", response = Account.class, responseContainer = "List"),
-            @ApiResponse(code = 400, message = "Invalid client id supplied"),
-            @ApiResponse(code = 404, message = "Client not found") })
-    @RequestMapping(value = "/{id}", produces = { "application/json" }, method = RequestMethod.GET)
-    public ResponseEntity<Account> get(
-            @ApiParam(value = "The id that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long id) {
-        return ResponseEntity.ok(accountService.getOne(id));
-    }
+        @ApiOperation(value = "Get client's accounts", nickname = "get", notes = "", response = Account.class, responseContainer = "List", tags = {
+                        "account", })
+        @ApiResponses(value = {
+                        @ApiResponse(code = 200, message = "successful operation", response = Account.class, responseContainer = "List"),
+                        @ApiResponse(code = 400, message = "Invalid client id supplied"),
+                        @ApiResponse(code = 404, message = "Client not found") })
+        @RequestMapping(value = "/{id}", produces = { "application/json" }, method = RequestMethod.GET)
+        public ResponseEntity<Account> get(
+                        @ApiParam(value = "The id that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long id) {
+                return ResponseEntity.ok(accountService.getOne(id));
+        }
 
 }
