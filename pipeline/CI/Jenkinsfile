@@ -13,11 +13,14 @@ node{
     stage('Test'){
         docker.image('maven:3.6.3-openjdk-11').inside{
             sh 'mvn test'
-            junit 'target/surefire-reports/*.xml'
-            stash includes: 'target/allure-results/*', name: 'allure-results'
+            sh 'mvn jacoco:report'
         }
-        unstash 'allure-results'
+    }
+    stage('Reports'){
+        junit 'target/surefire-reports/*.xml'
         allure includeProperties: true, jdk: '', report: 'target/site/allure-report', results: [[path: 'target/allure-results']]
+        jacoco classPattern: 'target/classes', exclusionPattern: '**/*Test*.class', execPattern: 'target/jacoco.exec', inclusionPattern: '**/*.class', sourcePattern: 'src/main/java'
+        publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'target/site/jacoco', reportFiles: 'index.html', reportName: 'Coverage Report', reportTitles: ''])
     }
 
     stage('Static analysis') {

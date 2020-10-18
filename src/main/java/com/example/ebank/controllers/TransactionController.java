@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @RestController
-@RequestMapping("/api/v1/transactions")
+@RequestMapping("/v1/transactions")
 public class TransactionController {
 
     private final static String DATE_FORMAT = "yyyy-MM";
