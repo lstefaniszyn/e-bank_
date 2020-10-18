@@ -18,7 +18,7 @@ import io.swagger.annotations.ApiResponses;
 @Api(value = "clients", description = "the clients API")
 
 @RestController
-@RequestMapping("/v1/customers")
+@RequestMapping("/api/v1/customers")
 public class CustomerController {
 
         private final CustomerService customerService;
