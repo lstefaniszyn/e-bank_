@@ -11,5 +11,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 public interface TransactionRepository extends PagingAndSortingRepository<Transaction, Long> {
 
     Page<Transaction> findByValueDateBetween(Date startDate, Date endDate, Pageable pageable);
+    
+    Page<Transaction> findByValueDateBetweenAndAccountId(Date startDate, Date endDate, Long accountId, Pageable pageable);
 
 }
