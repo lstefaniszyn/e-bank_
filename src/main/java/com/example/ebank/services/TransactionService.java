@@ -9,4 +9,6 @@ import org.springframework.data.domain.Page;
 public interface TransactionService {
 
     public Page<Transaction> findInMonthPaginated(LocalDate date, int page, int size);
+    
+    public Page<Transaction> findForAccountInMonthPaginated(Long accountId, LocalDate date, int page, int size);
 }
