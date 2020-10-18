@@ -16,12 +16,12 @@ CREATE TABLE public.account
     iban character varying(250),
     currency character varying(3),
     PRIMARY KEY (id),
-    CONSTRAINT cust_fk FOREIGN KEY (customer_id) REFERENCES public.customer (id)
+    CONSTRAINT cust_fk FOREIGN KEY (customer_id) REFERENCES public.customer (id) 
 );
 ALTER TABLE public.account  OWNER to postgres;
 
-drop table if exists public."accountTransaction" cascade;
-CREATE TABLE public."accountTransaction"
+drop table if exists public."account_transaction" cascade;
+CREATE TABLE public."account_transaction"
 (
     id serial,
     account_id integer,
@@ -33,7 +33,5 @@ CREATE TABLE public."accountTransaction"
     CONSTRAINT account_fk FOREIGN KEY (account_id) REFERENCES public.account (id)
 );
 ALTER TABLE public."accountTransaction" OWNER to postgres;
-
-ALTER TABLE public."accountTransaction" RENAME TO account_transaction;
 
 commit;
