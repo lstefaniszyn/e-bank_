@@ -6,13 +6,13 @@ To run spring app with application-{profile_name}.properties Profile. Default is
 > mvn -Pdev spring-boot:run
 > mvn -Pprod spring-boot:run
 
-To run spring app with arguments
+To run spring app on Dev with arguments
 
-> mvn -Dspring-boot.run.arguments="--db.user=test --db.pass=test" spring-boot:run
+> mvn -Pdev -Dspring-boot.run.arguments="--db.user=test --db.pass=test" spring-boot:run
 
 To run jar app with arguments
 
-> java -jar ebank.jar --db.user=test --db.pass=test
+> java -jar ebank.jar --spring.profiles.active=dev --db.user=test --db.pass=test
 
 ## Variables:
 
