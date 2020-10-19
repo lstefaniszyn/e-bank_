@@ -1,0 +1,1682 @@
+[
+  {
+    "id": 1,
+    "valueDate": "2018-01-08",
+    "amount": 440.79248,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2,
+    "valueDate": "2018-01-15",
+    "amount": 694.0646,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3,
+    "valueDate": "2018-01-13",
+    "amount": 964.6852,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4,
+    "valueDate": "2018-01-27",
+    "amount": 288.21243,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5,
+    "valueDate": "2018-01-04",
+    "amount": 63.980534,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 6,
+    "valueDate": "2018-01-07",
+    "amount": 309.34695,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7,
+    "valueDate": "2018-01-22",
+    "amount": 776.1171,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8,
+    "valueDate": "2018-01-03",
+    "amount": 480.90643,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9,
+    "valueDate": "2018-01-22",
+    "amount": 931.78174,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10,
+    "valueDate": "2018-01-16",
+    "amount": 674.84534,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 491,
+    "valueDate": "2018-02-07",
+    "amount": 188.09149,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 492,
+    "valueDate": "2018-02-04",
+    "amount": 798.974,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 493,
+    "valueDate": "2018-02-02",
+    "amount": 898.74445,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 494,
+    "valueDate": "2018-02-12",
+    "amount": 348.97543,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 495,
+    "valueDate": "2018-02-02",
+    "amount": 2.3959234,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 496,
+    "valueDate": "2018-02-25",
+    "amount": 227.40843,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 497,
+    "valueDate": "2018-02-22",
+    "amount": 785.8861,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 498,
+    "valueDate": "2018-02-10",
+    "amount": 751.757,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 499,
+    "valueDate": "2018-02-22",
+    "amount": 658.4037,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 500,
+    "valueDate": "2018-02-06",
+    "amount": 918.9012,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 681,
+    "valueDate": "2018-03-16",
+    "amount": 231.553,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 682,
+    "valueDate": "2018-03-09",
+    "amount": 395.75363,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 683,
+    "valueDate": "2018-03-05",
+    "amount": 497.93637,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 684,
+    "valueDate": "2018-03-28",
+    "amount": 951.7962,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 685,
+    "valueDate": "2018-03-21",
+    "amount": 128.63422,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 686,
+    "valueDate": "2018-03-11",
+    "amount": 141.0374,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 687,
+    "valueDate": "2018-03-16",
+    "amount": 339.3996,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 688,
+    "valueDate": "2018-03-22",
+    "amount": 50.769707,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 689,
+    "valueDate": "2018-03-13",
+    "amount": 574.6314,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 690,
+    "valueDate": "2018-03-07",
+    "amount": 383.2449,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 1571,
+    "valueDate": "2018-04-19",
+    "amount": 918.9648,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 1572,
+    "valueDate": "2018-04-02",
+    "amount": 936.6727,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 1573,
+    "valueDate": "2018-04-07",
+    "amount": 755.34094,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 1574,
+    "valueDate": "2018-04-09",
+    "amount": 660.3038,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 1575,
+    "valueDate": "2018-04-09",
+    "amount": 190.18204,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 1576,
+    "valueDate": "2018-04-15",
+    "amount": 371.78018,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 1577,
+    "valueDate": "2018-04-09",
+    "amount": 579.68365,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 1578,
+    "valueDate": "2018-04-08",
+    "amount": 784.10205,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 1579,
+    "valueDate": "2018-04-06",
+    "amount": 235.21242,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 1580,
+    "valueDate": "2018-04-23",
+    "amount": 100.312126,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2361,
+    "valueDate": "2018-05-27",
+    "amount": 317.7159,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2362,
+    "valueDate": "2018-05-14",
+    "amount": 228.51286,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2363,
+    "valueDate": "2018-05-20",
+    "amount": 844.54694,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2364,
+    "valueDate": "2018-05-08",
+    "amount": 313.10773,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2365,
+    "valueDate": "2018-05-16",
+    "amount": 405.5792,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2366,
+    "valueDate": "2018-05-03",
+    "amount": 529.34283,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2367,
+    "valueDate": "2018-05-04",
+    "amount": 702.8245,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2368,
+    "valueDate": "2018-05-26",
+    "amount": 950.05304,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2369,
+    "valueDate": "2018-05-27",
+    "amount": 863.7306,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2370,
+    "valueDate": "2018-05-25",
+    "amount": 793.20667,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2951,
+    "valueDate": "2018-06-24",
+    "amount": 864.9244,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2952,
+    "valueDate": "2018-06-14",
+    "amount": 240.32336,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2953,
+    "valueDate": "2018-06-14",
+    "amount": 198.97577,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2954,
+    "valueDate": "2018-06-21",
+    "amount": 909.8845,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2955,
+    "valueDate": "2018-06-16",
+    "amount": 472.93015,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2956,
+    "valueDate": "2018-06-09",
+    "amount": 376.62366,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2957,
+    "valueDate": "2018-06-01",
+    "amount": 399.0328,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2958,
+    "valueDate": "2018-06-28",
+    "amount": 436.22717,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2959,
+    "valueDate": "2018-06-12",
+    "amount": 332.081,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 2960,
+    "valueDate": "2018-06-04",
+    "amount": 251.79831,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3241,
+    "valueDate": "2018-07-15",
+    "amount": 597.3668,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3242,
+    "valueDate": "2018-07-11",
+    "amount": 882.3997,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3243,
+    "valueDate": "2018-07-22",
+    "amount": 720.0569,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3244,
+    "valueDate": "2018-07-16",
+    "amount": 923.1161,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3245,
+    "valueDate": "2018-07-28",
+    "amount": 987.1305,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3246,
+    "valueDate": "2018-07-27",
+    "amount": 443.8901,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3247,
+    "valueDate": "2018-07-10",
+    "amount": 552.58527,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3248,
+    "valueDate": "2018-07-19",
+    "amount": 446.35214,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3249,
+    "valueDate": "2018-07-16",
+    "amount": 227.24138,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3250,
+    "valueDate": "2018-07-19",
+    "amount": 425.15198,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3431,
+    "valueDate": "2018-08-12",
+    "amount": 6.847758,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3432,
+    "valueDate": "2018-08-11",
+    "amount": 811.7349,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3433,
+    "valueDate": "2018-08-08",
+    "amount": 161.54442,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3434,
+    "valueDate": "2018-08-15",
+    "amount": 239.84886,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3435,
+    "valueDate": "2018-08-27",
+    "amount": 880.7492,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3436,
+    "valueDate": "2018-08-13",
+    "amount": 104.788605,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3437,
+    "valueDate": "2018-08-25",
+    "amount": 892.7547,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3438,
+    "valueDate": "2018-08-17",
+    "amount": 221.01166,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3439,
+    "valueDate": "2018-08-12",
+    "amount": 122.84749,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 3440,
+    "valueDate": "2018-08-26",
+    "amount": 112.05646,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4021,
+    "valueDate": "2018-09-12",
+    "amount": 991.923,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4022,
+    "valueDate": "2018-09-16",
+    "amount": 134.88882,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4023,
+    "valueDate": "2018-09-22",
+    "amount": 406.94254,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4024,
+    "valueDate": "2018-09-22",
+    "amount": 343.2007,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4025,
+    "valueDate": "2018-09-14",
+    "amount": 551.36523,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4026,
+    "valueDate": "2018-09-09",
+    "amount": 713.1759,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4027,
+    "valueDate": "2018-09-14",
+    "amount": 68.90962,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4028,
+    "valueDate": "2018-09-18",
+    "amount": 839.609,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4029,
+    "valueDate": "2018-09-23",
+    "amount": 406.60318,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4030,
+    "valueDate": "2018-09-22",
+    "amount": 816.7819,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4711,
+    "valueDate": "2018-10-27",
+    "amount": 227.2272186279297,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4712,
+    "valueDate": "2018-10-21",
+    "amount": 229.26527404785156,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4713,
+    "valueDate": "2018-10-06",
+    "amount": 639.0991821289062,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4714,
+    "valueDate": "2018-10-24",
+    "amount": 44.79288864135742,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4715,
+    "valueDate": "2018-10-19",
+    "amount": 682.497314453125,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4716,
+    "valueDate": "2018-10-08",
+    "amount": 79.129150390625,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4717,
+    "valueDate": "2018-10-28",
+    "amount": 517.9848022460938,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4718,
+    "valueDate": "2018-10-22",
+    "amount": 676.4498291015625,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4719,
+    "valueDate": "2018-10-16",
+    "amount": 930.4606323242188,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 4720,
+    "valueDate": "2018-10-17",
+    "amount": 531.423828125,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5201,
+    "valueDate": "2018-11-17",
+    "amount": 215.17822265625,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5202,
+    "valueDate": "2018-11-17",
+    "amount": 744.0279541015625,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5203,
+    "valueDate": "2018-11-15",
+    "amount": 513.853515625,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5204,
+    "valueDate": "2018-11-08",
+    "amount": 518.1942138671875,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5205,
+    "valueDate": "2018-11-08",
+    "amount": 120.6893310546875,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5206,
+    "valueDate": "2018-11-04",
+    "amount": 311.19805908203125,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5207,
+    "valueDate": "2018-11-09",
+    "amount": 44.932132720947266,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5208,
+    "valueDate": "2018-11-22",
+    "amount": 599.1560668945312,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5209,
+    "valueDate": "2018-11-01",
+    "amount": 91.63780212402344,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5210,
+    "valueDate": "2018-11-23",
+    "amount": 61.5351676940918,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5691,
+    "valueDate": "2018-12-13",
+    "amount": 86.61662292480469,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5692,
+    "valueDate": "2018-12-21",
+    "amount": 780.17578125,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5693,
+    "valueDate": "2018-12-12",
+    "amount": 967.5416259765625,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5694,
+    "valueDate": "2018-12-03",
+    "amount": 668.5983276367188,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5695,
+    "valueDate": "2018-12-07",
+    "amount": 894.0874633789062,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5696,
+    "valueDate": "2018-12-08",
+    "amount": 61.012237548828125,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5697,
+    "valueDate": "2018-12-07",
+    "amount": 818.718994140625,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5698,
+    "valueDate": "2018-12-27",
+    "amount": 159.69554138183594,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5699,
+    "valueDate": "2018-12-19",
+    "amount": 951.2435302734375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5700,
+    "valueDate": "2018-12-13",
+    "amount": 292.0013427734375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5881,
+    "valueDate": "2019-01-15",
+    "amount": 979.9623413085938,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5882,
+    "valueDate": "2019-01-23",
+    "amount": 10.26641845703125,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5883,
+    "valueDate": "2019-01-18",
+    "amount": 516.90771484375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5884,
+    "valueDate": "2019-01-02",
+    "amount": 527.5797119140625,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5885,
+    "valueDate": "2019-01-12",
+    "amount": 897.7117919921875,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5886,
+    "valueDate": "2019-01-21",
+    "amount": 535.9827270507812,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5887,
+    "valueDate": "2019-01-20",
+    "amount": 537.5914916992188,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5888,
+    "valueDate": "2019-01-07",
+    "amount": 558.4049072265625,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5889,
+    "valueDate": "2019-01-27",
+    "amount": 588.4203491210938,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 5890,
+    "valueDate": "2019-01-15",
+    "amount": 615.7103271484375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 6471,
+    "valueDate": "2019-02-16",
+    "amount": 543.1625366210938,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 6472,
+    "valueDate": "2019-02-28",
+    "amount": 941.3162231445312,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 6473,
+    "valueDate": "2019-02-26",
+    "amount": 928.8631591796875,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 6474,
+    "valueDate": "2019-02-12",
+    "amount": 967.3710327148438,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 6475,
+    "valueDate": "2019-02-01",
+    "amount": 103.9510269165039,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 6476,
+    "valueDate": "2019-02-18",
+    "amount": 222.55006408691406,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 6477,
+    "valueDate": "2019-02-01",
+    "amount": 498.5403137207031,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 6478,
+    "valueDate": "2019-02-02",
+    "amount": 745.6768798828125,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 6479,
+    "valueDate": "2019-02-05",
+    "amount": 697.2540893554688,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 6480,
+    "valueDate": "2019-02-27",
+    "amount": 835.9367065429688,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7261,
+    "valueDate": "2019-03-05",
+    "amount": 186.10337829589844,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7262,
+    "valueDate": "2019-03-16",
+    "amount": 22.102027893066406,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7263,
+    "valueDate": "2019-03-25",
+    "amount": 737.43701171875,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7264,
+    "valueDate": "2019-03-01",
+    "amount": 61.735172271728516,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7265,
+    "valueDate": "2019-03-01",
+    "amount": 934.3148193359375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7266,
+    "valueDate": "2019-03-18",
+    "amount": 990.7512817382812,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7267,
+    "valueDate": "2019-03-18",
+    "amount": 760.4882202148438,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7268,
+    "valueDate": "2019-03-15",
+    "amount": 939.242431640625,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7269,
+    "valueDate": "2019-03-24",
+    "amount": 246.33473205566406,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7270,
+    "valueDate": "2019-03-25",
+    "amount": 82.95890808105469,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7551,
+    "valueDate": "2019-04-17",
+    "amount": 417.8148498535156,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7552,
+    "valueDate": "2019-04-28",
+    "amount": 508.9860534667969,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7553,
+    "valueDate": "2019-04-26",
+    "amount": 72.25680541992188,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7554,
+    "valueDate": "2019-04-04",
+    "amount": 504.0841064453125,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7555,
+    "valueDate": "2019-04-10",
+    "amount": 312.9825744628906,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7556,
+    "valueDate": "2019-04-20",
+    "amount": 66.4054946899414,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7557,
+    "valueDate": "2019-04-23",
+    "amount": 276.9607849121094,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7558,
+    "valueDate": "2019-04-04",
+    "amount": 919.73974609375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7559,
+    "valueDate": "2019-04-17",
+    "amount": 556.657958984375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 7560,
+    "valueDate": "2019-04-05",
+    "amount": 444.264892578125,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8341,
+    "valueDate": "2019-05-20",
+    "amount": 998.3363647460938,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8342,
+    "valueDate": "2019-05-17",
+    "amount": 363.6036682128906,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8343,
+    "valueDate": "2019-05-14",
+    "amount": 179.2327880859375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8344,
+    "valueDate": "2019-05-08",
+    "amount": 463.58148193359375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8345,
+    "valueDate": "2019-05-15",
+    "amount": 230.1746368408203,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8346,
+    "valueDate": "2019-05-02",
+    "amount": 624.7734375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8347,
+    "valueDate": "2019-05-01",
+    "amount": 982.5037841796875,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8348,
+    "valueDate": "2019-05-14",
+    "amount": 507.7453308105469,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8349,
+    "valueDate": "2019-05-12",
+    "amount": 242.08485412597656,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8350,
+    "valueDate": "2019-05-01",
+    "amount": 662.5379028320312,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8731,
+    "valueDate": "2019-06-02",
+    "amount": 69.44800567626953,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8732,
+    "valueDate": "2019-06-20",
+    "amount": 924.8965454101562,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8733,
+    "valueDate": "2019-06-23",
+    "amount": 561.7921752929688,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8734,
+    "valueDate": "2019-06-27",
+    "amount": 88.57685089111328,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8735,
+    "valueDate": "2019-06-24",
+    "amount": 838.3150634765625,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8736,
+    "valueDate": "2019-06-10",
+    "amount": 777.1829833984375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8737,
+    "valueDate": "2019-06-26",
+    "amount": 156.21087646484375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8738,
+    "valueDate": "2019-06-19",
+    "amount": 763.0269775390625,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8739,
+    "valueDate": "2019-06-09",
+    "amount": 740.9913940429688,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 8740,
+    "valueDate": "2019-06-19",
+    "amount": 263.339111328125,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9221,
+    "valueDate": "2019-07-13",
+    "amount": 569.2784423828125,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9222,
+    "valueDate": "2019-07-18",
+    "amount": 309.73309326171875,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9223,
+    "valueDate": "2019-07-28",
+    "amount": 30.180822372436523,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9224,
+    "valueDate": "2019-07-14",
+    "amount": 251.72586059570312,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9225,
+    "valueDate": "2019-07-21",
+    "amount": 32.08654022216797,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9226,
+    "valueDate": "2019-07-14",
+    "amount": 750.8912963867188,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9227,
+    "valueDate": "2019-07-08",
+    "amount": 301.8644104003906,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9228,
+    "valueDate": "2019-07-04",
+    "amount": 589.0267333984375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9229,
+    "valueDate": "2019-07-06",
+    "amount": 974.146484375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9230,
+    "valueDate": "2019-07-11",
+    "amount": 460.0138854980469,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9411,
+    "valueDate": "2019-08-17",
+    "amount": 904.705322265625,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9412,
+    "valueDate": "2019-08-14",
+    "amount": 896.156494140625,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9413,
+    "valueDate": "2019-08-20",
+    "amount": 58.58635711669922,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9414,
+    "valueDate": "2019-08-04",
+    "amount": 618.8328857421875,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9415,
+    "valueDate": "2019-08-18",
+    "amount": 448.92230224609375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9416,
+    "valueDate": "2019-08-27",
+    "amount": 426.0970458984375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9417,
+    "valueDate": "2019-08-06",
+    "amount": 825.0172729492188,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9418,
+    "valueDate": "2019-08-12",
+    "amount": 107.77519989013672,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9419,
+    "valueDate": "2019-08-11",
+    "amount": 491.26776123046875,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 9420,
+    "valueDate": "2019-08-18",
+    "amount": 445.7848205566406,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10301,
+    "valueDate": "2019-09-27",
+    "amount": 954.1647338867188,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10302,
+    "valueDate": "2019-09-28",
+    "amount": 480.6602783203125,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10303,
+    "valueDate": "2019-09-17",
+    "amount": 387.63629150390625,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10304,
+    "valueDate": "2019-09-14",
+    "amount": 789.8877563476562,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10305,
+    "valueDate": "2019-09-21",
+    "amount": 98.52318572998047,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10306,
+    "valueDate": "2019-09-07",
+    "amount": 362.7373352050781,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10307,
+    "valueDate": "2019-09-15",
+    "amount": 855.7299194335938,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10308,
+    "valueDate": "2019-09-21",
+    "amount": 968.9702758789062,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10309,
+    "valueDate": "2019-09-27",
+    "amount": 658.2681274414062,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10310,
+    "valueDate": "2019-09-13",
+    "amount": 257.7926330566406,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10791,
+    "valueDate": "2019-10-14",
+    "amount": 853.0826416015625,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10792,
+    "valueDate": "2019-10-05",
+    "amount": 545.8699340820312,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10793,
+    "valueDate": "2019-10-21",
+    "amount": 590.8662719726562,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10794,
+    "valueDate": "2019-10-02",
+    "amount": 607.987548828125,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10795,
+    "valueDate": "2019-10-24",
+    "amount": 78.10549926757812,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10796,
+    "valueDate": "2019-10-18",
+    "amount": 484.2149658203125,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10797,
+    "valueDate": "2019-10-19",
+    "amount": 538.3489990234375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10798,
+    "valueDate": "2019-10-28",
+    "amount": 641.92822265625,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10799,
+    "valueDate": "2019-10-05",
+    "amount": 205.04515075683594,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 10800,
+    "valueDate": "2019-10-02",
+    "amount": 296.5107727050781,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 11581,
+    "valueDate": "2019-11-08",
+    "amount": 609.6553955078125,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 11582,
+    "valueDate": "2019-11-19",
+    "amount": 156.37205505371094,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 11583,
+    "valueDate": "2019-11-21",
+    "amount": 920.91015625,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 11584,
+    "valueDate": "2019-11-26",
+    "amount": 196.27059936523438,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 11585,
+    "valueDate": "2019-11-04",
+    "amount": 655.4725952148438,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 11586,
+    "valueDate": "2019-11-23",
+    "amount": 54.3631591796875,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 11587,
+    "valueDate": "2019-11-06",
+    "amount": 14.037726402282715,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 11588,
+    "valueDate": "2019-11-13",
+    "amount": 777.64208984375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 11589,
+    "valueDate": "2019-11-21",
+    "amount": 498.76116943359375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 11590,
+    "valueDate": "2019-11-10",
+    "amount": 604.9880981445312,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 12271,
+    "valueDate": "2019-12-05",
+    "amount": 958.5745849609375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 12272,
+    "valueDate": "2019-12-14",
+    "amount": 599.9330444335938,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 12273,
+    "valueDate": "2019-12-22",
+    "amount": 684.7542114257812,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 12274,
+    "valueDate": "2019-12-09",
+    "amount": 226.68576049804688,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 12275,
+    "valueDate": "2019-12-05",
+    "amount": 608.5111083984375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 12276,
+    "valueDate": "2019-12-22",
+    "amount": 901.3870239257812,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 12277,
+    "valueDate": "2019-12-08",
+    "amount": 657.5062255859375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 12278,
+    "valueDate": "2019-12-17",
+    "amount": 605.8887329101562,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 12279,
+    "valueDate": "2019-12-28",
+    "amount": 674.5316162109375,
+    "currency": "EUR",
+    "description": "payment EUR"
+  },
+  {
+    "id": 12280,
+    "valueDate": "2019-12-03",
+    "amount": 725.6128540039062,
+    "currency": "EUR",
+    "description": "payment EUR"
+  }
+]
