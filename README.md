@@ -34,3 +34,7 @@ To run jar app with arguments
 - db.host=
 - db.user=
 - db.pass=
+
+## Mocked data
+
+To switch application to mocked data from `src/main/resources/data` you need to replace normal repositories (e.g. `TransactionRepository`) to mock ones (e.g. `MockTransactionRepository`) in particular services. 
