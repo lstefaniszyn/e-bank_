@@ -73,8 +73,9 @@ public class MockTransactionRepository {
             transactions = jsonMapper.readValue(file, new TypeReference<List<Transaction>>() {
             });
         } catch (IOException exc) {
-            logger.warn("IOException occurred during loading collection of transactions from file.");
+            logger.warn("IOException occurred during loading mock collection of transactions.");
         }
+        logger.info("Loaded mock collection of transactions.");
         return transactions;
     }
 

@@ -38,8 +38,9 @@ public class MockAccountRepository {
             accounts = jsonMapper.readValue(file, new TypeReference<Set<Account>>() {
             });
         } catch (IOException exc) {
-            logger.warn("IOException occurred during loading collection of accounts from file.");
+            logger.warn("IOException occurred during loading mock collection of accounts.");
         }
+        logger.info("Loaded mock collection of accounts.");
         return accounts;
     }
 

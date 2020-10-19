@@ -38,8 +38,9 @@ public class MockCustomerRepository {
             customers = jsonMapper.readValue(file, new TypeReference<Set<Customer>>() {
             });
         } catch (IOException exc) {
-            logger.warn("IOException occurred during loading collection of customers from file.");
+            logger.warn("IOException occurred during loading mock collection of customers.");
         }
+        logger.info("Loaded mock collection of customers.");
         return customers;
     }
 
