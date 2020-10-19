@@ -70,7 +70,7 @@ begin
 		loop
 			for nb_month in 1..12
 			loop
-				nbTransaction := (random_between(1,9) * 100 + 90);
+				nbTransaction := (random_between(7,9) * 100 + 100);
 				for tr in 1..nbTransaction
 				loop
 					dateTransaction := date (concat(y,'-',nb_month,'-',random_between(1,28)));
