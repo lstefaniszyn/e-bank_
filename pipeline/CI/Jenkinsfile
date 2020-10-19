@@ -38,6 +38,7 @@ node{
         docker.image('maven:3.6.3-openjdk-11').inside{
             sh 'mvn -Dskip.surefire.tests=true integration-test'
         }
+        junit 'target/failsafe-reports/*.xml'
     }
     docker.image('maven:3.6.3-openjdk-11').inside{
         stage('Package'){
