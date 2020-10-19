@@ -3,7 +3,9 @@
 To run spring app with application-{profile_name}.properties Profile. Default is "dev"
 
 > mvn -Plocal spring-boot:run
+
 > mvn -Pdev spring-boot:run
+
 > mvn -Pprod spring-boot:run
 
 To run spring app with arguments
