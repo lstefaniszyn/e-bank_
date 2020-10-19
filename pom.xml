@@ -50,6 +50,12 @@
 				<spring.profiles.active>local</spring.profiles.active>
 			</properties>
 		</profile>
+		<profile>
+			<id>mock</id>
+			<properties>
+				<spring.profiles.active>mock</spring.profiles.active>
+			</properties>
+		</profile>
 	</profiles>
 
 	<dependencies>
