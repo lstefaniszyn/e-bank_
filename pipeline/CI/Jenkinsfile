@@ -34,6 +34,11 @@ node{
     stage('Security scan') {
         echo 'TODO: Security scan'
     }
+    stage('Integration tests'){
+        docker.image('maven:3.6.3-openjdk-11').inside{
+            sh 'mvn -Dskip.surefire.tests=true integration-test'
+        }
+    }
     docker.image('maven:3.6.3-openjdk-11').inside{
         stage('Package'){
             sh 'mvn package -DskipTests=true'
