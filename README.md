@@ -37,4 +37,10 @@ To run jar app with arguments
 
 ## Mocked data
 
-To switch application to mocked data from `src/main/resources/data` you need to replace normal repositories (e.g. `TransactionRepository`) to mock ones (e.g. `MockTransactionRepository`) in particular services. 
+Mocked data are located in json files in: `src/main/resources/data`.
+
+Add `mock` profile while running the application to switch to mocked data instead of PostgreSQL. However, remember that `mock` profile is only a side profile, i.e. it still needs to be used together with one of the main profiles (`local/dev/prod`).
+
+- `accounts.json` contains 100 accounts with subsequent ids.
+- `customers.json` contains 152 customers with subsequent ids, transaction list is not present here.
+- `transactions_1_1.json` contains 10 transactions per month for each month in period 01/2018 - 12/2019. For one customer and one account, i.e. the same transactions are returned regardless of requested customer and/or account.

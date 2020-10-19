@@ -1,8 +1,36 @@
 package com.example.ebank.repositories;
 
 import com.example.ebank.models.Account;
-import org.springframework.data.repository.CrudRepository;
+import com.example.ebank.utils.ProfileManager;
+import org.springframework.stereotype.Component;
 
-public interface AccountRepository extends CrudRepository<Account, Long> {
+import java.util.Optional;
+
+@Component
+public class AccountRepository {
+
+    private final JpaAccountRepository jpaRepository;
+    private final MockAccountRepository mockRepository;
+    private final ProfileManager profileManager;
+
+    public AccountRepository(JpaAccountRepository jpaRepository,
+                             MockAccountRepository mockRepository,
+                             ProfileManager profileManager) {
+        this.jpaRepository = jpaRepository;
+        this.mockRepository = mockRepository;
+        this.profileManager = profileManager;
+    }
+
+    public Iterable<Account> findAll() {
+        return profileManager.isMockProfileActive()
+                ? mockRepository.findAll()
+                : jpaRepository.findAll();
+    }
+
+    public Optional<Account> findById(Long id) {
+        return profileManager.isMockProfileActive()
+                ? mockRepository.findById(id)
+                : jpaRepository.findById(id);
+    }
 
 }
