@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+    parameters {
+        choice(name:'ENVIRONMENT', choices: ['base'], description:'Which Kubernetes cluster are we targeting')
+        choice(name:'NAMESPACE', choices:['e-banking'], description:'Namespace we wish to deploy the service to')
+        choice(name:'APP_MANAGEMENT', choices: ['deploy','terminate'], description: 'Are we deploying or terminating the application?')
+        string(name:'APP_VERSION', defaultValue: 'latest', description: 'The version of the application to deploy or terminate.')
+    }
+    environment {
+        REGISTRY = defineRegistry()
+        KUBECONFIG= "/tmp/${env.JOB_NAME}/config"
+    }
+    stages {
+        stage('Deploy/Terminate Kubernetes Application') {
+            steps {
+                withKubeConfig([credentialsId: 'kube-e-banking', serverUrl: 'https://k8s.demo.xpaas.io:6443']) {
+                    script {
+                      def command;
+ 
+                      if (params.APP_MANAGEMENT == 'deploy') {
+                        command = "helm upgrade --install e-banking ./chart --set image.tag=${APP_VERSION},replicas=1,image.repository=${REGISTRY}/e-banking/e-banking --namespace=${NAMESPACE}"
+                      }
+
+                      if (params.APP_MANAGEMENT == 'terminate') {
+                        command = "helm del e-banking --namespace=${NAMESPACE}"
+                      }
+                      sh "${command}"
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+def defineRegistry() {
+    return env[params.ENVIRONMENT + "_REGISTRY".toUpperCase().trim()]
+}

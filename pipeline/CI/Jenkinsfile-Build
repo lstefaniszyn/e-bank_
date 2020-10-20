@@ -1,0 +1,147 @@
+pipeline {
+    agent any
+
+    options {
+        // Only keep the 10 most recent builds
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        // And we'd really like to be sure that this build doesn't hang forever, so let's time it out after an hour.
+        timeout(time: 60, unit: 'MINUTES')
+        disableConcurrentBuilds()
+        skipStagesAfterUnstable()
+    }
+    environment {
+        COMMIT_ID = defineCommitId()
+        REPOSITORY = defineRepository()
+        REGISTRY = defineRegistry()
+        IMAGE_VERSION = defineImageVersion()
+    }
+    stages {
+        stage('Compile') {
+            agent {
+                docker {
+                    image 'maven:3.6.3-openjdk-11'
+                    args '-v "$PWD":/usr/src/mymaven -w /usr/src/mymaven;'
+                }
+            }
+            steps {
+                sh "mvn compile"
+            }  
+        }
+        stage('Test') {
+            agent {
+                docker {
+                    image 'maven:3.6.3-openjdk-11'
+                    args '-v "$pwd":/usr/src/mymaven -w /usr/src/mymaven;'
+                }
+            }
+            steps {
+                sh "mvn test"
+                sh 'mvn jacoco:report'
+            }  
+        }
+        stage('Report') {
+            agent {
+                docker {
+                    image 'maven:3.6.3-openjdk-11'
+                    args '-v "$pwd":/usr/src/mymaven -w /usr/src/mymaven;'
+                }
+            }
+            steps {
+                junit 'target/surefire-reports/*.xml'
+                // allure includeProperties: true, jdk: '', report: 'target/site/allure-report', results: [[path: 'target/allure-results']]
+                // jacoco classPattern: 'target/classes', exclusionPattern: '**/*Test*.class', execPattern: 'target/jacoco.exec', inclusionPattern: '**/*.class', sourcePattern: 'src/main/java'
+                // publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'target/site/jacoco', reportFiles: 'index.html', reportName: 'Coverage Report', reportTitles: ''])
+            }
+        }
+        stage('Static analysis') {
+            agent {
+                docker {
+                    image 'rawdee/pmd:6.14.0.1'
+                    args '-v "$PWD/src/main/java":/src'
+                }
+            }
+            steps {
+                sh(script: 'pmd -language java -dir . -rulesets rulesets/java/quickstart.xml -f html > pmd.html', returnStatus: true)
+                // TODO: publishHTML report (plugin not available on Jenkins)
+            }
+            // TODO: checkstyle (plugin not available on Jenkins)
+            // TODO: findbugs (plugin not available on Jenkins)
+        }
+        stage('Security scan') {
+            steps {
+                echo 'TODO: Security scan'
+            }
+        }
+        stage('Package'){
+            agent {
+                docker {
+                    image 'maven:3.6.3-openjdk-11'
+                    args '-v "$pwd":/usr/src/mymaven -w /usr/src/mymaven;'
+                }
+            }
+            steps {
+                sh 'mvn package -DskipTests=true'
+            }  
+        }
+        stage('Build with Docker') {
+            agent {
+                docker {
+                    image 'docker:19.03.6'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock -u root --network=host'
+                }
+            }
+            steps {
+                sh "docker build -t ${REPOSITORY}:${COMMIT_ID} -t ${REPOSITORY}:${IMAGE_VERSION} -t ${REPOSITORY}:latest --build-arg=BASE_REGISTRY=${REGISTRY}/xpaas-images --build-arg BASE_IMAGE_VERSION=${IMAGE_VERSION} --build-arg BUILD_IMAGE_VERSION=${IMAGE_VERSION} --build-arg SPRIN_PROFILE=prod ${WORKSPACE}"
+            }
+        }
+
+        stage ("Push to Image Registry") {
+            agent {
+                docker {
+                    image 'docker:19.03.6'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock -u root --network=host'
+                }
+            }
+            steps {
+                script {
+                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'harbor_robot', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                        sh "docker login -u ${env.USERNAME} -p ${env.PASSWORD} ${REGISTRY}"
+                        sh "docker push ${REPOSITORY}:${COMMIT_ID}"
+                        sh "docker push ${REPOSITORY}:${IMAGE_VERSION}"
+                        sh "docker push ${REPOSITORY}:latest"
+                    }
+                }
+            }
+        }
+        stage ('Delete Image') {
+            agent {
+                docker {
+                    image 'docker:19.03.6'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock -u root --network=host'
+                }
+            }
+            steps {
+                script{
+                    sh "docker rmi ${REPOSITORY}:${COMMIT_ID} ${REPOSITORY}:latest ${REPOSITORY}:${IMAGE_VERSION}"
+                }
+            }
+        }
+    }
+}
+def defineCommitId() {
+    commitId = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+    return commitId
+}
+def defineRegistry() {
+    def registry = env.BASE_REGISTRY
+    return registry
+}
+def defineRepository() {
+    def jobConsoleName = env.JOB_BASE_NAME
+    repository = env.BASE_REGISTRY + "/e-banking/e-banking"
+    return repository
+}
+def defineImageVersion() {
+    imageVersion = sh(script: 'grep \'current_version =\' .bumpversion.cfg | cut -f2 -d = | tr -d " "', returnStdout: true).trim()
+    return imageVersion
+}
