@@ -1,12 +1,13 @@
 package com.example.ebank.repositories;
 
-import com.example.ebank.models.Account;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-import java.util.Set;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import com.example.ebank.models.Account;
 
 public class MockAccountRepositoryTests {
 
@@ -14,7 +15,7 @@ public class MockAccountRepositoryTests {
 
     @Test
     public void testFindAllAccounts() {
-        Set<Account> result = accountRepository.findAll();
+        List<Account> result = accountRepository.findAll();
 
         assertThat(result).isNotEmpty();
     }

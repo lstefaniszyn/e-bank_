@@ -11,6 +11,6 @@ public interface JpaTransactionRepository extends PagingAndSortingRepository<Tra
 
     Page<Transaction> findByValueDateBetween(Date startDate, Date endDate, Pageable pageable);
     
-    Page<Transaction> findByValueDateBetweenAndAccountId(Date startDate, Date endDate, Long accountId, Pageable pageable);
+    Page<Transaction> findByValueDateBetweenAndAccountId(Date startDate, Date endDate, Long accountId, Pageable pageable);    
 
 }

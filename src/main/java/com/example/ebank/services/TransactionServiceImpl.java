@@ -35,6 +35,7 @@ public class TransactionServiceImpl implements TransactionService {
         LocalDate startDate = date.withDayOfMonth(1);
         LocalDate endDate = date.withDayOfMonth(date.lengthOfMonth());
         return transactionRepository.findByValueDateBetween(Date.valueOf(startDate), Date.valueOf(endDate), pageable);
+        
     }
 
     @Override
@@ -45,4 +46,5 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.findByValueDateBetweenAndAccountId(Date.valueOf(startDate), Date.valueOf(endDate),
                 accountId, pageable);
     }
+
 }

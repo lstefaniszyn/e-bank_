@@ -72,10 +72,45 @@ public class CustomerController {
 			@ApiParam(value = "The id that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long id) {
 		return ResponseEntity.ok(customerService.getOne(id));
 	}
+	
+	@ApiOperation(value = "Get accounts for given user", nickname = "get", notes = "", response = Account.class, tags = {
+			"client", })
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "successful operation", response = Account.class),
+			@ApiResponse(code = 400, message = "Invalid client id supplied"),
+			@ApiResponse(code = 404, message = "Client not found") })
+	@RequestMapping(value = "/{id}/accounts", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<List<Account>> getAccounts(
+			@ApiParam(value = "The id that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long id,
+			@ApiParam(value = "The Page number to fetched. Use \"0\" for testing. ", required = false) @RequestParam(name = "page", defaultValue = "0") int page,
+			@ApiParam(value = "The number of objects fetch. Use \"2\" for testing. ", required = false) @RequestParam(name = "size", defaultValue = "2") int size){
+		Page<Account> accounts = accountService.getForCustomer(id, page, size);
+		return ResponseEntity.ok(accounts.getContent());
+	}
+	
+	@ApiOperation(value = "Get account details for given user", nickname = "get", notes = "", response = Account.class, tags = {
+			"client", })
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "successful operation", response = Account.class),
+			@ApiResponse(code = 400, message = "Invalid client id supplied"),
+			@ApiResponse(code = 404, message = "Client not found") })
+	@RequestMapping(value = "/{id}/accounts/{accountId}", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<Account> getAccount(
+			@ApiParam(value = "The id that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long id,
+			@ApiParam(value = "The account id that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long accountId,
+			@ApiParam(value = "The Page number to fetched. Use \"0\" for testing. ", required = false) @RequestParam(name = "page", defaultValue = "0") int page,
+			@ApiParam(value = "The number of objects fetch. Use \"2\" for testing. ", required = false) @RequestParam(name = "size", defaultValue = "2") int size){
+		
+		Customer customer = customerService.getOne(id);
+		Account account = accountService.getOne(accountId);
+		if (!account.getCustomer().getId().equals(customer.getId())) {
+			throw new IllegalArgumentException();
+		}
+		return ResponseEntity.ok(account);
+	}
+	
 
 	@ApiOperation(value = "Get transactions for given user and account and date", nickname = "get", notes = "", response = Transaction.class, tags = {
 			"client", })
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "successful operation", response = Customer.class),
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "successful operation", response = Transaction.class),
 			@ApiResponse(code = 400, message = "Invalid client id supplied"),
 			@ApiResponse(code = 404, message = "Client not found") })
 	@RequestMapping(value = "/{id}/accounts/{accountId}/transactions", produces = {
