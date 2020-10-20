@@ -1,5 +1,24 @@
 # e-bank\_
 
+REST API for an E-Banking Portal for returning list of transactions. Contains following features:
+
+- Java 11
+- Spring Boot 2
+- Postgres DB
+- Swagger 2 API documentation
+- MrChecker for integration testing
+- JMeter for performace testing
+- CI/CD Jenkins pipeline configured
+- Two environments (DEV and PROD)
+
+## Endpoints
+
+- Application - http://localhost:8080/
+- Swagger UI - http://localhost:8080/swagger-ui.html
+- Application status - http://localhost:8080/api/
+
+## Building & running
+
 To run spring app with application-{profile_name}.properties Profile. Default is "dev"
 
 > mvn -Plocal spring-boot:run
