@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Api(value = "clients", description = "the clients API")
+@Api(value = "customers", description = "the customers API")
 
 @RestController
 @RequestMapping("/api/v1/customers")
@@ -51,19 +51,19 @@ public class CustomerController {
 		this.accountService = accountService;
 	}
 
-	@ApiOperation(value = "Get all clients", nickname = "list", notes = "", response = Customer.class, responseContainer = "List", tags = {
-			"client", })
+	@ApiOperation(value = "Get all customers", nickname = "list", notes = "", response = Customer.class, responseContainer = "List", tags = {
+			"customer", })
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "successful operation", response = Customer.class, responseContainer = "List"),
 			@ApiResponse(code = 400, message = "Invalid client id supplied"),
-			@ApiResponse(code = 404, message = "Client not found") })
+			@ApiResponse(code = 404, message = "Customer not found") })
 	@RequestMapping(value = "/", produces = { "application/json" }, method = RequestMethod.GET)
 	public Iterable<Customer> list() {
 		return customerService.getAll();
 	}
 
-	@ApiOperation(value = "Get client by id", nickname = "get", notes = "", response = Customer.class, tags = {
-			"client", })
+	@ApiOperation(value = "Get customer by id", nickname = "get", notes = "", response = Customer.class, tags = {
+			"customer", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "successful operation", response = Customer.class),
 			@ApiResponse(code = 400, message = "Invalid client id supplied"),
 			@ApiResponse(code = 404, message = "Client not found") })
@@ -73,11 +73,11 @@ public class CustomerController {
 		return ResponseEntity.ok(customerService.getOne(id));
 	}
 	
-	@ApiOperation(value = "Get accounts for given user", nickname = "get", notes = "", response = Account.class, tags = {
-			"client", })
+	@ApiOperation(value = "Get accounts for given customer", nickname = "get", notes = "", response = Account.class, tags = {
+			"customer", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "successful operation", response = Account.class),
 			@ApiResponse(code = 400, message = "Invalid client id supplied"),
-			@ApiResponse(code = 404, message = "Client not found") })
+			@ApiResponse(code = 404, message = "customer not found") })
 	@RequestMapping(value = "/{id}/accounts", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<Account>> getAccounts(
 			@ApiParam(value = "The id that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long id,
@@ -87,8 +87,8 @@ public class CustomerController {
 		return ResponseEntity.ok(accounts.getContent());
 	}
 	
-	@ApiOperation(value = "Get account details for given user", nickname = "get", notes = "", response = Account.class, tags = {
-			"client", })
+	@ApiOperation(value = "Get account details for given customer", nickname = "get", notes = "", response = Account.class, tags = {
+			"customer", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "successful operation", response = Account.class),
 			@ApiResponse(code = 400, message = "Invalid client id supplied"),
 			@ApiResponse(code = 404, message = "Client not found") })
@@ -108,11 +108,11 @@ public class CustomerController {
 	}
 	
 
-	@ApiOperation(value = "Get transactions for given user and account and date", nickname = "get", notes = "", response = Transaction.class, tags = {
-			"client", })
+	@ApiOperation(value = "Get transactions for given customer and account and date", nickname = "get", notes = "", response = Transaction.class, tags = {
+			"customer", })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "successful operation", response = Transaction.class),
 			@ApiResponse(code = 400, message = "Invalid client id supplied"),
-			@ApiResponse(code = 404, message = "Client not found") })
+			@ApiResponse(code = 404, message = "customer not found") })
 	@RequestMapping(value = "/{id}/accounts/{accountId}/transactions", produces = {
 			"application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<List<Transaction>> getTransactions(

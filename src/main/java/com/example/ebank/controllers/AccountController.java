@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.*;
 
-@Api(value = "accounts", description = "the clients API")
+@Api(value = "accounts", description = "the accounts API")
 @RestController
 @RequestMapping("/api/v1/accounts")
 public class AccountController {
@@ -21,23 +21,23 @@ public class AccountController {
                 this.accountService = accountService;
         }
 
-        @ApiOperation(value = "Get client's accounts", nickname = "list", notes = "", response = Account.class, responseContainer = "List", tags = {
+        @ApiOperation(value = "Get customers's accounts", nickname = "list", notes = "", response = Account.class, responseContainer = "List", tags = {
                         "account", })
         @ApiResponses(value = {
                         @ApiResponse(code = 200, message = "successful operation", response = Account.class, responseContainer = "List"),
-                        @ApiResponse(code = 400, message = "Invalid client id supplied"),
-                        @ApiResponse(code = 404, message = "Client not found") })
+                        @ApiResponse(code = 400, message = "Invalid customer id supplied"),
+                        @ApiResponse(code = 404, message = "Customer not found") })
         @RequestMapping(value = "/", produces = { "application/json" }, method = RequestMethod.GET)
         public Iterable<Account> list() {
                 return accountService.getAll();
         }
 
-        @ApiOperation(value = "Get client's accounts", nickname = "get", notes = "", response = Account.class, responseContainer = "List", tags = {
+        @ApiOperation(value = "Get customer's accounts", nickname = "get", notes = "", response = Account.class, responseContainer = "List", tags = {
                         "account", })
         @ApiResponses(value = {
                         @ApiResponse(code = 200, message = "successful operation", response = Account.class, responseContainer = "List"),
-                        @ApiResponse(code = 400, message = "Invalid client id supplied"),
-                        @ApiResponse(code = 404, message = "Client not found") })
+                        @ApiResponse(code = 400, message = "Invalid customer id supplied"),
+                        @ApiResponse(code = 404, message = "Customer not found") })
         @RequestMapping(value = "/{id}", produces = { "application/json" }, method = RequestMethod.GET)
         public ResponseEntity<Account> get(
                         @ApiParam(value = "The id that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long id) {
