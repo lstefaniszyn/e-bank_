@@ -39,26 +39,38 @@ To run jar app with arguments
 
 ### Kafka
 
-- kafka.host=
+```
+kafka.host=
+```
 
 ### RabbitMQ
 
-- rabbit.hostname=
-- rabbit.port=
-- rabbit.user=
-- rabbit.pass=
+```
+rabbit.hostname=
+rabbit.port=
+rabbit.user=
+rabbit.pass=
+```
 
-### DataBase
+### Database
 
-- db.host=
-- db.user=
-- db.pass=
+```
+db.host=
+db.user=
+db.pass=
+```
+
+## Database schema
+
+<img src="Database\RBS-CodingChallenge_DatabaseModel.svg"/>
 
 ## Mocked data
 
-Mocked data are located in json files in: `src/main/resources/data`.
+Use `mock` profile while running the application to switch to mocked data instead of PostgreSQL.
 
-Add `mock` profile while running the application to switch to mocked data instead of PostgreSQL. However, remember that `mock` profile is only a side profile, i.e. it still needs to be used together with one of the main profiles (`local/dev/prod`).
+> mvn -Pmock spring-boot:run
+
+Mocked data are located in json files in: `src/main/resources/data`.
 
 - `accounts.json` contains 100 accounts with subsequent ids.
 - `customers.json` contains 152 customers with subsequent ids, transaction list is not present here.
