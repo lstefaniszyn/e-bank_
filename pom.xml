@@ -53,7 +53,7 @@
 		<profile>
 			<id>mock</id>
 			<properties>
-				<spring.profiles.active>mock</spring.profiles.active>
+				<spring.profiles.active>mock,dev</spring.profiles.active>
 			</properties>
 		</profile>
 	</profiles>

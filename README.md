@@ -1,5 +1,24 @@
 # e-bank\_
 
+REST API for an E-Banking Portal for returning list of transactions. Contains following features:
+
+- Java 11
+- Spring Boot 2
+- Postgres DB
+- Swagger 2 API documentation
+- MrChecker for integration testing
+- JMeter for performace testing
+- CI/CD Jenkins pipeline configured
+- Two environments (DEV and PROD)
+
+## Endpoints
+
+- Application - http://localhost:8080/
+- Swagger UI - http://localhost:8080/swagger-ui.html
+- Application status - http://localhost:8080/api/
+
+## Building & running
+
 To run spring app with application-{profile_name}.properties Profile. Default is "dev"
 
 > mvn -Plocal spring-boot:run
@@ -20,26 +39,38 @@ To run jar app with arguments
 
 ### Kafka
 
-- kafka.host=
+```
+kafka.host=
+```
 
 ### RabbitMQ
 
-- rabbit.hostname=
-- rabbit.port=
-- rabbit.user=
-- rabbit.pass=
+```
+rabbit.hostname=
+rabbit.port=
+rabbit.user=
+rabbit.pass=
+```
 
-### DataBase
+### Database
 
-- db.host=
-- db.user=
-- db.pass=
+```
+db.host=
+db.user=
+db.pass=
+```
+
+## Database schema
+
+<img src="Database\RBS-CodingChallenge_DatabaseModel.svg"/>
 
 ## Mocked data
 
-Mocked data are located in json files in: `src/main/resources/data`.
+Use `mock` profile while running the application to switch to mocked data instead of PostgreSQL.
 
-Add `mock` profile while running the application to switch to mocked data instead of PostgreSQL. However, remember that `mock` profile is only a side profile, i.e. it still needs to be used together with one of the main profiles (`local/dev/prod`).
+> mvn -Pmock spring-boot:run
+
+Mocked data are located in json files in: `src/main/resources/data`.
 
 - `accounts.json` contains 100 accounts with subsequent ids.
 - `customers.json` contains 152 customers with subsequent ids, transaction list is not present here.
