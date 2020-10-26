@@ -11,7 +11,18 @@ info:
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
   version: 1.0.0
 servers:
-  - url: "http://TEST.capgemini.com/v1"
+  - url: "{protocol}://10.40.234.149:{port}/api/v1"
+    variables:
+      protocol:
+        enum:
+          - 'http'
+          - 'https'
+        default: 'http'
+      port:
+        enum:
+          - '8080'
+          - '8443'
+        default: '8080'
 tags:
   - name: customer
     description: Operations about customer
@@ -53,7 +64,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/customer"
+                  $ref: "#/components/schemas/Customer"
         "400":
           description: Invalid customer id supplied
           content: {}
@@ -77,12 +88,9 @@ paths:
         "200":
           description: successful operation
           content:
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/customer"
             application/json:
               schema:
-                $ref: "#/components/schemas/customer"
+                $ref: "#/components/schemas/Customer"
         "400":
           description: Invalid customer id supplied
           content: {}
