@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ExchangeRateMockService implements ExchangeRateService {
 
-    private final Map<String, Double> exchangeRatesToEUR = Map.of("EUR", 1.0, "USD", 1.18550, "GBP", 0.90872);
+    private final Map<String, Double> exchangeRatesToEUR = Map.of("EUR", 1.0, "USD", 1.18550, "GBP", 0.90872, "CHF",
+            1.07361);
 
     @Override
     public Double getExchangeRate(String baseCurrency, String targetCurrency) {
