@@ -18,6 +18,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     
     @ExceptionHandler(value = IllegalArgumentException.class)
     protected ResponseEntity<Object> handleIllegalArgument() {
-    	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    	return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 }
