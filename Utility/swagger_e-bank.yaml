@@ -159,6 +159,38 @@ paths:
         "404":
           description: customer not found
           content: {}
+  "/accounts/{idAccount}/transactions":
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - account
+      summary: Get account's transactions secured
+      operationId: getAccountTransactionsSecured
+      parameters:
+        - name: idAccount
+          in: path
+          description: 'The idAccount that needs to be fetched. Use "1" for testing. '
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Transaction"
+        "400":
+          description: Invalid customer id supplied
+          content: {}
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        "404":
+          description: customer not found
+          content: {}
 components:
   schemas:
     Currency:
@@ -246,3 +278,12 @@ components:
           type: string
         message:
           type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+      content: {}

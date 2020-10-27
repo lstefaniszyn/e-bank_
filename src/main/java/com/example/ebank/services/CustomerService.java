@@ -22,4 +22,8 @@ public class CustomerService {
     public Customer getOne(Long id) {
         return customerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
+
+    public Customer getByIdentityKey(String identityKey) {
+        return customerRepository.findByIdentityKey(identityKey).orElseThrow(EntityNotFoundException::new);
+    }
 }
