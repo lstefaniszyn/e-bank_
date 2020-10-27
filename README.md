@@ -61,6 +61,27 @@ To run jar app with arguments
 
 > java -jar ebank.jar --spring.profiles.active=dev --db.user=test --db.pass=test
 
+### Running with external exchange rate service
+
+#### Spring Cloud Eureka server
+
+Exchange rate service is implemented as a mocked microservice (`com.example.exchangerate.microservice.ExchangeRateApplication` class) that will register itself in Eureka service discovery server (`com.example.exchangerate.registration.RegistrationServer`).
+
+EBank application can be run without exchange rate service. In this case, no currency conversion is performed.
+
+If you wish to use currency conversion, run `com.example.exchangerate.microservice.ExchangeRateApplication` and `com.example.exchangerate.registration.RegistrationServer` applications.
+In this case, `/api/v1/transactions` endpoint will return list of transactions with amounts converted to GBP.
+
+**Example**
+
+Example using data from DEV DB.
+
+```
+curl --location --request GET 'localhost:8080/api/v1/transactions?date=2019-01&size=5'
+
+[{"id":377041,"valueDate":"2019-01-05","amount":304.2898786561228,"currency":"GBP","description":"payment CHF"},{"id":377042,"valueDate":"2019-01-21","amount":219.8950045234303,"currency":"GBP","description":"payment CHF"},{"id":377043,"valueDate":"2019-01-11","amount":336.1576287515951,"currency":"GBP","description":"payment CHF"},{"id":377044,"valueDate":"2019-01-27","amount":108.30920607371392,"currency":"GBP","description":"payment CHF"},{"id":377045,"valueDate":"2019-01-25","amount":125.46708661282963,"currency":"GBP","description":"payment CHF"}]
+```
+
 ## Variables:
 
 ### Kafka
