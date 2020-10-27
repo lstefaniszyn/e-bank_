@@ -3,69 +3,80 @@ info:
   title: Swagger E-Banking
   description: >-
     This is E-banking server.
-  termsOfService: 'http://swagger.io/terms/'
+  termsOfService: "http://swagger.io/terms/"
   contact:
     email: lukasz.stefaniszyn@capgemini.com
   license:
     name: Apache 2.0
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
   version: 1.0.0
 servers:
-  - url: 'http://TEST.capgemini.com/v1'
+  - url: "{protocol}://10.40.234.149:{port}/api/v1"
+    variables:
+      protocol:
+        enum:
+          - 'http'
+          - 'https'
+        default: 'http'
+      port:
+        enum:
+          - '8080'
+          - '8443'
+        default: '8080'
 tags:
-  - name: client
-    description: Operations about client
+  - name: customer
+    description: Operations about customer
   - name: account
     description: Operations about account
 paths:
-  '/api':
+  "/api":
     get:
       tags:
         - app
       summary: Get API status
       operationId: getStatus
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: object
                 items:
-                  $ref: '#/components/schemas/AppStatus'
-        '400':
+                  $ref: "#/components/schemas/AppStatus"
+        "400":
           description: Error
           content: {}
-        '404':
+        "404":
           description: Error
           content: {}
-  '/clients':
+  "/customers":
     get:
       tags:
-        - client
-      summary: Get all clients
-      operationId: getClients
+        - customer
+      summary: Get all customers
+      operationId: getcustomers
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Client'
-        '400':
-          description: Invalid client id supplied
+                  $ref: "#/components/schemas/Customer"
+        "400":
+          description: Invalid customer id supplied
           content: {}
-        '404':
-          description: Client not found
+        "404":
+          description: customer not found
           content: {}
-  '/clients/{id}':
+  "/customers/{id}":
     get:
       tags:
-        - client
-      summary: Get client by id
-      operationId: getClientById
+        - customer
+      summary: Get customer by id
+      operationId: getcustomerById
       parameters:
         - name: id
           in: path
@@ -74,27 +85,24 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Client'
             application/json:
               schema:
-                $ref: '#/components/schemas/Client'
-        '400':
-          description: Invalid client id supplied
+                $ref: "#/components/schemas/Customer"
+        "400":
+          description: Invalid customer id supplied
           content: {}
-        '404':
-          description: Client not found
+        "404":
+          description: customer not found
           content: {}
-  '/clients/{id}/accounts':
+  "/customers/{id}/accounts":
     get:
       tags:
         - account
-      summary: Get client's accounts
-      operationId: getClientAccounts
+      summary: Get customer's accounts
+      operationId: getcustomerAccounts
       parameters:
         - name: id
           in: path
@@ -103,25 +111,25 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Account'
-        '400':
-          description: Invalid client id supplied
+                  $ref: "#/components/schemas/Account"
+        "400":
+          description: Invalid customer id supplied
           content: {}
-        '404':
-          description: Client not found
-          content: {}        
-  '/clients/{id}/accounts/{idAccount}/transactions':
+        "404":
+          description: customer not found
+          content: {}
+  "/customers/{id}/accounts/{idAccount}/transactions":
     get:
       tags:
         - account
-      summary: Get account's transactions 
+      summary: Get account's transactions
       operationId: getAccountTransactions
       parameters:
         - name: id
@@ -135,22 +143,22 @@ paths:
           description: 'The idAccount that needs to be fetched. Use "1" for testing. '
           required: true
           schema:
-            type: string    
+            type: string
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Transaction'
-        '400':
-          description: Invalid client id supplied
+                  $ref: "#/components/schemas/Transaction"
+        "400":
+          description: Invalid customer id supplied
           content: {}
-        '404':
-          description: Client not found
-          content: {}        
+        "404":
+          description: customer not found
+          content: {}
 components:
   schemas:
     Currency:
@@ -173,10 +181,10 @@ components:
         name:
           type: string
         currency:
-          $ref: '#/components/schemas/Currency'
+          $ref: "#/components/schemas/Currency"
       xml:
         name: Account
-    Client:
+    Customer:
       type: object
       properties:
         id:
@@ -194,7 +202,7 @@ components:
             name: account
             wrapped: false
           items:
-            $ref: '#/components/schemas/Account'
+            $ref: "#/components/schemas/Account"
       xml:
         name: User
     AppStatus:
@@ -204,7 +212,7 @@ components:
           type: string
           description: https://schema.org/version
       xml:
-        name: AppStatus    
+        name: AppStatus
     Transaction:
       type: object
       properties:
@@ -218,7 +226,7 @@ components:
               type: integer
               format: int64
             currency:
-              $ref: '#/components/schemas/Currency'
+              $ref: "#/components/schemas/Currency"
         iban:
           type: string
         date:

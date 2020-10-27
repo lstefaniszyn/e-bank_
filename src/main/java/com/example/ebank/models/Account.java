@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Account {
 
@@ -16,6 +18,7 @@ public class Account {
     private Customer customer;
 
     @OneToMany(mappedBy = "account")
+    @JsonIgnore
     private List<Transaction> transactions;
 
     @Column(name = "iban", length = 50)

@@ -2,7 +2,12 @@ FROM openjdk:11.0.8-jdk
 ENV DB_USER DB_PASS 
 ARG SPRING_PROFILE="dev"
 
-ARG JAR_FILE=target/*.jar
+ARG JAR_FILE="target/*.jar"
+RUN addgroup --system --gid 1001 appuser
+RUN adduser --system --uid 1001 --group appuser
+COPY --chown=appuser:appuser ${JAR_FILE} app.jar
+USER appuser
+
 COPY ${JAR_FILE} app.jar
 ENTRYPOINT ["java","-jar","/app.jar", "--spring.profiles.active=${SPRING_PROFILE}", "--db.user=${DB_USER}", "--db.pass=${DB_PASS}"]
 

@@ -15,7 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Api(value = "app", description = "the API status")
+@Api(value = "app", tags = "app", description = "the API status")
 
 @RestController
 @RequestMapping("/api")
