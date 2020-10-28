@@ -26,6 +26,7 @@
 		<allure-cli-runner.version>2.10.0</allure-cli-runner.version>
 		<springfox-version>2.9.2</springfox-version>
 		<skip.surefire.tests>${skipTests}</skip.surefire.tests>
+		<spring.mainClass>com.example.ebank.EBankApplication</spring.mainClass>
 	</properties>
 
 	<profiles>
@@ -187,6 +188,11 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -202,7 +208,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<jvmArguments>${argLine}</jvmArguments>
-					<mainClass>com.example.ebank.EBankApplication</mainClass>
+					<mainClass>${spring.mainClass}</mainClass>
 				</configuration>
 			</plugin>
 			<plugin>
