@@ -26,6 +26,7 @@
 		<allure-cli-runner.version>2.10.0</allure-cli-runner.version>
 		<springfox-version>2.9.2</springfox-version>
 		<skip.surefire.tests>${skipTests}</skip.surefire.tests>
+		<spring.mainClass>com.example.ebank.EBankApplication</spring.mainClass>
 	</properties>
 
 	<profiles>
@@ -178,6 +179,20 @@
 			<artifactId>allure-attachments</artifactId>
 			<version>${allure-attachments.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -193,6 +208,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<jvmArguments>${argLine}</jvmArguments>
+					<mainClass>${spring.mainClass}</mainClass>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -260,4 +276,16 @@
 		</plugins>
 	</build>
 
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>Hoxton.SR8</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>
