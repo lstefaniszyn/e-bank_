@@ -16,13 +16,12 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @Api(value = "app", tags = "app", description = "the API status")
-
 @RestController
 @RequestMapping("/api")
 public class AppStatusController {
     @Value("${app.version}")
     private String appVersion;
-
+    
     @ApiOperation(value = "Get API status", nickname = "getStatus", notes = "", response = AppStatus.class, responseContainer = "Object", tags = {
             "app", })
     @ApiResponses(value = {
@@ -34,5 +33,5 @@ public class AppStatusController {
         map.put("app-version", appVersion);
         return map;
     }
-
+    
 }
