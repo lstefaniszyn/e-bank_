@@ -111,6 +111,11 @@ paths:
                 - customer
             summary: Get customer by idCustomer
             operationId: getcustomerById
+            x-contracts:
+                - contractId: 1
+                  name: get-one-customer-OK-Response
+                  description: Positive, to one customer
+                  priority: 1
             parameters:
                 - name: idCustomer
                   in: path
@@ -118,11 +123,9 @@ paths:
                   required: true
                   schema:
                       type: string
-            x-contracts:
-                - contractId: 1
-                  name: get-one-customer-OK-Response
-                  description: Positive, to one customer
-                  priority: 1
+                  x-contracts:
+                      - contractId: 1
+                        value: 1
             responses:
                 "200":
                     description: successful operation
@@ -157,6 +160,10 @@ paths:
                 - account
             summary: Get customer's accounts
             operationId: getcustomerAccounts
+            x-contracts:
+                - contractId: 1
+                  name: get-accounts-for-customer-OK-Response
+                  priority: 1
             parameters:
                 - name: idCustomer
                   in: path
@@ -164,10 +171,9 @@ paths:
                   required: true
                   schema:
                       type: string
-            x-contracts:
-                - contractId: 1
-                  name: get-accounts-for-customer-OK-Response
-                  priority: 1
+                  x-contracts:
+                      - contractId: 1
+                        value: 1
             responses:
                 "200":
                     description: successful operation
@@ -199,6 +205,10 @@ paths:
                 - account
             summary: Get customer's account
             operationId: getcustomerAccount
+            x-contracts:
+                - contractId: 1
+                  name: get-account-for-one-customer-OK-Response
+                  priority: 1
             parameters:
                 - name: idCustomer
                   in: path
@@ -206,16 +216,18 @@ paths:
                   required: true
                   schema:
                       type: string
+                  x-contracts:
+                      - contractId: 1
+                        value: 1
                 - name: idAccount
                   in: path
                   description: 'The idAccount that needs to be fetched. Use "1" for testing. '
                   required: true
                   schema:
                       type: string
-            x-contracts:
-                - contractId: 1
-                  name: get-account-for-one-customer-OK-Response
-                  priority: 1
+                  x-contracts:
+                      - contractId: 1
+                        value: 1
             responses:
                 "200":
                     description: successful operation
@@ -247,6 +259,10 @@ paths:
                 - account
             summary: Get account's transactions
             operationId: getAccountTransactions
+            x-contracts:
+                - contractId: 1
+                  name: get-transactions-for-account-for-customer-OK-Response
+                  priority: 1
             parameters:
                 - name: idCustomer
                   in: path
@@ -254,16 +270,18 @@ paths:
                   required: true
                   schema:
                       type: string
+                  x-contracts:
+                      - contractId: 1
+                        value: 1
                 - name: idAccount
                   in: path
                   description: 'The idAccount that needs to be fetched. Use "1" for testing. '
                   required: true
                   schema:
                       type: string
-            x-contracts:
-                - contractId: 1
-                  name: get-transactions-for-account-for-customer-OK-Response
-                  priority: 1
+                  x-contracts:
+                      - contractId: 1
+                        value: 1
             responses:
                 "200":
                     description: successful operation

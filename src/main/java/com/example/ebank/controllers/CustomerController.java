@@ -33,49 +33,33 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 @RequestMapping("/api/v1")
 public class CustomerController {
-
-	private final static String DATE_FORMAT = "yyyy-MM";
-	private final static DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder()
-			.append(DateTimeFormatter.ofPattern(DATE_FORMAT)).parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
-			.toFormatter();
-
-	private final CustomerService customerService;
-	private final TransactionService transactionService;
-	private final AccountService accountService;
-
-	public CustomerController(CustomerService customerService, TransactionService transactionService,
-			AccountService accountService) {
-
-		this.customerService = customerService;
-		this.transactionService = transactionService;
-		this.accountService = accountService;
-	}
-
-	@ApiOperation(value = "Get all customers", nickname = "list", notes = "", response = Customer.class, responseContainer = "List", tags = {
-			"customer", })
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "successful operation", response = Customer.class, responseContainer = "List"),
-			@ApiResponse(code = 400, message = "Invalid client id supplied"),
-			@ApiResponse(code = 404, message = "Customer not found") })
-	@RequestMapping(value = "/customers", produces = { "application/json" }, method = RequestMethod.GET)
-	public Iterable<Customer> list() {
-		return customerService.getAll();
-	}
-
-	@ApiOperation(value = "Get customer by id", nickname = "get", notes = "", response = Customer.class, tags = {
-			"customer", })
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "successful operation", response = Customer.class),
-			@ApiResponse(code = 400, message = "Invalid client id supplied"),
-			@ApiResponse(code = 404, message = "Client not found") })
-	@RequestMapping(value = "/customers/{id}", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<Customer> get(
-			@ApiParam(value = "The id that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long id) {
-		return ResponseEntity.ok(customerService.getOne(id));
-	}
-	
-	
-	
-
-	
-
+    
+    private final CustomerService customerService;
+    
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
+    }
+    
+    @ApiOperation(value = "Get all customers", nickname = "list", notes = "", response = Customer.class, responseContainer = "List", tags = {
+            "customer", })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successful operation", response = Customer.class, responseContainer = "List"),
+            @ApiResponse(code = 400, message = "Invalid client id supplied"),
+            @ApiResponse(code = 404, message = "Customer not found") })
+    @RequestMapping(value = "/customers", produces = { "application/json" }, method = RequestMethod.GET)
+    public Iterable<Customer> list() {
+        return customerService.getAll();
+    }
+    
+    @ApiOperation(value = "Get customer by id", nickname = "get", notes = "", response = Customer.class, tags = {
+            "customer", })
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "successful operation", response = Customer.class),
+            @ApiResponse(code = 400, message = "Invalid client id supplied"),
+            @ApiResponse(code = 404, message = "Client not found") })
+    @RequestMapping(value = "/customers/{id}", produces = { "application/json" }, method = RequestMethod.GET)
+    public ResponseEntity<Customer> get(
+            @ApiParam(value = "The id that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long id) {
+        return ResponseEntity.ok(customerService.getOne(id));
+    }
+    
 }

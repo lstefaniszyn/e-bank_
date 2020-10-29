@@ -16,8 +16,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @Api(value = "app", tags = "app", description = "the API status")
-@RestController
 @RequestMapping("/api")
+@RestController
 public class AppStatusController {
     @Value("${app.version}")
     private String appVersion;
