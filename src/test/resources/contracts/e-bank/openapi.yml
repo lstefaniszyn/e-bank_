@@ -91,10 +91,6 @@ paths:
                           items:
                           body:
                               "[0].id": "1"
-                              "accounts[0].id": "1"
-                              "accounts[0].name": "1"
-                              "accounts[0].currency.name": "Euro"
-                              "accounts[0].currency.code": "EUR"
                           matchers:
                               body:
                                   - path: $[0].['givenName']
@@ -109,14 +105,14 @@ paths:
                 "404":
                     description: customer not found
                     content: {}
-    "/customers/{id}":
+    "/customers/{idCustomer}":
         get:
             tags:
                 - customer
-            summary: Get customer by id
+            summary: Get customer by idCustomer
             operationId: getcustomerById
             parameters:
-                - name: id
+                - name: idCustomer
                   in: path
                   description: 'The id that needs to be fetched. Use "1" for testing. '
                   required: true
@@ -141,10 +137,6 @@ paths:
                           items:
                           body:
                               "id": "1"
-                              "accounts[0].id": "1"
-                              "accounts[0].name": "1"
-                              "accounts[0].currency.name": "Euro"
-                              "accounts[0].currency.code": "EUR"
                           matchers:
                               body:
                                   - path: $.['givenName']
@@ -159,19 +151,23 @@ paths:
                 "404":
                     description: customer not found
                     content: {}
-    "/customers/{id}/accounts":
+    "/customers/{idCustomer}/accounts":
         get:
             tags:
                 - account
             summary: Get customer's accounts
             operationId: getcustomerAccounts
             parameters:
-                - name: id
+                - name: idCustomer
                   in: path
-                  description: 'The id that needs to be fetched. Use "1" for testing. '
+                  description: 'The idCustomer that needs to be fetched. Use "1" for testing. '
                   required: true
                   schema:
                       type: string
+            x-contracts:
+                - contractId: 1
+                  name: get-accounts-for-customer-OK-Response
+                  priority: 1
             responses:
                 "200":
                     description: successful operation
@@ -181,6 +177,64 @@ paths:
                                 type: array
                                 items:
                                     $ref: "#/components/schemas/Account"
+                    x-contracts:
+                        - contractId: 1
+                          headers:
+                              Content-Type: application/json;charset=UTF-8
+                          items:
+                          body:
+                              "[0].id": "1"
+                              "[0].name": "1"
+                              "[0].currency.name": "Euro"
+                              "[0].currency.code": "EUR"
+                "400":
+                    description: Invalid customer id supplied
+                    content: {}
+                "404":
+                    description: customer not found
+                    content: {}
+    "/customers/{idCustomer}/accounts/{idAccount}":
+        get:
+            tags:
+                - account
+            summary: Get customer's account
+            operationId: getcustomerAccount
+            parameters:
+                - name: idCustomer
+                  in: path
+                  description: 'The idCustomer that needs to be fetched. Use "1" for testing. '
+                  required: true
+                  schema:
+                      type: string
+                - name: idAccount
+                  in: path
+                  description: 'The idAccount that needs to be fetched. Use "1" for testing. '
+                  required: true
+                  schema:
+                      type: string
+            x-contracts:
+                - contractId: 1
+                  name: get-account-for-one-customer-OK-Response
+                  priority: 1
+            responses:
+                "200":
+                    description: successful operation
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: "#/components/schemas/Account"
+                    x-contracts:
+                        - contractId: 1
+                          headers:
+                              Content-Type: application/json;charset=UTF-8
+                          items:
+                          body:
+                              "id": "1"
+                              "name": "1"
+                              "currency.name": "Euro"
+                              "currency.code": "EUR"
                 "400":
                     description: Invalid customer id supplied
                     content: {}
@@ -206,6 +260,10 @@ paths:
                   required: true
                   schema:
                       type: string
+            x-contracts:
+                - contractId: 1
+                  name: get-transactions-for-account-for-customer-OK-Response
+                  priority: 1
             responses:
                 "200":
                     description: successful operation
@@ -215,6 +273,30 @@ paths:
                                 type: array
                                 items:
                                     $ref: "#/components/schemas/Transaction"
+                    x-contracts:
+                        - contractId: 1
+                          headers:
+                              Content-Type: application/json;charset=UTF-8
+                          items:
+                          body:
+                              "[0].id": "1"
+                              "[0].value.amount": "1"
+                              "[0].value.currency.name": "Euro"
+                              "[0].value.currency.code": "EUR"
+                              "[0].iban": "TR320010009999901234567890"
+                              "[0].date": "2017-07-21T17:32:28Z"
+                              "[0].description": "Test"
+                          matchers:
+                              body:
+                                  - path: $[0].['iban']
+                                    type: by_regex
+                                    value: "\\w\\w[\\d]{16,24}"
+                                  - path: $[0].['date']
+                                    type: by_regex
+                                    value: "\\d{4}-\\d{2}-\\d{2}(T|t)\\d{2}:\\d{2}:\\d{2}[\\w]?"
+                                  - path: $[0].['description']
+                                    type: by_regex
+                                    value: "[\\w]*"
                 "400":
                     description: Invalid customer id supplied
                     content: {}
@@ -258,9 +340,6 @@ components:
                     description: https://schema.org/familyName
                 accounts:
                     type: array
-                    xml:
-                        name: account
-                        wrapped: false
                     items:
                         $ref: "#/components/schemas/Account"
         AppStatus:

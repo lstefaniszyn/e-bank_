@@ -14,6 +14,9 @@ public class AbstractContractSpec {
     
     @Before
     public void setup() {
+        
+        
+        
         RestAssuredMockMvc.standaloneSetup(appStatusController);
     }
     
