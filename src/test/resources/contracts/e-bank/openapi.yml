@@ -36,10 +36,8 @@ paths:
             operationId: getStatus
             x-contracts:
                 - contractId: 1
-                  name: Should Mark Client as Fraud
+                  name: AppStatus-OK-Response
                   priority: 1
-                - contractId: 2
-                  name: Should Not Mark Client as Fraud
             responses:
                 "200":
                     description: successful operation
@@ -49,6 +47,17 @@ paths:
                                 type: object
                                 items:
                                     $ref: "#/components/schemas/AppStatus"
+                    x-contracts:
+                        - contractId: 1
+                          headers:
+                              Content-Type: application/json;charset=UTF-8
+                          body:
+                              app-version: "1.0.0"
+                          matchers:
+                              body:
+                                  - path: $.['app-version']
+                                    type: by_regex
+                                    value: "[0-9]+\\.[0-9]+\\.[0-9]+"
                 "400":
                     description: Error
                     content: {}
@@ -61,6 +70,11 @@ paths:
                 - customer
             summary: Get all customers
             operationId: getcustomers
+            x-contracts:
+                - contractId: 1
+                  name: get-customers-OK-Response
+                  description: Positive, to get list of customers
+                  priority: 1
             responses:
                 "200":
                     description: successful operation
@@ -70,6 +84,25 @@ paths:
                                 type: array
                                 items:
                                     $ref: "#/components/schemas/Customer"
+                    x-contracts:
+                        - contractId: 1
+                          headers:
+                              Content-Type: application/json;charset=UTF-8
+                          items:
+                          body:
+                              "[0].id": "1"
+                              "accounts[0].id": "1"
+                              "accounts[0].name": "1"
+                              "accounts[0].currency.name": "Euro"
+                              "accounts[0].currency.code": "EUR"
+                          matchers:
+                              body:
+                                  - path: $[0].['givenName']
+                                    type: by_regex
+                                    value: "[\\w-_\\.]+"
+                                  - path: $[0].['familyName']
+                                    type: by_regex
+                                    value: "[\\w-_\\.]+"
                 "400":
                     description: Invalid customer id supplied
                     content: {}
@@ -89,6 +122,11 @@ paths:
                   required: true
                   schema:
                       type: string
+            x-contracts:
+                - contractId: 1
+                  name: get-one-customer-OK-Response
+                  description: Positive, to one customer
+                  priority: 1
             responses:
                 "200":
                     description: successful operation
@@ -96,6 +134,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Customer"
+                    x-contracts:
+                        - contractId: 1
+                          headers:
+                              Content-Type: application/json;charset=UTF-8
+                          items:
+                          body:
+                              "id": "1"
+                              "accounts[0].id": "1"
+                              "accounts[0].name": "1"
+                              "accounts[0].currency.name": "Euro"
+                              "accounts[0].currency.code": "EUR"
+                          matchers:
+                              body:
+                                  - path: $.['givenName']
+                                    type: by_regex
+                                    value: "[\\w-_\\.]+"
+                                  - path: $.['familyName']
+                                    type: by_regex
+                                    value: "[\\w-_\\.]+"
                 "400":
                     description: Invalid customer id supplied
                     content: {}
@@ -130,16 +187,16 @@ paths:
                 "404":
                     description: customer not found
                     content: {}
-    "/customers/{id}/accounts/{idAccount}/transactions":
+    "/customers/{idCustomer}/accounts/{idAccount}/transactions":
         get:
             tags:
                 - account
             summary: Get account's transactions
             operationId: getAccountTransactions
             parameters:
-                - name: id
+                - name: idCustomer
                   in: path
-                  description: 'The id that needs to be fetched. Use "1" for testing. '
+                  description: 'The idCustomer that needs to be fetched. Use "1" for testing. '
                   required: true
                   schema:
                       type: string
@@ -187,8 +244,6 @@ components:
                     type: string
                 currency:
                     $ref: "#/components/schemas/Currency"
-            xml:
-                name: Account
         Customer:
             type: object
             properties:
@@ -208,16 +263,12 @@ components:
                         wrapped: false
                     items:
                         $ref: "#/components/schemas/Account"
-            xml:
-                name: User
         AppStatus:
             type: object
             properties:
                 app-version:
                     type: string
                     description: https://schema.org/version
-            xml:
-                name: AppStatus
         Transaction:
             type: object
             properties:
