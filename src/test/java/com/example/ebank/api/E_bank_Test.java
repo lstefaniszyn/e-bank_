@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import org.springframework.boot.web.server.LocalServerPort;
 import io.restassured.module.mockmvc.specification.MockMvcRequestSpecification;
 import io.restassured.response.ResponseOptions;
 
