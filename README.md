@@ -168,7 +168,7 @@ To get encoded Json Web Token use [jwt.io](https://jwt.io/) with specific `ident
 
 <img src="Utility\jwt-secret.png"/>
 
-#### Authorization in Swagger
+### Authorization in Swagger
 
 To authorize request with Swagger click on padlock icon on the top or next to the chosen endpoint
 
