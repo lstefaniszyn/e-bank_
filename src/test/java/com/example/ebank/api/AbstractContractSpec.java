@@ -2,16 +2,26 @@ package com.example.ebank.api;
 
 import static org.mockito.BDDMockito.given;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
+import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import com.capgemini.mrchecker.test.core.logger.BFLogger;
+import com.example.ebank.controllers.AccountController;
 import com.example.ebank.controllers.AppStatusController;
 import com.example.ebank.controllers.CustomerController;
+import com.example.ebank.controllers.TransactionController;
+import com.example.ebank.models.Account;
+import com.example.ebank.models.Currency;
 import com.example.ebank.models.Customer;
+import com.example.ebank.models.Transaction;
+import com.example.ebank.services.AccountService;
 import com.example.ebank.services.CustomerService;
+import com.example.ebank.services.TransactionService;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
@@ -26,10 +36,22 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 public class AbstractContractSpec {
     
     @Mock
+    AccountService accountService;
+    
+    @Mock
+    TransactionService transactionService;
+    
+    @Mock
     CustomerService customerService;
     
     @InjectMocks
     CustomerController customerController;
+    
+    @InjectMocks
+    AccountController accountController;
+    
+    @InjectMocks
+    TransactionController transactionController;
     
     @InjectMocks
     AppStatusController appStatusController;
@@ -37,8 +59,23 @@ public class AbstractContractSpec {
     @Before
     public void setup() {
         BFLogger.logDebug("!!!! TEST ME !!!");
+        // Mock customer service
         given(customerService.getOne(1L)).willReturn(getCustomer(1L));
         given(customerService.getAll()).willReturn(getCustomers());
+        
+        // Mock account service
+        given(accountService.getOne(1L)).willReturn(getAccount(1L, Currency.CHF));
+        given(accountService.getAll()).willReturn(getAccounts());
+        
+        // Mock transaction service
+        final String DATE_FORMAT = "yyyy-MM";
+        final DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder()
+                .append(DateTimeFormatter.ofPattern(DATE_FORMAT))
+                .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+                .toFormatter();
+        LocalDate date = LocalDate.parse("2019-01", DATE_FORMATTER);
+        given(transactionService.findInMonthPaginated(date, 1, 2)).willReturn(getTransactions());
+        
         RestAssuredMockMvc.standaloneSetup(appStatusController, customerController);
     }
     
@@ -57,6 +94,43 @@ public class AbstractContractSpec {
         customer.setFamilyName(randomString(30));
         customer.setIdentityKey(randomNumber(12));
         return customer;
+    }
+    
+    private List<Account> getAccounts() {
+        return List.of(
+                getAccount(1L, Currency.CHF),
+                getAccount(2L, Currency.GBP),
+                getAccount(3L, Currency.CHF),
+                getAccount(4L, Currency.EUR),
+                getAccount(5L, Currency.GBP));
+    }
+    
+    private Account getAccount(Long id, Currency currency) {
+        Account account = new Account();
+        account.setId(id);
+        account.setIban(randomString(20));
+        account.setCurrency(currency);
+        account.setCustomer(new Customer());
+        return account;
+    }
+    
+    private List<Transaction> getTransactions() {
+        return List.of(
+                getTransaction(1L),
+                getTransaction(2L),
+                getTransaction(3L),
+                getTransaction(4L),
+                getTransaction(5L));
+    }
+    
+    private Transaction getTransaction(Long id) {
+        Transaction transaction = new Transaction();
+        transaction.setAmount(123.12);
+        transaction.setCurrency(Currency.CHF);
+        transaction.setDescription("Test");
+        transaction.setId(id);
+        transaction.setValueDate(new Date());
+        return transaction;
     }
     
     static String randomString(int length) {

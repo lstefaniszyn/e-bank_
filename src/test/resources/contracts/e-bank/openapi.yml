@@ -50,7 +50,7 @@ paths:
                     x-contracts:
                         - contractId: 1
                           headers:
-                              Content-Type: application/json;charset=UTF-8
+                              Content-Type: application/json
                           body:
                               app-version: "1.0.0"
                           matchers:
@@ -64,12 +64,12 @@ paths:
                 "404":
                     description: Error
                     content: {}
-    "/customers":
+    "/api/v1/customers":
         get:
             tags:
                 - customer
             summary: Get all customers
-            operationId: getcustomers
+            operationId: getCustomers
             x-contracts:
                 - contractId: 1
                   name: get-customers-OK-Response
@@ -87,16 +87,17 @@ paths:
                     x-contracts:
                         - contractId: 1
                           headers:
-                              Content-Type: application/json;charset=UTF-8
+                              Content-Type: application/json
                           items:
-                          body:
-                              "[0].id": "1"
                           matchers:
                               body:
-                                  - path: $[0].['givenName']
+                                  - path: $[0].id
+                                    type: by_regex
+                                    value: "[\\d]+"
+                                  - path: $[0].givenName
                                     type: by_regex
                                     value: "[\\w-_\\.]+"
-                                  - path: $[0].['familyName']
+                                  - path: $[0].familyName
                                     type: by_regex
                                     value: "[\\w-_\\.]+"
                 "400":
@@ -105,12 +106,12 @@ paths:
                 "404":
                     description: customer not found
                     content: {}
-    "/customers/{idCustomer}":
+    "/api/v1/customers/{idCustomer}":
         get:
             tags:
                 - customer
             summary: Get customer by idCustomer
-            operationId: getcustomerById
+            operationId: getCustomerById
             x-contracts:
                 - contractId: 1
                   name: get-one-customer-OK-Response
@@ -136,16 +137,16 @@ paths:
                     x-contracts:
                         - contractId: 1
                           headers:
-                              Content-Type: application/json;charset=UTF-8
+                              Content-Type: application/json
                           items:
                           body:
                               "id": "1"
                           matchers:
                               body:
-                                  - path: $.['givenName']
+                                  - path: $.givenName
                                     type: by_regex
                                     value: "[\\w-_\\.]+"
-                                  - path: $.['familyName']
+                                  - path: $.familyName
                                     type: by_regex
                                     value: "[\\w-_\\.]+"
                 "400":
@@ -154,12 +155,12 @@ paths:
                 "404":
                     description: customer not found
                     content: {}
-    "/customers/{idCustomer}/accounts":
+    "/api/v1/customers/{idCustomer}/accounts":
         get:
             tags:
                 - account
             summary: Get customer's accounts
-            operationId: getcustomerAccounts
+            operationId: getCustomerAccounts
             x-contracts:
                 - contractId: 1
                   name: get-accounts-for-customer-OK-Response
@@ -186,25 +187,34 @@ paths:
                     x-contracts:
                         - contractId: 1
                           headers:
-                              Content-Type: application/json;charset=UTF-8
+                              Content-Type: application/json
                           items:
-                          body:
-                              "[0].id": "1"
-                              "[0].name": "1"
-                              "[0].currency.name": "Euro"
-                              "[0].currency.code": "EUR"
+                          matchers:
+                              body:
+                                  - path: $[0].id
+                                    type: by_regex
+                                    value: "[\\d]+"
+                                  - path: $[0].name
+                                    type: by_regex
+                                    value: "[\\w-_\\.]+"
+                                  - path: $[0].currency.name
+                                    type: by_regex
+                                    value: "[\\w]+"
+                                  - path: $[0].currency.code
+                                    type: by_regex
+                                    value: "[\\w]+"
                 "400":
                     description: Invalid customer id supplied
                     content: {}
                 "404":
                     description: customer not found
                     content: {}
-    "/customers/{idCustomer}/accounts/{idAccount}":
+    "/api/v1/customers/{idCustomer}/accounts/{idAccount}":
         get:
             tags:
                 - account
             summary: Get customer's account
-            operationId: getcustomerAccount
+            operationId: getCustomerAccount
             x-contracts:
                 - contractId: 1
                   name: get-account-for-one-customer-OK-Response
@@ -240,7 +250,7 @@ paths:
                     x-contracts:
                         - contractId: 1
                           headers:
-                              Content-Type: application/json;charset=UTF-8
+                              Content-Type: application/json
                           items:
                           body:
                               "id": "1"
@@ -253,7 +263,7 @@ paths:
                 "404":
                     description: customer not found
                     content: {}
-    "/customers/{idCustomer}/accounts/{idAccount}/transactions":
+    "/api/v1/customers/{idCustomer}/accounts/{idAccount}/transactions":
         get:
             tags:
                 - account
@@ -294,25 +304,29 @@ paths:
                     x-contracts:
                         - contractId: 1
                           headers:
-                              Content-Type: application/json;charset=UTF-8
+                              Content-Type: application/json
                           items:
-                          body:
-                              "[0].id": "1"
-                              "[0].value.amount": "1"
-                              "[0].value.currency.name": "Euro"
-                              "[0].value.currency.code": "EUR"
-                              "[0].iban": "TR320010009999901234567890"
-                              "[0].date": "2017-07-21T17:32:28Z"
-                              "[0].description": "Test"
                           matchers:
                               body:
-                                  - path: $[0].['iban']
+                                  - path: $[0].id
+                                    type: by_regex
+                                    value: "[\\d]+"
+                                  - path: $[0].value.amount
+                                    type: by_regex
+                                    value: "[\\d]+"
+                                  - path: $[0].value.currency.name
+                                    type: by_regex
+                                    value: "[\\w]+"
+                                  - path: $[0].value.currency.code
+                                    type: by_regex
+                                    value: "[\\w]+"
+                                  - path: $[0].iban
                                     type: by_regex
                                     value: "\\w\\w[\\d]{16,24}"
-                                  - path: $[0].['date']
+                                  - path: $[0].date
                                     type: by_regex
                                     value: "\\d{4}-\\d{2}-\\d{2}(T|t)\\d{2}:\\d{2}:\\d{2}[\\w]?"
-                                  - path: $[0].['description']
+                                  - path: $[0].description
                                     type: by_regex
                                     value: "[\\w]*"
                 "400":

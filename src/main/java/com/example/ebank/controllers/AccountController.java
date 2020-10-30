@@ -51,41 +51,41 @@ public class AccountController {
                         @ApiResponse(code = 200, message = "successful operation", response = Account.class, responseContainer = "List"),
                         @ApiResponse(code = 400, message = "Invalid customer id supplied"),
                         @ApiResponse(code = 404, message = "Customer not found") })
-        @RequestMapping(value = "/accounts/{id}", produces = { "application/json" }, method = RequestMethod.GET)
+        @RequestMapping(value = "/accounts/{idAccount}", produces = { "application/json" }, method = RequestMethod.GET)
         public ResponseEntity<Account> get(
-                        @ApiParam(value = "The id that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long id) {
-                return ResponseEntity.ok(accountService.getOne(id));
+                        @ApiParam(value = "The idAccount that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long idAccount) {
+                return ResponseEntity.ok(accountService.getOne(idAccount));
         }
 
-        @ApiOperation(value = "Get accounts for given customer", nickname = "get", notes = "", response = Account.class, tags = {
+        @ApiOperation(value = "Get accounts for given customer", nickname = "getCustomerAccounts", notes = "", response = Account.class, tags = {
                         "customer", })
         @ApiResponses(value = { @ApiResponse(code = 200, message = "successful operation", response = Account.class),
                         @ApiResponse(code = 400, message = "Invalid client id supplied"),
                         @ApiResponse(code = 404, message = "customer not found") })
-        @RequestMapping(value = "/customers/{id}/accounts", produces = { "application/json" }, method = RequestMethod.GET)
-        public ResponseEntity<List<Account>> getAccounts(
-                        @ApiParam(value = "The id that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long id,
+        @RequestMapping(value = "/customers/{idCustomer}/accounts", produces = { "application/json" }, method = RequestMethod.GET)
+        public ResponseEntity<List<Account>> getCustomerAccounts(
+                        @ApiParam(value = "The idCustomer that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long idCustomer,
                         @ApiParam(value = "The Page number to fetched. Use \"0\" for testing. ", required = false) @RequestParam(name = "page", defaultValue = "0") int page,
                         @ApiParam(value = "The number of objects fetch. Use \"2\" for testing. ", required = false) @RequestParam(name = "size", defaultValue = "2") int size) {
-                Page<Account> accounts = accountService.getForCustomer(id, page, size);
+                Page<Account> accounts = accountService.getForCustomer(idCustomer, page, size);
                 return ResponseEntity.ok(accounts.getContent());
         }
 
-        @ApiOperation(value = "Get account details for given customer", nickname = "get", notes = "", response = Account.class, tags = {
+        @ApiOperation(value = "Get account details for given customer", nickname = "getCustomerAccount", notes = "", response = Account.class, tags = {
                         "customer", })
         @ApiResponses(value = { @ApiResponse(code = 200, message = "successful operation", response = Account.class),
                         @ApiResponse(code = 400, message = "Invalid client id supplied"),
                         @ApiResponse(code = 404, message = "Client not found") })
-        @RequestMapping(value = "/customers/{id}/accounts/{accountId}", produces = {
+        @RequestMapping(value = "/customers/{idCustomer}/accounts/{idAccount}", produces = {
                         "application/json" }, method = RequestMethod.GET)
-        public ResponseEntity<Account> getAccount(
-                        @ApiParam(value = "The id that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long id,
-                        @ApiParam(value = "The account id that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long accountId,
+        public ResponseEntity<Account> getCustomerAccount(
+                        @ApiParam(value = "The idCustomer that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long idCustomer,
+                        @ApiParam(value = "The idAccount that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long idAccount,
                         @ApiParam(value = "The Page number to fetched. Use \"0\" for testing. ", required = false) @RequestParam(name = "page", defaultValue = "0") int page,
                         @ApiParam(value = "The number of objects fetch. Use \"2\" for testing. ", required = false) @RequestParam(name = "size", defaultValue = "2") int size) {
 
-                Customer customer = customerService.getOne(id);
-                Account account = accountService.getOne(accountId);
+                Customer customer = customerService.getOne(idCustomer);
+                Account account = accountService.getOne(idAccount);
                 if (!account.getCustomer().getId().equals(customer.getId())) {
                         throw new IllegalArgumentException();
                 }

@@ -40,26 +40,26 @@ public class CustomerController {
         this.customerService = customerService;
     }
     
-    @ApiOperation(value = "Get all customers", nickname = "list", notes = "", response = Customer.class, responseContainer = "List", tags = {
+    @ApiOperation(value = "Get all customers", nickname = "getCustomers", notes = "", response = Customer.class, responseContainer = "List", tags = {
             "customer", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful operation", response = Customer.class, responseContainer = "List"),
             @ApiResponse(code = 400, message = "Invalid client id supplied"),
             @ApiResponse(code = 404, message = "Customer not found") })
     @RequestMapping(value = "/customers", produces = { "application/json" }, method = RequestMethod.GET)
-    public Iterable<Customer> list() {
+    public Iterable<Customer> getCustomers() {
         return customerService.getAll();
     }
     
-    @ApiOperation(value = "Get customer by id", nickname = "get", notes = "", response = Customer.class, tags = {
+    @ApiOperation(value = "Get customer by id", nickname = "getCustomerById", notes = "", response = Customer.class, tags = {
             "customer", })
     @ApiResponses(value = { @ApiResponse(code = 200, message = "successful operation", response = Customer.class),
             @ApiResponse(code = 400, message = "Invalid client id supplied"),
             @ApiResponse(code = 404, message = "Client not found") })
-    @RequestMapping(value = "/customers/{id}", produces = { "application/json" }, method = RequestMethod.GET)
-    public ResponseEntity<Customer> get(
-            @ApiParam(value = "The id that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long id) {
-        return ResponseEntity.ok(customerService.getOne(id));
+    @RequestMapping(value = "/customers/{idCustomer}", produces = { "application/json" }, method = RequestMethod.GET)
+    public ResponseEntity<Customer> getCustomerById(
+            @ApiParam(value = "The idCustomer that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long idCustomer) {
+        return ResponseEntity.ok(customerService.getOne(idCustomer));
     }
     
 }
