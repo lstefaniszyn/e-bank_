@@ -2,6 +2,7 @@ package com.example.ebank.api;
 
 import static org.mockito.BDDMockito.given;
 
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Random;
@@ -12,6 +13,7 @@ import com.example.ebank.controllers.CustomerController;
 import com.example.ebank.models.Customer;
 import com.example.ebank.services.CustomerService;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -37,7 +39,7 @@ public class AbstractContractSpec {
         BFLogger.logDebug("!!!! TEST ME !!!");
         given(customerService.getOne(1L)).willReturn(getCustomer(1L));
         given(customerService.getAll()).willReturn(getCustomers());
-        RestAssuredMockMvc.standaloneSetup(appStatusController);
+        RestAssuredMockMvc.standaloneSetup(appStatusController, customerController);
     }
     
     private List<Customer> getCustomers() {
@@ -51,14 +53,17 @@ public class AbstractContractSpec {
     private Customer getCustomer(Long id) {
         Customer customer = new Customer();
         customer.setId(id);
-        customer.setName(randomString(30));
-        customer.setIdentityKey(randomString(12));
+        customer.setGivenName(randomString(10));
+        customer.setFamilyName(randomString(30));
+        customer.setIdentityKey(randomNumber(12));
         return customer;
     }
     
     static String randomString(int length) {
-        byte[] array = new byte[length];
-        new Random().nextBytes(array);
-        return new String(array, StandardCharsets.UTF_8);
+        return RandomStringUtils.randomAlphabetic(length);
+    }
+    
+    static String randomNumber(int length) {
+        return RandomStringUtils.randomNumeric(length);
     }
 }

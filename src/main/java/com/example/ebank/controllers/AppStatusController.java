@@ -20,14 +20,14 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 public class AppStatusController {
     @Value("${app.version}")
-    private String appVersion;
+    private String appVersion = "1.0.0";
     
     @ApiOperation(value = "Get API status", nickname = "getStatus", notes = "", response = AppStatus.class, responseContainer = "Object", tags = {
             "app", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful operation", response = AppStatus.class, responseContainer = "Object"),
             @ApiResponse(code = 400, message = "Error"), @ApiResponse(code = 404, message = "Error") })
-    @RequestMapping(value = "/", produces = { "application/json" }, method = RequestMethod.GET)
+    @RequestMapping(value = "", produces = { "application/json" }, method = RequestMethod.GET)
     public Map getStatus() {
         Map map = new HashMap<String, String>();
         map.put("app-version", appVersion);

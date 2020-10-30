@@ -67,7 +67,8 @@ public class CustomerServiceTests {
     private Customer getCustomer(Long id) {
         Customer customer = new Customer();
         customer.setId(id);
-        customer.setName(randomString(30));
+        customer.setGivenName(randomString(10));
+        customer.setFamilyName(randomString(30));
         customer.setIdentityKey(randomString(12));
         return customer;
     }
