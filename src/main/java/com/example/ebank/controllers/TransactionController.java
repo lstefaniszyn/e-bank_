@@ -6,11 +6,11 @@ import com.example.ebank.models.Transaction;
 import com.example.ebank.services.AccountService;
 import com.example.ebank.services.CustomerService;
 import com.example.ebank.services.TransactionService;
+import com.example.ebank.utils.SecurityContextUtils;
 import io.swagger.annotations.*;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -100,8 +100,7 @@ public class TransactionController {
 			@ApiParam(value = "The Page number to fetched. Use \"0\" for testing. ", required = false) @RequestParam(name = "page", defaultValue = "0") int page,
 			@ApiParam(value = "The number of objects fetch. Use \"2\" for testing. ", required = false) @RequestParam(name = "size", defaultValue = "2") int size) {
 
-		String identityKey = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Customer customer = customerService.getByIdentityKey(identityKey);
+		Customer customer = customerService.getByIdentityKey(SecurityContextUtils.getIdentityKey());
 
 		Account account = accountService.getOne(accountId);
 		if (!account.getCustomer().getId().equals(customer.getId())) {
