@@ -22,8 +22,12 @@ public class KafkaProducer<T> {
 	private String _TOPIC;
 
 	public void sendMessage(T message) {
+		sendMessage(null, message);
+	}
+	
+	public void sendMessage(String key, T message) {
 
-		ListenableFuture<SendResult<String, T>> future = kafkaTemplate.send(_TOPIC, message);
+		ListenableFuture<SendResult<String, T>> future = kafkaTemplate.send(_TOPIC, key, message);
 
 		future.addCallback(new ListenableFutureCallback<SendResult<String, T>>() {
 
