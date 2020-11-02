@@ -47,6 +47,8 @@ public class KafkaFeeder {
 			deleteTopics();
 			createTopics();
 			feedKafkaTopic();
+		} else {
+			logger.info("Loading mocked data into kafka topics disabled!");
 		}
 	}
 	
@@ -91,6 +93,8 @@ public class KafkaFeeder {
 		}
 		
 		transactions.forEach(t -> kafkaProducer.sendMessage(String.valueOf(t.getId()), t));
+		
+		logger.info("Kafka topics have been fed with mocked data!");
 	}
 	
 }

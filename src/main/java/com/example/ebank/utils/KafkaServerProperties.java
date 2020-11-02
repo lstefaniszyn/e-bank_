@@ -6,11 +6,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class KafkaServerProperties {
 	
-	@Value("${kafka.mock.during.start:false}")
+	@Value("${kafka.mock-during-start.enabled:false}")
 	private boolean generateDataDuringStart;
+	
+	@Value("${kafka.read-mock-transactions.enabled:false}")
+	private boolean readMockedTransactions;
 	
 	public boolean feedKafkaDuringStart() {
 		return generateDataDuringStart;
+	}
+	
+	public boolean readMockedTransactions() {
+		return readMockedTransactions;
 	}
 	
 }
