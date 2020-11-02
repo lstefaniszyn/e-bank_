@@ -25,7 +25,9 @@
 		<maven-site-plugin.version>3.7.1</maven-site-plugin.version>
 		<allure-cli-runner.version>2.10.0</allure-cli-runner.version>
 		<springfox-version>2.9.2</springfox-version>
+		<jsonwebtoken-version>0.11.2</jsonwebtoken-version>
 		<skip.surefire.tests>${skipTests}</skip.surefire.tests>
+		<spring.mainClass>com.example.ebank.EBankApplication</spring.mainClass>
 	</properties>
 
 	<profiles>
@@ -70,6 +72,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
@@ -88,6 +95,24 @@
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>${jsonwebtoken-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>${jsonwebtoken-version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>${jsonwebtoken-version}</version>
+			<scope>runtime</scope>
 		</dependency>
 
 		<!--SpringFox dependencies -->
@@ -178,6 +203,20 @@
 			<artifactId>allure-attachments</artifactId>
 			<version>${allure-attachments.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -193,6 +232,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<jvmArguments>${argLine}</jvmArguments>
+					<mainClass>${spring.mainClass}</mainClass>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -260,4 +300,16 @@
 		</plugins>
 	</build>
 
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>Hoxton.SR8</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

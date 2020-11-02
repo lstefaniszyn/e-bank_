@@ -19,29 +19,32 @@ import java.util.Set;
 @Component
 public class MockCustomerRepository {
 
-    private static final Logger logger = LoggerFactory.getLogger(MockCustomerRepository.class);
+	private static final Logger logger = LoggerFactory.getLogger(MockCustomerRepository.class);
 
-    public Set<Customer> findAll() {
-        return getCustomers();
-    }
+	public Set<Customer> findAll() {
+		return getCustomers();
+	}
 
-    public Optional<Customer> findById(Long id) {
-        return getCustomers().stream().filter(c -> Objects.equals(c.getId(), id)).findFirst();
-    }
+	public Optional<Customer> findById(Long id) {
+		return getCustomers().stream().filter(c -> Objects.equals(c.getId(), id)).findFirst();
+	}
 
-    private Set<Customer> getCustomers() {
-        Set<Customer> customers = new HashSet<>();
-        Resource resource = new ClassPathResource("data/customers.json");
-        try {
-            File file = resource.getFile();
-            ObjectMapper jsonMapper = new ObjectMapper();
-            customers = jsonMapper.readValue(file, new TypeReference<Set<Customer>>() {
-            });
-        } catch (IOException exc) {
-            logger.warn("IOException occurred during loading mock collection of customers.");
-        }
-        logger.info("Loaded mock collection of customers.");
-        return customers;
-    }
+	public Optional<Customer> findByIdentityKey(String identityKey) {
+		return getCustomers().stream().filter(c -> Objects.equals(c.getIdentityKey(), identityKey)).findFirst();
+	}
 
+	private Set<Customer> getCustomers() {
+		Set<Customer> customers = new HashSet<>();
+		Resource resource = new ClassPathResource("data/customers.json");
+		try {
+			File file = resource.getFile();
+			ObjectMapper jsonMapper = new ObjectMapper();
+			customers = jsonMapper.readValue(file, new TypeReference<Set<Customer>>() {
+			});
+		} catch (IOException exc) {
+			logger.warn("IOException occurred during loading mock collection of customers.");
+		}
+		logger.info("Loaded mock collection of customers.");
+		return customers;
+	}
 }
