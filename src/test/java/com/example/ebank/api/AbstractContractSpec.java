@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +30,12 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
@@ -74,9 +81,15 @@ public class AbstractContractSpec {
                 .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
                 .toFormatter();
         LocalDate date = LocalDate.parse("2019-01", DATE_FORMATTER);
-        given(transactionService.findInMonthPaginated(date, 1, 2)).willReturn(getTransactions());
+        BFLogger.logDebug("Transactions: " + getPagedTransactions(0, 3));
         
-        RestAssuredMockMvc.standaloneSetup(appStatusController, customerController);
+        // transactionService.findForAccountInMonthPaginated(
+        // idAccount, date, page,
+        // size);
+        given(transactionService.findForAccountInMonthPaginated(1L, date, 0, 3)).willReturn(getPagedTransactions(0, 3));
+        // given(transactionService.findInMonthPaginated(date, 0, 3)).willReturn(getPagedTransactions(0, 3));
+        
+        RestAssuredMockMvc.standaloneSetup(appStatusController, customerController, accountController, transactionController);
     }
     
     private List<Customer> getCustomers() {
@@ -110,8 +123,29 @@ public class AbstractContractSpec {
         account.setId(id);
         account.setIban(randomString(20));
         account.setCurrency(currency);
-        account.setCustomer(new Customer());
+        account.setCustomer(this.getCustomer(1L));
         return account;
+    }
+    
+    private Page<Transaction> getPagedTransactions(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        
+        List<Transaction> transactions = getTransactions();
+        
+        int total = transactions.size();
+        int start = Math.toIntExact(pageRequest.getOffset());
+        int end = Math.min((start + pageRequest.getPageSize()), total);
+        
+        List<Transaction> output = new ArrayList<>();
+        
+        if (start <= end) {
+            output = transactions.subList(start, end);
+        }
+        
+        return new PageImpl<>(
+                output,
+                pageRequest,
+                total);
     }
     
     private List<Transaction> getTransactions() {
@@ -127,7 +161,7 @@ public class AbstractContractSpec {
         Transaction transaction = new Transaction();
         transaction.setAmount(123.12);
         transaction.setCurrency(Currency.CHF);
-        transaction.setDescription("Test");
+        transaction.setDescription("Test_" + id);
         transaction.setId(id);
         transaction.setValueDate(new Date());
         return transaction;

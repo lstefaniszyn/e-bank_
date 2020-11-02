@@ -22,16 +22,11 @@ public class E_bank_Test extends AbstractContractSpec {
         
         // when:
         ResponseOptions response = given().spec(request)
-                .get("/api");
+                .get("/api/v1/app");
         
         // then:
         assertThat(response.statusCode()).isEqualTo(200);
-        assertThat(response.header("Content-Type")).isEqualTo("application/json");
-        // and:
-        DocumentContext parsedJson = JsonPath.parse(response.getBody()
-                .asString());
-        // and:
-        assertThat(parsedJson.read("$.['app-version']", String.class)).matches("[0-9]+\\.[0-9]+\\.[0-9]+");
+        
     }
     
     @Test
@@ -82,6 +77,48 @@ public class E_bank_Test extends AbstractContractSpec {
         // and:
         assertThat(parsedJson.read("$.['givenName']", String.class)).matches("[\\w-_\\.]+");
         assertThat(parsedJson.read("$.['familyName']", String.class)).matches("[\\w-_\\.]+");
+    }
+    
+    @Test
+    public void validate_get_account_for_one_customer_OK_Response() throws Exception {
+        // given:
+        MockMvcRequestSpecification request = given();
+        
+        // when:
+        ResponseOptions response = given().spec(request)
+                .get("/api/v1/customers/{idCustomer}/accounts/{idAccount}", 1, 1);
+        
+        // then:
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.header("Content-Type")).isEqualTo("application/json");
+        // and:
+        DocumentContext parsedJson = JsonPath.parse(response.getBody()
+                .asString());
+        assertThatJson(parsedJson).field("['name']")
+                .isEqualTo("1");
+        assertThatJson(parsedJson).field("['currency.name']")
+                .isEqualTo("Euro");
+        assertThatJson(parsedJson).field("['currency.code']")
+                .isEqualTo("EUR");
+        assertThatJson(parsedJson).field("['id']")
+                .isEqualTo("1");
+    }
+    
+    @Test
+    public void validate_get_transactions_for_account_for_customer_OK_Response() throws Exception {
+        // given:
+        MockMvcRequestSpecification request = given();
+        
+        // when:
+        ResponseOptions response = given().spec(request)
+                .queryParam("date", "2019-01")
+                .queryParam("page", 0)
+                .queryParam("size", 3)
+                .get("/api/v1/customers/{idCustomer}/accounts/{idAccount}/transactions", 1, 1);
+        
+        // then:
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.header("Content-Type")).isEqualTo("application/json");
     }
     
 }

@@ -73,7 +73,7 @@ public class TransactionController {
             @ApiResponse(code = 200, message = "successful operation", response = Transaction.class),
             @ApiResponse(code = 400, message = "Invalid client id supplied"),
             @ApiResponse(code = 404, message = "customer not found") })
-    @RequestMapping(value = "customers/{idCustomer}/accounts/{idAccount}/transactions", produces = {
+    @RequestMapping(value = "/customers/{idCustomer}/accounts/{idAccount}/transactions", produces = {
             "application/json" }, method = RequestMethod.GET)
     public ResponseEntity<List<Transaction>> getAccountTransactions(
             @ApiParam(value = "The idCustomer that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long idCustomer,
