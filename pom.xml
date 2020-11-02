@@ -30,6 +30,7 @@
         <springfox-version>2.9.2</springfox-version>
         <skip.surefire.tests>${skipTests}</skip.surefire.tests>
         <jsonwebtoken-version>0.11.2</jsonwebtoken-version>
+        <openapitools-version>4.3.1</openapitools-version>
 
         <!-- Consumer Driven Contract -->
         <spring-cloud-contract.version>2.1.5.RELEASE</spring-cloud-contract.version>
@@ -140,6 +141,12 @@
             <version>${springfox-version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator</artifactId>
+            <version>${openapitools-version}</version>
+        </dependency>
+        
         <dependency>
             <groupId>com.github.joschi.jackson</groupId>
             <artifactId>jackson-datatype-threetenbp</artifactId>
@@ -428,6 +435,28 @@
                         <goals>
                             <goal>aggregate</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapitools-version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/api.yaml</inputSpec>
+                            <generatorName>java</generatorName>
+                            <configOptions>
+                                <sourceFolder>src/gen/java/main</sourceFolder>
+                            </configOptions>
+                            <generatorName>spring</generatorName>
+                            <generateModels>false</generateModels>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
