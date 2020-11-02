@@ -98,7 +98,7 @@ public class TransactionController {
 		
 		LocalDate date = LocalDate.parse(dateString, DATE_FORMATTER);
 		
-		Page<Transaction> resultPage = null;
+		Page<Transaction> resultPage = Page.empty();
 		
 		if (kafkaProperties.readMockedTransactions()) {
 			CompletableFuture<Page<Transaction>> resultPageFuture = asyncTransactionService.findInMonthPaginated(date, page, size);
