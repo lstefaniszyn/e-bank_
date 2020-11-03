@@ -1,28 +1,47 @@
 package com.example.ebank.controllers;
 
-import com.example.ebank.models.Account;
-import com.example.ebank.models.Customer;
-import com.example.ebank.models.Transaction;
-import com.example.ebank.services.AccountService;
-import com.example.ebank.services.CustomerService;
-import com.example.ebank.services.TransactionService;
-import com.example.ebank.utils.SecurityContextUtils;
-import io.swagger.annotations.*;
-import org.springframework.data.domain.Page;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.ebank.models.Account;
+import com.example.ebank.models.Customer;
+import com.example.ebank.models.Transaction;
+import com.example.ebank.services.AccountService;
+import com.example.ebank.services.AsyncTransactionService;
+import com.example.ebank.services.CustomerService;
+import com.example.ebank.services.TransactionService;
+import com.example.ebank.utils.KafkaServerProperties;
+import com.example.ebank.utils.SecurityContextUtils;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.Authorization;
 
 @Api(value = "transactions", tags = "transaction", description = "the transaction API")
 @RestController
 @RequestMapping("/api/v1")
 public class TransactionController {
+  
+	  private static final Logger logger = LoggerFactory.getLogger(TransactionController.class);
     
     private final static String DATE_FORMAT = "yyyy-MM";
     private final static DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder()
@@ -33,13 +52,18 @@ public class TransactionController {
     private final CustomerService customerService;
     private final TransactionService transactionService;
     private final AccountService accountService;
+    private final KafkaServerProperties kafkaProperties;
+    private final AsyncTransactionService asyncTransactionService;
     
     public TransactionController(CustomerService customerService, TransactionService transactionService,
-            AccountService accountService) {
+            AccountService accountService, KafkaServerProperties kafkaProperties,
+			      AsyncTransactionService asyncTransactionService) {
         
         this.customerService = customerService;
         this.transactionService = transactionService;
         this.accountService = accountService;
+        this.kafkaProperties = kafkaProperties;
+		    this.asyncTransactionService = asyncTransactionService;
     }
     
     @ApiOperation(value = "Get account's transactions", nickname = "getAllByDatePaginated", notes = "", response = Transaction.class, responseContainer = "List", tags = {
@@ -82,10 +106,22 @@ public class TransactionController {
         }
         
         LocalDate date = LocalDate.parse(dateString, DATE_FORMATTER);
-        Page<Transaction> resultPage = transactionService.findForAccountInMonthPaginated(
-                idAccount, date, page,
+        Page<Transaction> resultPage = Page.empty();
+		
+		    if (kafkaProperties.readMockedTransactions()) {
+			    CompletableFuture<Page<Transaction>> resultPageFuture = asyncTransactionService.findInMonthPaginated(date, page, size);
+			    CompletableFuture.allOf(resultPageFuture);
+          try {
+            resultPage = resultPageFuture.get();
+          } catch (InterruptedException | ExecutionException e) {
+            logger.error("Error during reading mocked data from Kafka", e);
+          }
+        } else {
+          resultPage = transactionService.findForAccountInMonthPaginated(accountId, date, page,
                 size);
+        }
         
         return ResponseEntity.ok(resultPage.getContent());
     }
+
 }
