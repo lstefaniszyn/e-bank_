@@ -1,7 +1,7 @@
 package com.example.ebank.repositories;
 
 import com.example.ebank.models.Transaction;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
