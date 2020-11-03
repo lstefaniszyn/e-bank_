@@ -22,7 +22,7 @@ public class E_bank_Test extends AbstractContractSpec {
         
         // when:
         ResponseOptions response = given().spec(request)
-                .get("/api/v1/app");
+                .get("/api");
         
         // then:
         assertThat(response.statusCode()).isEqualTo(200);
@@ -113,12 +113,23 @@ public class E_bank_Test extends AbstractContractSpec {
         ResponseOptions response = given().spec(request)
                 .queryParam("date", "2019-01")
                 .queryParam("page", 0)
-                .queryParam("size", 3)
+                .queryParam("size", 2)
                 .get("/api/v1/customers/{idCustomer}/accounts/{idAccount}/transactions", 1, 1);
         
         // then:
         assertThat(response.statusCode()).isEqualTo(200);
         assertThat(response.header("Content-Type")).isEqualTo("application/json");
+        // and:
+        DocumentContext parsedJson = JsonPath.parse(response.getBody()
+                .asString());
+        // and:
+        assertThat(parsedJson.read("$[0].id", String.class)).matches("[\\d]+");
+        assertThat(parsedJson.read("$[0].value.amount", String.class)).matches("[\\d]+");
+        assertThat(parsedJson.read("$[0].value.currency.name", String.class)).matches("[\\w]+");
+        assertThat(parsedJson.read("$[0].value.currency.code", String.class)).matches("[\\w]+");
+        assertThat(parsedJson.read("$[0].iban", String.class)).matches("\\w\\w[\\d]{16,24}");
+        assertThat(parsedJson.read("$[0].date", String.class)).matches("\\d{4}-\\d{2}-\\d{2}(T|t)\\d{2}:\\d{2}:\\d{2}[\\w]?");
+        assertThat(parsedJson.read("$[0].description", String.class)).matches("[\\w]*");
     }
     
 }

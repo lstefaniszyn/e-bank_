@@ -141,6 +141,9 @@ paths:
                           items:
                           body:
                               "id": "1"
+                              "balance.value": ""
+                              "balance.currency.code": "GPB"
+                              "balance.currency.name": "Pound Sterling"
                           matchers:
                               body:
                                   - path: $.givenName
@@ -149,6 +152,9 @@ paths:
                                   - path: $.familyName
                                     type: by_regex
                                     value: "[\\w-_\\.]+"
+                                  - path: $.balance.value
+                                    type: by_regex
+                                    value: "[-+]?[\\d]+\\.{1}\\d{2}"
                 "400":
                     description: Invalid customer id supplied
                     content: {}
@@ -172,9 +178,10 @@ paths:
                   required: true
                   schema:
                       type: string
+                  description: The number of items to skip before starting to collect the result set
                   x-contracts:
-                      - contractId: 1
-                        value: 1
+                    - contractId: 1
+                      value: 1
             responses:
                 "200":
                     description: successful operation
@@ -189,6 +196,8 @@ paths:
                           headers:
                               Content-Type: application/json
                           items:
+                          body:
+                              nullValue: null
                           matchers:
                               body:
                                   - path: $[0].id
@@ -292,6 +301,35 @@ paths:
                   x-contracts:
                       - contractId: 1
                         value: 1
+                - name: date
+                  in: query
+                  description: 'The date to filter. Use \"2019-01\" for testing.'
+                  required: true
+                  schema:
+                      type: string
+                  x-contracts:
+                      - contractId: 1
+                        value: "2019-01"
+                - name: page
+                  in: query
+                  description: 'The Page number to fetched. Use \"0\" for testing.'
+                  required: false
+                  schema:
+                      type: integer
+                  x-contracts:
+                      - contractId: 1
+                        type: integer
+                        value: 0
+                - name: size
+                  in: query
+                  description: 'The number of objects fetch. Use \"2\" for testing.'
+                  required: false
+                  schema:
+                      type: integer
+                  x-contracts:
+                      - contractId: 1
+                        type: integer
+                        value: 2
             responses:
                 "200":
                     description: successful operation
@@ -306,6 +344,8 @@ paths:
                           headers:
                               Content-Type: application/json
                           items:
+                          body:
+                              nullValue: null
                           matchers:
                               body:
                                   - path: $[0].id
@@ -346,8 +386,6 @@ components:
                 code:
                     type: string
                     description: like, EUR
-            xml:
-                name: Currency
         Account:
             type: object
             properties:
@@ -355,6 +393,8 @@ components:
                     type: integer
                     format: int64
                 name:
+                    type: string
+                iban:
                     type: string
                 currency:
                     $ref: "#/components/schemas/Currency"
@@ -374,6 +414,15 @@ components:
                     type: array
                     items:
                         $ref: "#/components/schemas/Account"
+                balance: 
+                    type: object
+                    properties:
+                        value:
+                            type: integer
+                            description: Sum up of money status combined from all client's accounts and exchange to GPB
+                        currency:
+                            description: Sum up of money status combined from all client's accounts and exchange to GPB
+                            $ref: "#/components/schemas/Currency"
         AppStatus:
             type: object
             properties:
@@ -401,8 +450,6 @@ components:
                     format: date-time
                 description:
                     type: string
-            xml:
-                name: Transaction
         ApiResponse:
             type: object
             properties:

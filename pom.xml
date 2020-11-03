@@ -14,7 +14,11 @@
     <description>Example e-bank project for Spring Boot</description>
 
     <properties>
-        <java.version>11</java.version>
+        <project.build.sourceEncoding>UTF8</project.build.sourceEncoding>
+
+        <!-- Java settings -->
+        <java.compiler.version>1.8</java.compiler.version>
+
         <mrchecker-core-module.version>5.7.0.1</mrchecker-core-module.version>
         <mrchecker-webapi-module.version>1.2.4</mrchecker-webapi-module.version>
         <allure-junit5.version>2.13.3</allure-junit5.version>
@@ -229,6 +233,21 @@
             </resource>
         </resources>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.1</version>
+                <configuration>
+                    <source>${java.compiler.version}</source>
+                    <target>${java.compiler.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <testSource>${java.compiler.version}</testSource>
+                    <testTarget>${java.compiler.version}</testTarget>
+                    <showDeprecation>true</showDeprecation>
+                    <showWarnings>true</showWarnings>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

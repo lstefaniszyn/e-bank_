@@ -83,11 +83,7 @@ public class AbstractContractSpec {
         LocalDate date = LocalDate.parse("2019-01", DATE_FORMATTER);
         BFLogger.logDebug("Transactions: " + getPagedTransactions(0, 3));
         
-        // transactionService.findForAccountInMonthPaginated(
-        // idAccount, date, page,
-        // size);
-        given(transactionService.findForAccountInMonthPaginated(1L, date, 0, 3)).willReturn(getPagedTransactions(0, 3));
-        // given(transactionService.findInMonthPaginated(date, 0, 3)).willReturn(getPagedTransactions(0, 3));
+        given(transactionService.findForAccountInMonthPaginated(1L, date, 0, 2)).willReturn(getPagedTransactions(0, 2));
         
         RestAssuredMockMvc.standaloneSetup(appStatusController, customerController, accountController, transactionController);
     }
