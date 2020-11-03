@@ -9,10 +9,13 @@ import com.capgemini.mrchecker.test.core.utils.PageFactory;
 import com.example.ebank.endpoints.CustomerEndpoint;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import io.restassured.response.Response;
+import net.serenitybdd.junit.runners.SerenityRunner;
 
+@RunWith(SerenityRunner.class)
 @SpringBootTest
 public class CustomerEndpointIT extends BaseTest {
 
