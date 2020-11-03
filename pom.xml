@@ -273,6 +273,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <jvmArguments>${argLine}</jvmArguments>
+                    <mainClass>${spring.mainClass}</mainClass>
                 </configuration>
             </plugin>
 
