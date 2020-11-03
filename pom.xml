@@ -28,6 +28,8 @@
 		<skip.surefire.tests>${skipTests}</skip.surefire.tests>
 		<spring.mainClass>com.example.ebank.EBankApplication</spring.mainClass>
 		<serenity.version>2.3.6</serenity.version>
+		<rest-assured.version>4.3.1</rest-assured.version>
+		<groovy.version>3.0.3</groovy.version>
 	</properties>
 
 	<profiles>
@@ -220,6 +222,23 @@
 			<artifactId>serenity-rest-assured</artifactId>
 			<version>${serenity.version}</version>
 			<scope>test</scope>
+		</dependency>
+		<!-- rest-assured version working with serenity-rest (minimal: 4.2.0) -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${rest-assured.version}</version>
+		</dependency>
+		<!-- need to explicitly declare json-path (and xml-path) in correct version -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>json-path</artifactId>
+			<version>${rest-assured.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>xml-path</artifactId>
+			<version>${rest-assured.version}</version>
 		</dependency>
 	</dependencies>
 

@@ -1,7 +1,6 @@
 package com.example.ebank.integration;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.equalTo;
 
 import com.capgemini.mrchecker.test.core.BaseTest;
 import com.capgemini.mrchecker.test.core.logger.BFLogger;
@@ -12,8 +11,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import io.restassured.response.Response;
 import net.serenitybdd.junit.runners.SerenityRunner;
+import net.serenitybdd.rest.SerenityRest;
 
 @RunWith(SerenityRunner.class)
 @SpringBootTest
@@ -24,10 +23,10 @@ public class CustomerEndpointIT extends BaseTest {
         CustomerEndpoint endpoint = PageFactory.getPageInstance(CustomerEndpoint.class);
 
         BFLogger.logInfo("Step 1 - Sending GET query to " + endpoint.getEndpoint());
-        Response response = endpoint.sendGetQuery();
+        SerenityRest.get(endpoint.getEndpoint());
 
         BFLogger.logInfo("Step 2 - Validate response status code");
-        assertThat(response.statusCode(), is(200));
+        SerenityRest.restAssuredThat(resp -> resp.statusCode(equalTo(200)));
     }
 
 }
