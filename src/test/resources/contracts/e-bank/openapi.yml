@@ -112,6 +112,8 @@ paths:
                 - customer
             summary: Get customer by idCustomer
             operationId: getCustomerById
+            security:
+                - bearerAuth: []
             x-contracts:
                 - contractId: 1
                   name: get-one-customer-OK-Response
@@ -167,6 +169,8 @@ paths:
                 - account
             summary: Get customer's accounts
             operationId: getCustomerAccounts
+            security:
+                - bearerAuth: []
             x-contracts:
                 - contractId: 1
                   name: get-accounts-for-customer-OK-Response
@@ -178,10 +182,9 @@ paths:
                   required: true
                   schema:
                       type: string
-                  description: The number of items to skip before starting to collect the result set
                   x-contracts:
-                    - contractId: 1
-                      value: 1
+                      - contractId: 1
+                        value: 1
             responses:
                 "200":
                     description: successful operation
@@ -224,6 +227,8 @@ paths:
                 - account
             summary: Get customer's account
             operationId: getCustomerAccount
+            security:
+                - bearerAuth: []
             x-contracts:
                 - contractId: 1
                   name: get-account-for-one-customer-OK-Response
@@ -278,6 +283,8 @@ paths:
                 - account
             summary: Get account's transactions
             operationId: getAccountTransactions
+            security:
+                - bearerAuth: []
             x-contracts:
                 - contractId: 1
                   name: get-transactions-for-account-for-customer-OK-Response
@@ -376,6 +383,15 @@ paths:
                     description: customer not found
                     content: {}
 components:
+    securitySchemes:
+        bearerAuth:
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
+    responses:
+        UnauthorizedError:
+            description: Access token is missing or invalid
+            content: {}
     schemas:
         Currency:
             type: object
@@ -414,7 +430,7 @@ components:
                     type: array
                     items:
                         $ref: "#/components/schemas/Account"
-                balance: 
+                balance:
                     type: object
                     properties:
                         value:

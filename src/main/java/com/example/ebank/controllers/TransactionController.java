@@ -73,7 +73,7 @@ public class TransactionController {
             @ApiParam(value = "The Page number to fetched. Use \"0\" for testing. ", required = false) @RequestParam(name = "page", defaultValue = "0") int page,
             @ApiParam(value = "The number of objects fetch. Use \"2\" for testing. ", required = false) @RequestParam(name = "size", defaultValue = "2") int size) {
         
-        Customer customer = customerService.getOne(idCustomer);
+        Customer customer = customerService.getByIdentityKey(SecurityContextUtils.getIdentityKey());
         Account account = accountService.getOne(idAccount);
         if (!account.getCustomer()
                 .getId()

@@ -68,6 +68,7 @@ public class AbstractContractSpec {
         BFLogger.logDebug("!!!! TEST ME !!!");
         // Mock customer service
         given(customerService.getOne(1L)).willReturn(getCustomer(1L));
+        given(customerService.getByIdentityKey("P-01")).willReturn(getCustomer(1L));
         given(customerService.getAll()).willReturn(getCustomers());
         
         // Mock account service
