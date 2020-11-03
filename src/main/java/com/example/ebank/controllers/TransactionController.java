@@ -1,32 +1,23 @@
 package com.example.ebank.controllers;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
-import java.util.List;
-
 import com.example.ebank.models.Account;
 import com.example.ebank.models.Customer;
 import com.example.ebank.models.Transaction;
 import com.example.ebank.services.AccountService;
 import com.example.ebank.services.CustomerService;
 import com.example.ebank.services.TransactionService;
-
+import com.example.ebank.utils.SecurityContextUtils;
+import io.swagger.annotations.*;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
+import java.util.List;
 
 @Api(value = "transactions", tags = "transaction", description = "the transaction API")
 @RestController

@@ -11,24 +11,28 @@ import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
 @Service
-public class KafkaProducer {
+public class KafkaProducer<T> {
 
 	private static final Logger logger = LoggerFactory.getLogger(KafkaProducer.class);
 
 	@Autowired
-	private KafkaTemplate<String, String> kafkaTemplate;
+	private KafkaTemplate<String, T> kafkaTemplate;
 
 	@Value(value = "${default.kafka.input.topic.name}")
 	private String _TOPIC;
 
-	public void sendMessage(String message) {
+	public void sendMessage(T message) {
+		sendMessage(null, message);
+	}
+	
+	public void sendMessage(String key, T message) {
 
-		ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(_TOPIC, message);
+		ListenableFuture<SendResult<String, T>> future = kafkaTemplate.send(_TOPIC, key, message);
 
-		future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
+		future.addCallback(new ListenableFutureCallback<SendResult<String, T>>() {
 
 			@Override
-			public void onSuccess(SendResult<String, String> result) {
+			public void onSuccess(SendResult<String, T> result) {
 				logger.info(String.format("Message has been sent! [%s]", message));
 			}
 

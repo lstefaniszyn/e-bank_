@@ -17,7 +17,7 @@
         <project.build.sourceEncoding>UTF8</project.build.sourceEncoding>
 
         <!-- Java settings -->
-        <java.compiler.version>1.8</java.compiler.version>
+        <java.version>11</java.version>
 
         <mrchecker-core-module.version>5.7.0.1</mrchecker-core-module.version>
         <mrchecker-webapi-module.version>1.2.4</mrchecker-webapi-module.version>
@@ -30,9 +30,13 @@
         <allure-cli-runner.version>2.10.0</allure-cli-runner.version>
         <springfox-version>2.9.2</springfox-version>
         <skip.surefire.tests>${skipTests}</skip.surefire.tests>
+        <jsonwebtoken-version>0.11.2</jsonwebtoken-version>
+
         <!-- Consumer Driven Contract -->
         <spring-cloud-contract.version>2.1.5.RELEASE</spring-cloud-contract.version>
         <scc-oa3-version>2.1.2.0</scc-oa3-version>
+
+        <spring.mainClass>com.example.ebank.EBankApplication</spring.mainClass>
 
     </properties>
 
@@ -78,6 +82,10 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -98,6 +106,24 @@
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jsonwebtoken-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jsonwebtoken-version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jsonwebtoken-version}</version>
+            <scope>runtime</scope>
         </dependency>
 
         <!--SpringFox dependencies -->
@@ -183,6 +209,21 @@
             <version>${allure-attachments.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+
         <!-- Consumer Driver contract  -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -202,25 +243,18 @@
             <version>${scc-oa3-version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured-common -->
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured-common</artifactId>
             <version>4.3.1</version>
         </dependency>
-
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>spring-mock-mvc</artifactId>
             <version>4.2.0</version>
             <scope>test</scope>
         </dependency>
-        <!-- <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator-annotation-processor</artifactId>
-            <version>4.1.0.Final</version>
-        </dependency> -->
+        <!-- /Consumer Driver contract  -->
 
 
     </dependencies>
@@ -233,20 +267,6 @@
             </resource>
         </resources>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
-                <configuration>
-                    <source>${java.compiler.version}</source>
-                    <target>${java.compiler.version}</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                    <testSource>${java.compiler.version}</testSource>
-                    <testTarget>${java.compiler.version}</testTarget>
-                    <showDeprecation>true</showDeprecation>
-                    <showWarnings>true</showWarnings>
-                </configuration>
-            </plugin>
 
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -348,4 +368,16 @@
         </plugins>
     </build>
 
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Hoxton.SR8</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
