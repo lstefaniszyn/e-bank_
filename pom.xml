@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.3.4.RELEASE</version>
-        <relativePath /> <!-- lookup parent from repository -->
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
     <artifactId>e-bank</artifactId>
@@ -31,6 +32,7 @@
         <skip.surefire.tests>${skipTests}</skip.surefire.tests>
         <jsonwebtoken-version>0.11.2</jsonwebtoken-version>
         <openapitools-version>4.3.1</openapitools-version>
+        <mapstruct-version>1.4.1.Final</mapstruct-version>
 
         <!-- Consumer Driven Contract -->
         <spring-cloud-contract.version>2.1.5.RELEASE</spring-cloud-contract.version>
@@ -146,7 +148,25 @@
             <artifactId>openapi-generator</artifactId>
             <version>${openapitools-version}</version>
         </dependency>
-        
+
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.2.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct-version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.github.joschi.jackson</groupId>
             <artifactId>jackson-datatype-threetenbp</artifactId>
@@ -448,13 +468,19 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/api.yaml</inputSpec>
-                            <generatorName>java</generatorName>
-                            <configOptions>
-                                <sourceFolder>src/gen/java/main</sourceFolder>
-                            </configOptions>
                             <generatorName>spring</generatorName>
-                            <generateModels>false</generateModels>
+                            <inputSpec>${project.basedir}/src/test/resources/contracts/e-bank/openapi.yml</inputSpec>
+                            <configOptions>
+                                <sourceFolder>src/main/java</sourceFolder>
+                                <library>spring-boot</library>
+                                <dateLibrary>java8</dateLibrary>
+                                <java11>true</java11>
+                                <interfaceOnly>true</interfaceOnly>
+                                <skipDefaultInterface>true</skipDefaultInterface>
+                                <useTags>true</useTags>
+                            </configOptions>
+                            <modelPackage>org.openapitools.dto</modelPackage>
+                            <modelNameSuffix>Dto</modelNameSuffix>
                             <generateSupportingFiles>false</generateSupportingFiles>
                         </configuration>
                     </execution>

@@ -1,10 +1,9 @@
 package com.example.ebank.models;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.List;
 
 @Entity
 public class Account {
@@ -12,6 +11,12 @@ public class Account {
     @Id
     @GeneratedValue
     private Long id;
+
+    @Column(name = "iban", length = 50)
+    private String iban;
+
+    @Enumerated(EnumType.STRING)
+    private Currency currency;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
@@ -21,26 +26,12 @@ public class Account {
     @JsonIgnore
     private List<Transaction> transactions;
 
-    @Column(name = "iban", length = 50)
-    private String iban;
-
-    @Enumerated(EnumType.STRING)
-    private Currency currency;
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
     }
 
     public String getIban() {
@@ -57,6 +48,14 @@ public class Account {
 
     public void setCurrency(Currency currency) {
         this.currency = currency;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     /**

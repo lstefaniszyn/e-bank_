@@ -1,52 +1,46 @@
 package com.example.ebank.controllers;
 
+import com.example.ebank.mappers.CustomerMapper;
 import com.example.ebank.models.Customer;
 import com.example.ebank.services.CustomerService;
-
+import com.example.ebank.utils.SecurityContextUtils;
+import org.openapitools.api.CustomerApi;
+import org.openapitools.dto.CustomerDto;
+import org.openapitools.dto.CustomerListItemDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-
-@Api(value = "customers", tags = "customer", description = "the customers API")
+import java.util.List;
+import java.util.Objects;
 
 @RestController
-@RequestMapping("/api/v1")
-public class CustomerController {
-    
+public class CustomerController implements CustomerApi {
+
     private final CustomerService customerService;
-    
-    public CustomerController(CustomerService customerService) {
+    private final CustomerMapper customerMapper;
+
+    public CustomerController(CustomerService customerService,
+        CustomerMapper customerMapper) {
+
         this.customerService = customerService;
+        this.customerMapper = customerMapper;
     }
-    
-    @ApiOperation(value = "Get all customers", nickname = "getCustomers", notes = "", response = Customer.class, responseContainer = "List", tags = {
-            "customer", })
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful operation", response = Customer.class, responseContainer = "List"),
-            @ApiResponse(code = 400, message = "Invalid client id supplied"),
-            @ApiResponse(code = 404, message = "Customer not found") })
-    @RequestMapping(value = "/customers", produces = { "application/json" }, method = RequestMethod.GET)
-    public Iterable<Customer> getCustomers() {
-        return customerService.getAll();
+
+    @Override
+    public ResponseEntity<List<CustomerListItemDto>> getCustomers() {
+        return ResponseEntity.ok(customerMapper.toListDto(customerService.getAll()));
     }
-    
-    @ApiOperation(value = "Get customer by id", nickname = "getCustomerById", notes = "", response = Customer.class, tags = {
-            "customer", })
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "successful operation", response = Customer.class),
-            @ApiResponse(code = 400, message = "Invalid client id supplied"),
-            @ApiResponse(code = 404, message = "Client not found") })
-    @RequestMapping(value = "/customers/{idCustomer}", produces = { "application/json" }, method = RequestMethod.GET)
-    public ResponseEntity<Customer> getCustomerById(
-            @ApiParam(value = "The idCustomer that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long idCustomer) {
-        return ResponseEntity.ok(customerService.getOne(idCustomer));
+
+    @Override
+    public ResponseEntity<CustomerDto> getCustomerById(Long id) {
+        Customer customer = customerService.getOne(id);
+        validateAccessToRequestedCustomer(customer);
+        return ResponseEntity.ok(customerMapper.toDto(customer));
     }
-    
+
+    private void validateAccessToRequestedCustomer(Customer customer) {
+        if (!Objects.equals(customer.getIdentityKey(), SecurityContextUtils.getIdentityKey())) {
+            throw new IllegalArgumentException();
+        }
+    }
 }
