@@ -8,7 +8,7 @@ import com.capgemini.mrchecker.test.core.logger.BFLogger;
 import com.capgemini.mrchecker.test.core.utils.PageFactory;
 import com.example.ebank.endpoints.CustomerEndpoint;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import io.restassured.response.Response;

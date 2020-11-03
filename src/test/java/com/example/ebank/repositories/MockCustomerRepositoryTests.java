@@ -1,7 +1,7 @@
 package com.example.ebank.repositories;
 
 import com.example.ebank.models.Customer;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.util.Optional;
 import java.util.Set;

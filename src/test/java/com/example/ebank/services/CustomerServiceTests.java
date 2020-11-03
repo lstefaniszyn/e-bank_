@@ -2,11 +2,11 @@ package com.example.ebank.services;
 
 import com.example.ebank.models.Customer;
 import com.example.ebank.repositories.CustomerRepository;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.persistence.EntityNotFoundException;
 import java.nio.charset.StandardCharsets;
@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@RunWith(MockitoJUnitRunner.class)
 public class CustomerServiceTests {
 
     @Mock
@@ -26,7 +26,6 @@ public class CustomerServiceTests {
 
     @InjectMocks
     private CustomerService customerService;
-
 
     @Test
     public void testGetAll_expectOk() {
@@ -40,8 +39,7 @@ public class CustomerServiceTests {
     @Test
     public void testFindOne_expectOk() {
         long id = 157L;
-        when(customerRepository.findById(id))
-                .thenReturn(Optional.of(getCustomer(id)));
+        when(customerRepository.findById(id)).thenReturn(Optional.of(getCustomer(id)));
 
         Customer result = customerService.getOne(id);
 
@@ -57,12 +55,7 @@ public class CustomerServiceTests {
     }
 
     private List<Customer> getList() {
-        return List.of(
-                getCustomer(1L),
-                getCustomer(2L),
-                getCustomer(3L),
-                getCustomer(4L)
-        );
+        return List.of(getCustomer(1L), getCustomer(2L), getCustomer(3L), getCustomer(4L));
     }
 
     private Customer getCustomer(Long id) {
