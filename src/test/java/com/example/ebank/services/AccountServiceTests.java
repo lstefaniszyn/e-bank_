@@ -61,6 +61,7 @@ public class AccountServiceTests {
     private List<Account> getList() {
         return List.of(
                 getAccount(1L, Currency.CHF),
+                getAccount(2L, Currency.GBP),
                 getAccount(3L, Currency.CHF),
                 getAccount(4L, Currency.EUR),
                 getAccount(5L, Currency.GBP));

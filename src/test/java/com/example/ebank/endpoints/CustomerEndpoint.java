@@ -1,12 +1,14 @@
 package com.example.ebank.endpoints;
 
 import com.capgemini.mrchecker.test.core.BaseTest;
-import com.capgemini.mrchecker.webapi.core.BasePageWebAPI;
-import com.capgemini.mrchecker.webapi.core.base.driver.DriverManager;
+
+import org.springframework.stereotype.Component;
 
 import io.restassured.response.Response;
+import net.serenitybdd.rest.SerenityRest;
 
-public class CustomerEndpoint extends BasePageWebAPI {
+@Component
+public class CustomerEndpoint {
 
 
     private static final String HOST_ENV_PROPERTY = "HOST";
@@ -14,10 +16,9 @@ public class CustomerEndpoint extends BasePageWebAPI {
     private final String endpoint = BaseTest.getEnvironmentService().getValue(HOST_ENV_PROPERTY) + RESOURCE;
 
     public Response sendGetQuery() {
-        return DriverManager.getDriverWebAPI().when().get(endpoint);
+        return SerenityRest.when().get(endpoint);
     }
 
-    @Override
     public String getEndpoint() {
         return endpoint;
     }
