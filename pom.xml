@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.4.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
-	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>e-bank</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>e-bank</name>
-	<description>Example e-bank project for Spring Boot</description>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.4.RELEASE</version>
+        <relativePath /> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.example</groupId>
+    <artifactId>e-bank</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>e-bank</name>
+    <description>Example e-bank project for Spring Boot</description>
 
-	<properties>
+    <properties>
         <project.build.sourceEncoding>UTF8</project.build.sourceEncoding>
 
         <!-- Java settings -->
-		<java.version>11</java.version>
-		<mrchecker-core-module.version>5.7.0.1</mrchecker-core-module.version>
-		<mrchecker-webapi-module.version>1.2.4</mrchecker-webapi-module.version>
-		<allure-junit5.version>2.13.3</allure-junit5.version>
-		<allure-java-commons.version>2.13.3</allure-java-commons.version>
-		<allure-junit-platform.version>2.13.3</allure-junit-platform.version>
-		<allure-maven.version>2.10.0</allure-maven.version>
-		<allure-attachments.version>2.13.3</allure-attachments.version>
-		<maven-site-plugin.version>3.7.1</maven-site-plugin.version>
-		<allure-cli-runner.version>2.10.0</allure-cli-runner.version>
-		<springfox-version>2.9.2</springfox-version>
+        <java.version>11</java.version>
+        <mrchecker-core-module.version>5.7.0.1</mrchecker-core-module.version>
+        <mrchecker-webapi-module.version>1.2.4</mrchecker-webapi-module.version>
+        <allure-junit5.version>2.13.3</allure-junit5.version>
+        <allure-java-commons.version>2.13.3</allure-java-commons.version>
+        <allure-junit-platform.version>2.13.3</allure-junit-platform.version>
+        <allure-maven.version>2.10.0</allure-maven.version>
+        <allure-attachments.version>2.13.3</allure-attachments.version>
+        <maven-site-plugin.version>3.7.1</maven-site-plugin.version>
+        <allure-cli-runner.version>2.10.0</allure-cli-runner.version>
+        <springfox-version>2.9.2</springfox-version>
         <skip.surefire.tests>${skipTests}</skip.surefire.tests>
         <jsonwebtoken-version>0.11.2</jsonwebtoken-version>
 
@@ -36,79 +36,79 @@
         <scc-oa3-version>2.1.2.0</scc-oa3-version>
 
         <spring.mainClass>com.example.ebank.EBankApplication</spring.mainClass>
-        
+
         <!-- Serenity -->
-		<serenity.version>2.3.6</serenity.version>
-		<rest-assured.version>4.3.1</rest-assured.version>
-		<groovy.version>3.0.3</groovy.version>
-	</properties>
+        <serenity.version>2.3.6</serenity.version>
+        <rest-assured.version>4.3.1</rest-assured.version>
+        <groovy.version>3.0.3</groovy.version>
+    </properties>
 
-	<profiles>
-		<profile>
-			<id>dev</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<properties>
-				<spring.profiles.active>dev</spring.profiles.active>
-			</properties>
-		</profile>
-		<profile>
-			<id>prod</id>
-			<properties>
-				<spring.profiles.active>prod</spring.profiles.active>
-			</properties>
-		</profile>
-		<profile>
-			<id>local</id>
-			<properties>
-				<spring.profiles.active>local</spring.profiles.active>
-			</properties>
-		</profile>
-		<profile>
-			<id>mock</id>
-			<properties>
-				<spring.profiles.active>mock,dev</spring.profiles.active>
-			</properties>
-		</profile>
-	</profiles>
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <spring.profiles.active>dev</spring.profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <spring.profiles.active>prod</spring.profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>local</id>
+            <properties>
+                <spring.profiles.active>local</spring.profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>mock</id>
+            <properties>
+                <spring.profiles.active>mock,dev</spring.profiles.active>
+            </properties>
+        </profile>
+    </profiles>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.kafka</groupId>
-			<artifactId>kafka-streams</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-streams</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework.kafka</groupId>
-			<artifactId>spring-kafka</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -128,114 +128,115 @@
             <scope>runtime</scope>
         </dependency>
 
-		<!--SpringFox dependencies -->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>${springfox-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>${springfox-version}</version>
-		</dependency>
+        <!--SpringFox dependencies -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox-version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>com.github.joschi.jackson</groupId>
-			<artifactId>jackson-datatype-threetenbp</artifactId>
-			<version>2.6.4</version>
-		</dependency>
-		<!-- Bean Validation API support -->
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>com.github.joschi.jackson</groupId>
+            <artifactId>jackson-datatype-threetenbp</artifactId>
+            <version>2.6.4</version>
+        </dependency>
+        <!-- Bean Validation API support -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.junit.jupiter</groupId>
-					<artifactId>junit-jupiter</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.jupiter</groupId>
+                    <artifactId>junit-jupiter</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.13</version>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13</version>
+            <scope>test</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>com.capgemini.mrchecker</groupId>
-			<artifactId>mrchecker-core-module</artifactId>
-			<version>${mrchecker-core-module.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>com.capgemini.mrchecker</groupId>
+            <artifactId>mrchecker-core-module</artifactId>
+            <version>${mrchecker-core-module.version}</version>
+        </dependency>
 
-		<!-- <dependency>
+        <!-- <dependency>
 			<groupId>com.capgemini.mrchecker</groupId>
 			<artifactId>mrchecker-webapi-module</artifactId>
 			<version>${mrchecker-webapi-module.version}</version>
 		</dependency> -->
 
-		<dependency>
-			<!-- Test listener. Binds Junit exec to Allure annotation -->
-			<groupId>io.qameta.allure</groupId>
-			<artifactId>allure-junit5</artifactId>
-			<version>${allure-junit5.version}</version>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <!-- Test listener. Binds Junit exec to Allure annotation -->
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit5</artifactId>
+            <version>${allure-junit5.version}</version>
+            <scope>test</scope>
+        </dependency>
 
-		<dependency>
-			<!-- Test listener. Binds Junit exec to Allure annotation -->
-			<groupId>io.qameta.allure</groupId>
-			<artifactId>allure-junit-platform</artifactId>
-			<version>${allure-junit-platform.version}</version>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <!-- Test listener. Binds Junit exec to Allure annotation -->
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit-platform</artifactId>
+            <version>${allure-junit-platform.version}</version>
+            <scope>test</scope>
+        </dependency>
 
-		<dependency>
-			<!-- Test listener. Binds Junit exec to Allure annotation -->
-			<groupId>io.qameta.allure</groupId>
-			<artifactId>allure-maven</artifactId>
-			<version>${allure-maven.version}</version>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <!-- Test listener. Binds Junit exec to Allure annotation -->
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-maven</artifactId>
+            <version>${allure-maven.version}</version>
+            <scope>test</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>io.qameta.allure</groupId>
-			<artifactId>allure-java-commons</artifactId>
-			<version>${allure-java-commons.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-java-commons</artifactId>
+            <version>${allure-java-commons.version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>io.qameta.allure</groupId>
-			<artifactId>allure-attachments</artifactId>
-			<version>${allure-attachments.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-attachments</artifactId>
+            <version>${allure-attachments.version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-openfeign</artifactId>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 
         <!-- Consumer Driver contract  -->
@@ -270,24 +271,24 @@
         </dependency>
         <!-- /Consumer Driver contract  -->
 
-		<!-- Serenity -->
-		<dependency>
-			<groupId>net.serenity-bdd</groupId>
-			<artifactId>serenity-core</artifactId>
-			<version>${serenity.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.serenity-bdd</groupId>
-			<artifactId>serenity-junit</artifactId>
-			<version>${serenity.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.serenity-bdd</groupId>
-			<artifactId>serenity-rest-assured</artifactId>
-			<version>${serenity.version}</version>
-			<scope>test</scope>
+        <!-- Serenity -->
+        <dependency>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-core</artifactId>
+            <version>${serenity.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-junit</artifactId>
+            <version>${serenity.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-rest-assured</artifactId>
+            <version>${serenity.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>net.serenity-bdd</groupId>
@@ -295,40 +296,40 @@
             <version>${serenity.version}</version>
             <scope>test</scope>
         </dependency>
-		<!-- rest-assured version working with serenity-rest (minimal: 4.2.0) -->
-		<dependency>
-			<groupId>io.rest-assured</groupId>
-			<artifactId>rest-assured</artifactId>
-			<version>${rest-assured.version}</version>
-		</dependency>
-		<!-- need to explicitly declare json-path (and xml-path) in correct version -->
-		<dependency>
-			<groupId>io.rest-assured</groupId>
-			<artifactId>json-path</artifactId>
-			<version>${rest-assured.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.rest-assured</groupId>
-			<artifactId>xml-path</artifactId>
-			<version>${rest-assured.version}</version>
-		</dependency>
-	</dependencies>
+        <!-- rest-assured version working with serenity-rest (minimal: 4.2.0) -->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${rest-assured.version}</version>
+        </dependency>
+        <!-- need to explicitly declare json-path (and xml-path) in correct version -->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>json-path</artifactId>
+            <version>${rest-assured.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>xml-path</artifactId>
+            <version>${rest-assured.version}</version>
+        </dependency>
+    </dependencies>
 
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<jvmArguments>${argLine}</jvmArguments>
-					<mainClass>${spring.mainClass}</mainClass>
-				</configuration>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <jvmArguments>${argLine}</jvmArguments>
+                    <mainClass>${spring.mainClass}</mainClass>
+                </configuration>
             </plugin>
             <!-- Consumer Driver contract  -->
             <plugin>
@@ -352,97 +353,97 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.2</version>
-				<configuration>
-					<systemPropertyVariables>
-						<allure.results.directory>target/allure-results</allure.results.directory>
-					</systemPropertyVariables>
-					<skipTests>${skip.surefire.tests}</skipTests>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<version>${maven-site-plugin.version}</version>
-			</plugin>
-			<plugin>
-				<groupId>io.qameta.allure</groupId>
-				<artifactId>allure-maven</artifactId>
-				<version>2.10.0</version>
-				<configuration>
-					<reportVersion>${allure-cli-runner.version}</reportVersion>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.6</version>
-				<executions>
-					<execution>
-						<id>default-prepare-agent</id>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>default-report</id>
-						<phase>site</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<configuration>
-					<systemPropertyVariables>
-						<allure.results.directory>target/allure-results-it</allure.results.directory>
-					</systemPropertyVariables>
-					<testFailureIgnore>true</testFailureIgnore>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>integration-test</phase>
-						<goals>
-							<goal>integration-test</goal>
-							<goal>verify</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>net.serenity-bdd.maven.plugins</groupId>
-				<artifactId>serenity-maven-plugin</artifactId>
-				<version>${serenity.version}</version>
-				<executions>
-					<execution>
-						<id>serenity-reports</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>aggregate</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <allure.results.directory>target/allure-results</allure.results.directory>
+                    </systemPropertyVariables>
+                    <skipTests>${skip.surefire.tests}</skipTests>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>${maven-site-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>2.10.0</version>
+                <configuration>
+                    <reportVersion>${allure-cli-runner.version}</reportVersion>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.6</version>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <allure.results.directory>target/allure-results-it</allure.results.directory>
+                    </systemPropertyVariables>
+                    <testFailureIgnore>true</testFailureIgnore>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>net.serenity-bdd.maven.plugins</groupId>
+                <artifactId>serenity-maven-plugin</artifactId>
+                <version>${serenity.version}</version>
+                <executions>
+                    <execution>
+                        <id>serenity-reports</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>Hoxton.SR8</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Hoxton.SR8</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

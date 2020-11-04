@@ -32,7 +32,6 @@ public class CustomerServiceTests {
         when(customerRepository.findAll()).thenReturn(getList());
 
         Iterable<Customer> result = customerService.getAll();
-
         assertThat(result).isNotEmpty()
                 .hasSize(4);
     }

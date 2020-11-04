@@ -27,13 +27,11 @@ public class AccountServiceTests {
 
     @InjectMocks
     private AccountService accountService;
-
     @Test
     public void testGetAll_expectOk() {
         when(accountRepository.findAll()).thenReturn(getList());
 
         Iterable<Account> result = accountService.getAll();
-
         assertThat(result).isNotEmpty()
                 .hasSize(5);
     }
