@@ -58,11 +58,12 @@ public class AsyncTransactionService {
 		try {
 			ConsumerRecords<String, Transaction> records = consumer.poll(Duration.ofSeconds(10));
 			
+			LocalDate startDate = date.withDayOfMonth(1);
+	        LocalDate endDate = date.withDayOfMonth(date.lengthOfMonth());
 			transactions = StreamSupport.stream(records.spliterator(), false)
 					.filter(v -> {
-						return v.value()
-								.getValueDate()
-								.equals(Date.valueOf(date));
+						return v.value().getValueDate().after(Date.valueOf(startDate)) &&
+								v.value().getValueDate().before(Date.valueOf(endDate));
 					})
 					.map(ConsumerRecord<String, Transaction>::value)
 					.collect(Collectors.toList());

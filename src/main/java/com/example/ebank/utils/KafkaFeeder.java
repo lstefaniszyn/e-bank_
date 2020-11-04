@@ -32,21 +32,31 @@ public class KafkaFeeder {
 	@Value("${spring.kafka.bootstrap-servers}")
 	private String bootstrapServers;
 	
-	@Autowired
-	private KafkaProducer<Transaction> kafkaProducer;
+	private final KafkaProducer<Transaction> kafkaProducer;
+	private final KafkaServerProperties properties;
+	
+	public KafkaFeeder(KafkaProducer<Transaction> kafkaProducer,
+			KafkaServerProperties properties) {
+		this.kafkaProducer = kafkaProducer;
+		this.properties = properties;
+	}
 	
 	@PostConstruct
 	public void prepareMockedKafka() {
-		deleteTopics();
-		createTopics();
-		feedKafkaTopic();
+		if (properties.feedKafkaDuringStart()) {
+			deleteTopics();
+			createTopics();
+			feedKafkaTopic();
+		} else {
+			logger.info("Loading mocked data into kafka topics disabled!");
+		}
 	}
 	
 	private void deleteTopics() {
 		Properties props = new Properties();
 		props.setProperty("bootstrap.servers", bootstrapServers);
 		
-		try(AdminClient adminClient = AdminClient.create(props)){
+		try (AdminClient adminClient = AdminClient.create(props)) {
 			List<String> topics = new ArrayList<String>();
 			topics.add("input-topic");
 			topics.add("output-topic");
@@ -59,10 +69,12 @@ public class KafkaFeeder {
 		Properties props = new Properties();
 		props.setProperty("bootstrap.servers", bootstrapServers);
 		
-		try(AdminClient adminClient = AdminClient.create(props)){
+		try (AdminClient adminClient = AdminClient.create(props)) {
 			List<NewTopic> topics = new ArrayList<NewTopic>();
-			topics.add(TopicBuilder.name("output-topic").build());
-			topics.add(TopicBuilder.name("input-topic").build());
+			topics.add(TopicBuilder.name("output-topic")
+					.build());
+			topics.add(TopicBuilder.name("input-topic")
+					.build());
 			
 			adminClient.createTopics(topics);
 		}
@@ -70,17 +82,19 @@ public class KafkaFeeder {
 	
 	private void feedKafkaTopic() {
 		List<Transaction> transactions = new ArrayList<>();
-        Resource resource = new ClassPathResource("data/transactions_1_1.json");
-        try {
-            File file = resource.getFile();
-            ObjectMapper jsonMapper = new ObjectMapper();
-            transactions = jsonMapper.readValue(file, new TypeReference<List<Transaction>>() {
-            });
-        } catch (IOException exc) {
-            logger.error("Error during loading transactions from file");
-        }
-
-        transactions.forEach(t -> kafkaProducer.sendMessage(String.valueOf(t.getId()), t));
+		Resource resource = new ClassPathResource("data/transactions_1_1.json");
+		try {
+			File file = resource.getFile();
+			ObjectMapper jsonMapper = new ObjectMapper();
+			transactions = jsonMapper.readValue(file, new TypeReference<List<Transaction>>() {
+			});
+		} catch (IOException exc) {
+			logger.error("Error during loading transactions from file");
+		}
+		
+		transactions.forEach(t -> kafkaProducer.sendMessage(String.valueOf(t.getId()), t));
+		
+		logger.info("Kafka topics have been fed with mocked data!");
 	}
 	
 }
