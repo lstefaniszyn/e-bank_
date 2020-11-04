@@ -55,11 +55,11 @@ To run spring app with application-{profile_name}.properties Profile. Default is
 
 To run spring app on Dev with arguments
 
-> mvn -Pdev -Dspring-boot.run.arguments="--db.user=test --db.pass=test" spring-boot:run
+> mvn -Pdev -Dspring-boot.run.arguments="--db.user=test --db.pass=test --jwt.sec=secret" spring-boot:run
 
 To run jar app with arguments
 
-> java -jar ebank.jar --spring.profiles.active=dev --db.user=test --db.pass=test
+> java -jar ebank.jar --spring.profiles.active=dev --db.user=test --db.pass=test --jwt.sec=secret
 
 ### Running with external exchange rate service
 
@@ -140,6 +140,46 @@ mvn -Pdev -DskipTests=true -Dspring-boot.run.arguments="--db.user=<user> --db.pa
 
 Feign-based client is implemented in `com.example.ebank.extapi.client.ExchangeRateFeignClient` class using `com.example.ebank.extapi.client.FeignAPIClient` interface for defining REST operations provided by external API.
 
+
+## Security
+
+All endpoints which path starts from `api/v1/customers/` are NOT secured. 
+The rest resources require authorization. 
+
+### JWT
+
+To authorize add Authorization header with bearer token.
+Json Web Token should contain property `identity_key` for specified customer, e.g.:
+
+```
+header: {
+  "alg": "HS256",
+  "typ": "JWT"
+}
+payload: {
+  "sub": "1234567890",
+  "name": "cust_JDoo_01",
+  "iat": 1516239022,
+  "identity_key": "P-01"
+}
+```
+
+To get encoded Json Web Token use [jwt.io](https://jwt.io/) with specific `identity_key` and `secret`.
+
+<img src="Utility\jwt-secret.png"/>
+
+### Authorization in Swagger
+
+To authorize request with Swagger click on padlock icon on the top or next to the chosen endpoint
+
+<img src="Utility\swagger-auth1.png"/>
+
+Enter bearer token and confirm with **`Authorize`**
+
+<img src="Utility\swagger-auth2.png"/>
+
+Now all requests to the server will contain Authorization header with provided token.
+
 ## Variables:
 
 ### Kafka
@@ -163,6 +203,12 @@ rabbit.pass=
 db.host=
 db.user=
 db.pass=
+```
+
+### Security
+
+```
+jwt.sec=
 ```
 
 ## Database schema

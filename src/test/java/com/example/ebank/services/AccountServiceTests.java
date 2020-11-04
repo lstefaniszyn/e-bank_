@@ -34,13 +34,15 @@ public class AccountServiceTests {
 
         Iterable<Account> result = accountService.getAll();
 
-        assertThat(result).isNotEmpty().hasSize(5);
+        assertThat(result).isNotEmpty()
+                .hasSize(5);
     }
 
     @Test
     public void testFindOne_expectOk() {
         long id = 157L;
-        when(accountRepository.findById(id)).thenReturn(Optional.of(getAccount(id, Currency.CHF)));
+        when(accountRepository.findById(id))
+                .thenReturn(Optional.of(getAccount(id, Currency.CHF)));
 
         Account result = accountService.getOne(id);
 
@@ -57,8 +59,11 @@ public class AccountServiceTests {
     }
 
     private List<Account> getList() {
-        return List.of(getAccount(1L, Currency.CHF), getAccount(2L, Currency.GBP), getAccount(3L, Currency.CHF),
-                getAccount(4L, Currency.EUR), getAccount(5L, Currency.GBP));
+        return List.of(
+                getAccount(1L, Currency.CHF),
+                getAccount(3L, Currency.CHF),
+                getAccount(4L, Currency.EUR),
+                getAccount(5L, Currency.GBP));
     }
 
     private Account getAccount(Long id, Currency currency) {

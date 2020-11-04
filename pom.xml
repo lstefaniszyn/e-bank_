@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.4.RELEASE</version>
+		<version>2.2.4.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
@@ -14,6 +14,9 @@
 	<description>Example e-bank project for Spring Boot</description>
 
 	<properties>
+        <project.build.sourceEncoding>UTF8</project.build.sourceEncoding>
+
+        <!-- Java settings -->
 		<java.version>11</java.version>
 		<mrchecker-core-module.version>5.7.0.1</mrchecker-core-module.version>
 		<mrchecker-webapi-module.version>1.2.4</mrchecker-webapi-module.version>
@@ -25,8 +28,16 @@
 		<maven-site-plugin.version>3.7.1</maven-site-plugin.version>
 		<allure-cli-runner.version>2.10.0</allure-cli-runner.version>
 		<springfox-version>2.9.2</springfox-version>
-		<skip.surefire.tests>${skipTests}</skip.surefire.tests>
-		<spring.mainClass>com.example.ebank.EBankApplication</spring.mainClass>
+        <skip.surefire.tests>${skipTests}</skip.surefire.tests>
+        <jsonwebtoken-version>0.11.2</jsonwebtoken-version>
+
+        <!-- Consumer Driven Contract -->
+        <spring-cloud-contract.version>2.1.5.RELEASE</spring-cloud-contract.version>
+        <scc-oa3-version>2.1.2.0</scc-oa3-version>
+
+        <spring.mainClass>com.example.ebank.EBankApplication</spring.mainClass>
+        
+        <!-- Serenity -->
 		<serenity.version>2.3.6</serenity.version>
 		<rest-assured.version>4.3.1</rest-assured.version>
 		<groovy.version>3.0.3</groovy.version>
@@ -71,7 +82,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
 
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -93,6 +109,24 @@
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
 		</dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jsonwebtoken-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jsonwebtoken-version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jsonwebtoken-version}</version>
+            <scope>runtime</scope>
+        </dependency>
 
 		<!--SpringFox dependencies -->
 		<dependency>
@@ -202,7 +236,39 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
-		</dependency>
+        </dependency>
+
+        <!-- Consumer Driver contract  -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-contract-verifier</artifactId>
+            <version>${spring-cloud-contract.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.rest-assured</groupId>
+                    <artifactId>spring-mock-mvc</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>guru.springframework</groupId>
+            <artifactId>spring-cloud-contract-oa3</artifactId>
+            <version>${scc-oa3-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured-common</artifactId>
+            <version>4.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>spring-mock-mvc</artifactId>
+            <version>4.2.0</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- /Consumer Driver contract  -->
 
 		<!-- Serenity -->
 		<dependency>
@@ -257,7 +323,30 @@
 					<jvmArguments>${argLine}</jvmArguments>
 					<mainClass>${spring.mainClass}</mainClass>
 				</configuration>
-			</plugin>
+            </plugin>
+            <!-- Consumer Driver contract  -->
+            <plugin>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-contract-maven-plugin</artifactId>
+                <version>${spring-cloud-contract.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <contractsDirectory>${project.basedir}/src/test/resources/contracts</contractsDirectory>
+                    <!-- Provide the base class for your auto-generated tests -->
+                    <baseClassForTests>com.example.ebank.api.AbstractContractSpec</baseClassForTests>
+                    <!-- Create package name for your auto-generated tests -->
+                    <basePackageForTests>com.example.ebank.api.generate</basePackageForTests>
+                </configuration>
+                <dependencies>
+                    <!--needed to include oa3 converter-->
+                    <dependency>
+                        <groupId>guru.springframework</groupId>
+                        <artifactId>spring-cloud-contract-oa3</artifactId>
+                        <version>${scc-oa3-version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
