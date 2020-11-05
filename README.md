@@ -328,3 +328,15 @@ You can also run report generation automatically during `mvn verify` goal. `pom.
 	</build>
 ```
 Generated report is available under `target/site/serenity` folder.
+
+### Test case writing
+
+For convenience and clarity, integration test cases should be created under `src/test/java/com/example/ebank/integration` folder structure. If you wish to include your test case in Serenity report, you can extend `com.example.ebank.integration.serenity.SerenityReportBase` abstract class. This class provides integration with Spring libraries, so useful annotations like `@Autowired` work without any additional configration needed.
+
+To include REST requests in the report, `SerenityRest` class should be used instead of `RestAssured`. `SerenityRest` class is a wrapper around `RestAssured`, so all familiar methods are available.
+
+Example:
+```java
+SerenityRest.get(endpoint.getEndpoint());
+SerenityRest.restAssuredThat(resp -> resp.statusCode(equalTo(200)));
+```
