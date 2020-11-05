@@ -2,11 +2,9 @@ package com.example.ebank.repositories;
 
 import com.example.ebank.models.Account;
 import com.example.ebank.utils.ProfileManager;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -24,7 +22,7 @@ public class AccountRepository {
         this.profileManager = profileManager;
     }
 
-    public Iterable<Account> findAll() {
+    public List<Account> findAll() {
         return profileManager.isMockProfileActive()
                 ? mockRepository.findAll()
                 : jpaRepository.findAll();
@@ -36,10 +34,10 @@ public class AccountRepository {
                 : jpaRepository.findById(id);
     }
     
-    public Page<Account> findByCustomerId(Long customerId, Pageable pageable){
+    public List<Account> findByCustomerId(Long customerId){
     	return profileManager.isMockProfileActive()
-                ? mockRepository.findByCustomerId(customerId, pageable)
-                : jpaRepository.findByCustomerId(customerId, pageable);
+                ? mockRepository.findByCustomerId(customerId)
+                : jpaRepository.findByCustomerId(customerId);
     }
 
 }

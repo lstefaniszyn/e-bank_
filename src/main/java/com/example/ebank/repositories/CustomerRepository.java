@@ -4,6 +4,7 @@ import com.example.ebank.models.Customer;
 import com.example.ebank.utils.ProfileManager;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -21,7 +22,7 @@ public class CustomerRepository {
 		this.profileManager = profileManager;
 	}
 
-	public Iterable<Customer> findAll() {
+	public List<Customer> findAll() {
 		return profileManager.isMockProfileActive()
 				? mockRepository.findAll()
 				: jpaRepository.findAll();

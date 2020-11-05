@@ -43,10 +43,7 @@ paths:
                     description: successful operation
                     content:
                         application/json:
-                            schema:
-                                type: object
-                                items:
-                                    $ref: "#/components/schemas/AppStatus"
+                          $ref: "#/components/schemas/AppStatus"
                     x-contracts:
                         - contractId: 1
                           headers:
@@ -83,7 +80,7 @@ paths:
                             schema:
                                 type: array
                                 items:
-                                    $ref: "#/components/schemas/CustomerForList"
+                                    $ref: "#/components/schemas/CustomerListItem"
                     x-contracts:
                         - contractId: 1
                           headers:
@@ -106,21 +103,21 @@ paths:
                 "404":
                     description: customer not found
                     content: {}
-    "/api/v1/customers/{idCustomer}":
+    "/api/v1/customers/{customerId}":
         get:
             tags:
                 - customer
-            summary: Get customer by idCustomer
+            summary: Get customer by customerId
             operationId: getCustomerById
             security:
-              - bearerAuth: []
+                - bearerAuth: []
             x-contracts:
                 - contractId: 1
                   name: get-one-customer-OK-Response
                   description: Positive, to one customer
                   priority: 1
             parameters:
-                - name: idCustomer
+                - name: customerId
                   in: path
                   description: 'The id that needs to be fetched. Use "1" for testing. '
                   required: true
@@ -161,31 +158,34 @@ paths:
                 "400":
                     description: Invalid customer id supplied
                     content: {}
+                "401":
+                    $ref: '#/components/responses/UnauthorizedError'
                 "404":
                     description: customer not found
                     content: {}
-    "/api/v1/customers/{idCustomer}/accounts":
+    "/api/v1/customers/{customerId}/accounts":
         get:
             tags:
                 - account
             summary: Get customer's accounts
             operationId: getCustomerAccounts
             security:
-              - bearerAuth: []
+                - bearerAuth: []
             x-contracts:
                 - contractId: 1
                   name: get-accounts-for-customer-OK-Response
                   priority: 1
             parameters:
-                - name: idCustomer
+                - name: customerId
                   in: path
-                  description: 'The idCustomer that needs to be fetched. Use "1" for testing. '
+                  description: 'The customerId that needs to be fetched. Use "1" for testing. '
                   required: true
                   schema:
-                      type: string
+                      type: integer
+                      format: int64
                   x-contracts:
-                    - contractId: 1
-                      value: 1
+                      - contractId: 1
+                        value: 1
             responses:
                 "200":
                     description: successful operation
@@ -219,37 +219,41 @@ paths:
                 "400":
                     description: Invalid customer id supplied
                     content: {}
+                "401":
+                    $ref: '#/components/responses/UnauthorizedError'
                 "404":
                     description: customer not found
                     content: {}
-    "/api/v1/customers/{idCustomer}/accounts/{idAccount}":
+    "/api/v1/customers/{customerId}/accounts/{accountId}":
         get:
             tags:
                 - account
             summary: Get customer's account
             operationId: getCustomerAccount
             security:
-              - bearerAuth: []
+                - bearerAuth: []
             x-contracts:
                 - contractId: 1
                   name: get-account-for-one-customer-OK-Response
                   priority: 1
             parameters:
-                - name: idCustomer
+                - name: customerId
                   in: path
-                  description: 'The idCustomer that needs to be fetched. Use "1" for testing. '
+                  description: 'The customerId that needs to be fetched. Use "1" for testing. '
                   required: true
                   schema:
-                      type: string
+                      type: integer
+                      format: int64
                   x-contracts:
                       - contractId: 1
                         value: 1
-                - name: idAccount
+                - name: accountId
                   in: path
-                  description: 'The idAccount that needs to be fetched. Use "1" for testing. '
+                  description: 'The accountId that needs to be fetched. Use "1" for testing. '
                   required: true
                   schema:
-                      type: string
+                      type: integer
+                      format: int64
                   x-contracts:
                       - contractId: 1
                         value: 1
@@ -259,7 +263,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                              $ref: "#/components/schemas/Account"
+                                $ref: "#/components/schemas/Account"
                     x-contracts:
                         - contractId: 1
                           headers:
@@ -273,37 +277,41 @@ paths:
                 "400":
                     description: Invalid customer id supplied
                     content: {}
+                "401":
+                    $ref: '#/components/responses/UnauthorizedError'
                 "404":
                     description: customer not found
                     content: {}
-    "/api/v1/customers/{idCustomer}/accounts/{idAccount}/transactions":
+    "/api/v1/customers/{customerId}/accounts/{accountId}/transactions":
         get:
             tags:
                 - account
             summary: Get account's transactions
             operationId: getAccountTransactions
             security:
-              - bearerAuth: []
+                - bearerAuth: []
             x-contracts:
                 - contractId: 1
                   name: get-transactions-for-account-for-customer-OK-Response
                   priority: 1
             parameters:
-                - name: idCustomer
+                - name: customerId
                   in: path
-                  description: 'The idCustomer that needs to be fetched. Use "1" for testing. '
+                  description: 'The customerId that needs to be fetched. Use "1" for testing. '
                   required: true
                   schema:
-                      type: string
+                      type: integer
+                      format: int64
                   x-contracts:
                       - contractId: 1
                         value: 1
-                - name: idAccount
+                - name: accountId
                   in: path
-                  description: 'The idAccount that needs to be fetched. Use "1" for testing. '
+                  description: 'The accountId that needs to be fetched. Use "1" for testing. '
                   required: true
                   schema:
-                      type: string
+                      type: integer
+                      format: int64
                   x-contracts:
                       - contractId: 1
                         value: 1
@@ -341,15 +349,15 @@ paths:
                     description: successful operation
                     content:
                         application/json:
-                            type: object
-                                items:
-                                    pageCurrent: integer
-                                    pageSize: integer
-                                    
                             schema:
-                                type: array
-                                items:
-                                    $ref: "#/components/schemas/Transaction"
+                                type: object
+                                properties:
+                                    content:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/Transaction"
+#                                    pageCurrent: integer #TODO HATEOAS
+#                                    pageSize: integer                                
                     x-contracts:
                         - contractId: 1
                           headers:
@@ -383,26 +391,30 @@ paths:
                 "400":
                     description: Invalid customer id supplied
                     content: {}
+                "401":
+                    $ref: '#/components/responses/UnauthorizedError'
                 "404":
                     description: customer not found
                     content: {}
 components:
     securitySchemes:
         bearerAuth:
-          type: http
-          scheme: bearer
-          bearerFormat: JWT
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
     responses:
         UnauthorizedError:
-          description: Access token is missing or invalid
-          content: {}
+            description: Access token is missing or invalid
+            content: {}
     schemas:
         Currency:
-            type: object
-            properties:
-                code:
-                    type: string
-                    description: like, EUR
+            type: string
+            enum:
+                - GBP
+                - EUR
+                - CHF
+            xml:
+                name: Currency
         Account:
             type: object
             properties:
@@ -415,15 +427,16 @@ components:
                     type: string
                 currency:
                     $ref: "#/components/schemas/Currency"
-                balance: 
+                balance:
                     type: object
                     properties:
                         value:
-                            type: double
+                            type: number
+                            format: double
                             description: Sum up of money from this account
                         currency:
                             $ref: "#/components/schemas/Currency"
-        CustomerForList:
+        CustomerListItem:
             type: object
             properties:
                 id:
@@ -447,15 +460,18 @@ components:
                 familyName:
                     type: string
                     description: https://schema.org/familyName
+                identityKey:
+                    type: string
                 accounts:
                     type: array
                     items:
                         $ref: "#/components/schemas/Account"
-                balance: 
+                balance:
                     type: object
                     properties:
                         value:
-                            type: double
+                            type: number
+                            format: double
                             description: Sum up of money status combined from all client's accounts and exchange to GPB
                         currency:
                             description: Sum up of money status combined from all client's accounts and exchange to GPB
@@ -476,8 +492,8 @@ components:
                     type: object
                     properties:
                         amount:
-                            type: integer
-                            format: int64
+                            type: number
+                            format: double
                         currency:
                             $ref: "#/components/schemas/Currency"
                 iban:
@@ -497,4 +513,3 @@ components:
                     type: string
                 message:
                     type: string
-
