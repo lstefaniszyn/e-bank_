@@ -11,17 +11,14 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Component
 public class MockCustomerRepository {
 
 	private static final Logger logger = LoggerFactory.getLogger(MockCustomerRepository.class);
 
-	public Set<Customer> findAll() {
+	public List<Customer> findAll() {
 		return getCustomers();
 	}
 
@@ -33,13 +30,13 @@ public class MockCustomerRepository {
 		return getCustomers().stream().filter(c -> Objects.equals(c.getIdentityKey(), identityKey)).findFirst();
 	}
 
-	private Set<Customer> getCustomers() {
-		Set<Customer> customers = new HashSet<>();
+	private List<Customer> getCustomers() {
+		List<Customer> customers = new ArrayList<>();
 		Resource resource = new ClassPathResource("data/customers.json");
 		try {
 			File file = resource.getFile();
 			ObjectMapper jsonMapper = new ObjectMapper();
-			customers = jsonMapper.readValue(file, new TypeReference<Set<Customer>>() {
+			customers = jsonMapper.readValue(file, new TypeReference<List<Customer>>() {
 			});
 		} catch (IOException exc) {
 			logger.warn("IOException occurred during loading mock collection of customers.");

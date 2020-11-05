@@ -3,8 +3,8 @@ package com.example.ebank.repositories;
 import com.example.ebank.models.Customer;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,7 +14,7 @@ public class MockCustomerRepositoryTests {
 
 	@Test
 	public void testFindAllCustomers() {
-		Set<Customer> result = customerRepository.findAll();
+		List<Customer> result = customerRepository.findAll();
 
 		assertThat(result).isNotEmpty();
 	}
