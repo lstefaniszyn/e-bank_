@@ -1,9 +1,9 @@
 package com.example.ebank.mappers;
 
+import com.example.ebank.generated.dto.CustomerDto;
+import com.example.ebank.generated.dto.CustomerListItemDto;
 import com.example.ebank.models.Customer;
 import org.mapstruct.Mapper;
-import org.openapitools.dto.CustomerDto;
-import org.openapitools.dto.CustomerListItemDto;
 
 import java.util.List;
 

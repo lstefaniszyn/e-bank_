@@ -1,8 +1,8 @@
 package com.example.ebank.mappers;
 
+import com.example.ebank.generated.dto.AccountDto;
 import com.example.ebank.models.Account;
 import org.mapstruct.Mapper;
-import org.openapitools.dto.AccountDto;
 
 import java.util.List;
 

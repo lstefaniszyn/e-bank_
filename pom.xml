@@ -473,14 +473,15 @@
                             <configOptions>
                                 <sourceFolder>src/main/java</sourceFolder>
                                 <library>spring-boot</library>
-                                <dateLibrary>java8</dateLibrary>
+                                <dateLibrary>java11</dateLibrary>
                                 <java11>true</java11>
                                 <interfaceOnly>true</interfaceOnly>
                                 <skipDefaultInterface>true</skipDefaultInterface>
                                 <useTags>true</useTags>
                             </configOptions>
-                            <modelPackage>org.openapitools.dto</modelPackage>
+                            <modelPackage>com.example.ebank.generated.dto</modelPackage>
                             <modelNameSuffix>Dto</modelNameSuffix>
+                            <apiPackage>com.example.ebank.generated.api</apiPackage>
                             <generateSupportingFiles>false</generateSupportingFiles>
                         </configuration>
                     </execution>

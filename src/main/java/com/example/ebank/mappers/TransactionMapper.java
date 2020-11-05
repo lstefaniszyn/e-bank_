@@ -1,10 +1,10 @@
 package com.example.ebank.mappers;
 
+import com.example.ebank.generated.dto.TransactionDto;
 import com.example.ebank.models.Transaction;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.openapitools.dto.TransactionDto;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.example.ebank.controllers;
 
-import org.openapitools.api.AppApi;
-import org.openapitools.dto.AppStatusDto;
+import com.example.ebank.generated.api.AppApi;
+import com.example.ebank.generated.dto.AppStatusDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

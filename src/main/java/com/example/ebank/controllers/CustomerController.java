@@ -1,12 +1,12 @@
 package com.example.ebank.controllers;
 
+import com.example.ebank.generated.api.CustomerApi;
+import com.example.ebank.generated.dto.CustomerDto;
+import com.example.ebank.generated.dto.CustomerListItemDto;
 import com.example.ebank.mappers.CustomerMapper;
 import com.example.ebank.models.Customer;
 import com.example.ebank.services.CustomerService;
 import com.example.ebank.utils.SecurityContextUtils;
-import org.openapitools.api.CustomerApi;
-import org.openapitools.dto.CustomerDto;
-import org.openapitools.dto.CustomerListItemDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 

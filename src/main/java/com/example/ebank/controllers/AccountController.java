@@ -1,5 +1,8 @@
 package com.example.ebank.controllers;
 
+import com.example.ebank.generated.api.AccountApi;
+import com.example.ebank.generated.dto.AccountDto;
+import com.example.ebank.generated.dto.TransactionDto;
 import com.example.ebank.mappers.AccountMapper;
 import com.example.ebank.mappers.TransactionMapper;
 import com.example.ebank.models.Account;
@@ -11,9 +14,6 @@ import com.example.ebank.services.CustomerService;
 import com.example.ebank.services.TransactionService;
 import com.example.ebank.utils.KafkaServerProperties;
 import com.example.ebank.utils.SecurityContextUtils;
-import org.openapitools.api.AccountApi;
-import org.openapitools.dto.AccountDto;
-import org.openapitools.dto.TransactionDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
