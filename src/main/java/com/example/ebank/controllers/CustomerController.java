@@ -7,12 +7,14 @@ import com.example.ebank.mappers.CustomerMapper;
 import com.example.ebank.models.Customer;
 import com.example.ebank.services.CustomerService;
 import com.example.ebank.utils.SecurityContextUtils;
+import io.swagger.annotations.Api;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Objects;
 
+@Api(tags = "customer")
 @RestController
 public class CustomerController implements CustomerApi {
 

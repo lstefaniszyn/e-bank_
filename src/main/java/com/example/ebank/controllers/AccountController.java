@@ -14,6 +14,7 @@ import com.example.ebank.services.CustomerService;
 import com.example.ebank.services.TransactionService;
 import com.example.ebank.utils.KafkaServerProperties;
 import com.example.ebank.utils.SecurityContextUtils;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+@Api(tags = "account")
 @RestController
 public class AccountController implements AccountApi {
 
