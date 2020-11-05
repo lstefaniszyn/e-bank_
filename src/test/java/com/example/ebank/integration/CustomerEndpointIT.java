@@ -7,15 +7,10 @@ import com.example.ebank.integration.serenity.SerenityReportBase;
 import com.example.ebank.utils.logger.BFLogger;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.rest.SerenityRest;
 
-@RunWith(SerenityRunner.class)
-@SpringBootTest
 public class CustomerEndpointIT extends SerenityReportBase {
 
     @Autowired
