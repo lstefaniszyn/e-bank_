@@ -16,6 +16,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafkaStreams;
 import org.springframework.kafka.annotation.KafkaStreamsDefaultConfiguration;
 import org.springframework.kafka.config.KafkaStreamsConfiguration;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.kafka.support.serializer.JsonSerde;
+
+import com.example.ebank.models.Transaction;
 
 @Configuration
 @EnableKafkaStreams
@@ -35,24 +39,27 @@ public class KafkaStreamConfig {
 	@Value("${spring.kafka.consumer.group-id}")
 	private String groupId;
 	
+	@SuppressWarnings("resource")
 	@Bean(name = KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME)
 	public KafkaStreamsConfiguration kStreamsConfigs(KafkaProperties kafkaProperties) {
+		
 		Map<String, Object> config = new HashMap<>();
 		config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
 		config.put(StreamsConfig.APPLICATION_ID_CONFIG, "other-group");
 		config.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String()
 				.getClass());
-		config.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String()
+		config.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, new JsonSerde<Transaction>()
 				.getClass());
+		config.put(JsonDeserializer.TRUSTED_PACKAGES, "com.example.ebank.models");
 		return new KafkaStreamsConfiguration(config);
 	}
 	
 	@Bean
-	public KStream<String, String> kStream(StreamsBuilder kStreamBuilder) {
-		KStream<String, String> stream = kStreamBuilder.stream(inputTopic);
+	public KStream<String, Transaction> kStream(StreamsBuilder kStreamBuilder) {
+		KStream<String, Transaction> stream = kStreamBuilder.stream(inputTopic);
 		stream.mapValues(v -> {
 			logger.info(String.format("Processing: [%s]", v));
-			return v.toUpperCase();
+			return v;
 		})
 				.to(outputTopic);
 		return stream;
