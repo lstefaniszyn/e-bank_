@@ -1,6 +1,15 @@
 package com.example.ebank.api;
 
-import com.capgemini.mrchecker.test.core.logger.BFLogger;
+import static org.mockito.BDDMockito.given;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import com.example.ebank.controllers.AccountController;
 import com.example.ebank.controllers.AppStatusController;
 import com.example.ebank.controllers.CustomerController;
@@ -11,7 +20,8 @@ import com.example.ebank.models.Transaction;
 import com.example.ebank.services.AccountService;
 import com.example.ebank.services.CustomerService;
 import com.example.ebank.services.TransactionService;
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import com.example.ebank.utils.logger.BFLogger;
+
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -22,15 +32,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static org.mockito.BDDMockito.given;
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AbstractContractSpec {

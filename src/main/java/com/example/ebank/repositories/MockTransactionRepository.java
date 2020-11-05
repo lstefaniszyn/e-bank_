@@ -1,10 +1,15 @@
 package com.example.ebank.repositories;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.example.ebank.models.Transaction;
+import com.example.ebank.utils.logger.BFLogger;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -12,15 +17,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
-
 @Component
 public class MockTransactionRepository {
-
-    private static final Logger logger = LoggerFactory.getLogger(MockTransactionRepository.class);
 
     public List<Transaction> findAll() {
         return getTransactions();
@@ -34,11 +32,9 @@ public class MockTransactionRepository {
         return getPagedTransactions(pageable, getTransactions());
     }
 
-
     public Page<Transaction> findByValueDateBetween(Date startDate, Date endDate, Pageable pageable) {
         List<Transaction> allTransactions = getTransactions().stream()
-                .filter(t -> isInPeriod(t.getValueDate(), startDate, endDate))
-                .collect(Collectors.toList());
+                .filter(t -> isInPeriod(t.getValueDate(), startDate, endDate)).collect(Collectors.toList());
         return getPagedTransactions(pageable, allTransactions);
     }
 
@@ -49,14 +45,14 @@ public class MockTransactionRepository {
         int to = (pageNumber + 1) * pageSize;
         int transactionsSize = allTransactions.size();
         List<Transaction> transactions = from <= transactionsSize
-                ? to <= transactionsSize
-                ? allTransactions.subList(from, to)
-                : allTransactions.subList(from, transactionsSize)
+                ? to <= transactionsSize ? allTransactions.subList(from, to)
+                        : allTransactions.subList(from, transactionsSize)
                 : List.of();
         return new PageImpl<>(transactions, pageable, allTransactions.size());
     }
 
-    public Page<Transaction> findByValueDateBetweenAndAccountId(Date startDate, Date endDate, Long accountId, Pageable pageable) {
+    public Page<Transaction> findByValueDateBetweenAndAccountId(Date startDate, Date endDate, Long accountId,
+            Pageable pageable) {
         return findByValueDateBetween(startDate, endDate, pageable);
     }
 
@@ -73,9 +69,9 @@ public class MockTransactionRepository {
             transactions = jsonMapper.readValue(file, new TypeReference<List<Transaction>>() {
             });
         } catch (IOException exc) {
-            logger.warn("IOException occurred during loading mock collection of transactions.");
+            BFLogger.logWarn("IOException occurred during loading mock collection of transactions.");
         }
-        logger.info("Loaded mock collection of transactions.");
+        BFLogger.logInfo("Loaded mock collection of transactions.");
         return transactions;
     }
 

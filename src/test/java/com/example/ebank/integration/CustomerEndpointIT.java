@@ -2,9 +2,9 @@ package com.example.ebank.integration;
 
 import static org.hamcrest.Matchers.equalTo;
 
-import com.capgemini.mrchecker.test.core.logger.BFLogger;
 import com.example.ebank.integration.endpoints.CustomerEndpoint;
 import com.example.ebank.integration.serenity.SerenityReportBase;
+import com.example.ebank.utils.logger.BFLogger;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
