@@ -32,8 +32,7 @@
         <jsonwebtoken-version>0.11.2</jsonwebtoken-version>
 
         <!-- Consumer Driven Contract -->
-        <spring-cloud-contract.version>2.1.5.RELEASE</spring-cloud-contract.version>
-        <scc-oa3-version>2.1.2.0</scc-oa3-version>
+        <spring-cloud-contract.version>2.2.4.RELEASE</spring-cloud-contract.version>
 
         <spring.mainClass>com.example.ebank.EBankApplication</spring.mainClass>
 
@@ -244,32 +243,8 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-contract-verifier</artifactId>
             <version>${spring-cloud-contract.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>io.rest-assured</groupId>
-                    <artifactId>spring-mock-mvc</artifactId>
-                </exclusion>
-            </exclusions>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>guru.springframework</groupId>
-            <artifactId>spring-cloud-contract-oa3</artifactId>
-            <version>${scc-oa3-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured-common</artifactId>
-            <version>${rest-assured.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>spring-mock-mvc</artifactId>
-            <version>${rest-assured.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- /Consumer Driver contract  -->
 
         <!-- Serenity -->
         <dependency>
@@ -342,16 +317,10 @@
                     <!-- Provide the base class for your auto-generated tests -->
                     <baseClassForTests>com.example.ebank.api.AbstractContractSpec</baseClassForTests>
                     <!-- Create package name for your auto-generated tests -->
-                    <basePackageForTests>com.example.ebank.api.generate</basePackageForTests>
+                    <basePackageForTests>com.example.ebank.api.autogenerate</basePackageForTests>
+                    <!-- If there’s a contract under /com/example/ebank/api/<folderName>/*.groovy` then we’ll search for a <folderName>Base.java files -->
+                    <packageWithBaseClasses>com.example.ebank.api</packageWithBaseClasses>
                 </configuration>
-                <dependencies>
-                    <!--needed to include oa3 converter-->
-                    <dependency>
-                        <groupId>guru.springframework</groupId>
-                        <artifactId>spring-cloud-contract-oa3</artifactId>
-                        <version>${scc-oa3-version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
 
             <plugin>
