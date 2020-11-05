@@ -1,4 +1,4 @@
-package com.example.ebank.endpoints;
+package com.example.ebank.integration.endpoints;
 
 import com.capgemini.mrchecker.test.core.BaseTest;
 
