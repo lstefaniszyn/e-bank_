@@ -21,7 +21,7 @@ import com.example.ebank.services.AccountService;
 import com.example.ebank.services.CustomerService;
 import com.example.ebank.services.TransactionService;
 import com.example.ebank.utils.logger.BFLogger;
-
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -31,8 +31,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AbstractContractSpec {
@@ -70,9 +68,8 @@ public class AbstractContractSpec {
         // Mock transaction service
         final String DATE_FORMAT = "yyyy-MM";
         final DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder()
-            .append(DateTimeFormatter.ofPattern(DATE_FORMAT))
-            .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
-            .toFormatter();
+                .append(DateTimeFormatter.ofPattern(DATE_FORMAT)).parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+                .toFormatter();
         LocalDate date = LocalDate.parse("2019-01", DATE_FORMATTER);
         BFLogger.logDebug("Transactions: " + getPagedTransactions(0, 3));
 
@@ -82,11 +79,7 @@ public class AbstractContractSpec {
     }
 
     private List<Customer> getCustomers() {
-        return List.of(
-            getCustomer(1L),
-            getCustomer(2L),
-            getCustomer(3L),
-            getCustomer(4L));
+        return List.of(getCustomer(1L), getCustomer(2L), getCustomer(3L), getCustomer(4L));
     }
 
     private Customer getCustomer(Long id) {
@@ -99,12 +92,8 @@ public class AbstractContractSpec {
     }
 
     private List<Account> getAccounts() {
-        return List.of(
-            getAccount(1L, Currency.CHF),
-            getAccount(2L, Currency.GBP),
-            getAccount(3L, Currency.CHF),
-            getAccount(4L, Currency.EUR),
-            getAccount(5L, Currency.GBP));
+        return List.of(getAccount(1L, Currency.CHF), getAccount(2L, Currency.GBP), getAccount(3L, Currency.CHF),
+                getAccount(4L, Currency.EUR), getAccount(5L, Currency.GBP));
     }
 
     private Account getAccount(Long id, Currency currency) {
@@ -131,19 +120,12 @@ public class AbstractContractSpec {
             output = transactions.subList(start, end);
         }
 
-        return new PageImpl<>(
-            output,
-            pageRequest,
-            total);
+        return new PageImpl<>(output, pageRequest, total);
     }
 
     private List<Transaction> getTransactions() {
-        return List.of(
-            getTransaction(1L),
-            getTransaction(2L),
-            getTransaction(3L),
-            getTransaction(4L),
-            getTransaction(5L));
+        return List.of(getTransaction(1L), getTransaction(2L), getTransaction(3L), getTransaction(4L),
+                getTransaction(5L));
     }
 
     private Transaction getTransaction(Long id) {

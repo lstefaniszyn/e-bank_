@@ -2,5 +2,8 @@ package com.example.ebank.models;
 
 public enum Currency {
 
-    GBP, EUR, CHF
+    AED, AUD, BRL, CAD, CHF, CLP, CNY, COP, CZK, DKK,
+    EUR, GBP, HKD, HUF, IDR, ILS, INR, JPY, KRW, MXN,
+    MYR, NOK, NZD, PHP, PLN, RON, RUB, SAR, SEK, SGD,
+    THB, TRY, TWD, ZAR
 }

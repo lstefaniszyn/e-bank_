@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutionException;
 
 import com.example.ebank.generated.api.AccountApi;
 import com.example.ebank.generated.dto.AccountDto;
-import com.example.ebank.generated.dto.TransactionDto;
+import com.example.ebank.generated.dto.TransactionPageDto;
 import com.example.ebank.mappers.AccountMapper;
 import com.example.ebank.mappers.TransactionMapper;
 import com.example.ebank.models.Account;
@@ -29,6 +29,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+
+@Api(tags = "account")
 @RestController
 public class AccountController implements AccountApi {
 
@@ -70,8 +73,8 @@ public class AccountController implements AccountApi {
     }
 
     @Override
-    public ResponseEntity<List<TransactionDto>> getAccountTransactions(Long customerId, Long accountId,
-            String dateString, Integer page, Integer size) {
+    public ResponseEntity<TransactionPageDto> getAccountTransactions(Long customerId, Long accountId, String dateString,
+            Integer page, Integer size) {
         Account account = accountService.getOne(accountId);
         validateAccessToRequestedCustomerAndAccount(customerId, account);
 
@@ -91,7 +94,7 @@ public class AccountController implements AccountApi {
             resultPage = transactionService.findForAccountInMonthPaginated(accountId, date, page, size);
         }
 
-        return ResponseEntity.ok(transactionMapper.toListDto(resultPage.getContent()));
+        return ResponseEntity.ok(transactionMapper.toTransactionPageDto(resultPage));
     }
 
     private void validateAccessToRequestedCustomerAndAccount(Long customerId, Account account) {

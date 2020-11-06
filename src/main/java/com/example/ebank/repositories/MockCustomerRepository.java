@@ -19,30 +19,30 @@ import org.springframework.stereotype.Component;
 @Component
 public class MockCustomerRepository {
 
-    public List<Customer> findAll() {
-        return getCustomers();
-    }
+	public List<Customer> findAll() {
+		return getCustomers();
+	}
 
-    public Optional<Customer> findById(Long id) {
-        return getCustomers().stream().filter(c -> Objects.equals(c.getId(), id)).findFirst();
-    }
+	public Optional<Customer> findById(Long id) {
+		return getCustomers().stream().filter(c -> Objects.equals(c.getId(), id)).findFirst();
+	}
 
-    public Optional<Customer> findByIdentityKey(String identityKey) {
-        return getCustomers().stream().filter(c -> Objects.equals(c.getIdentityKey(), identityKey)).findFirst();
-    }
+	public Optional<Customer> findByIdentityKey(String identityKey) {
+		return getCustomers().stream().filter(c -> Objects.equals(c.getIdentityKey(), identityKey)).findFirst();
+	}
 
-    private List<Customer> getCustomers() {
-        List<Customer> customers = new ArrayList<>();
-        Resource resource = new ClassPathResource("data/customers.json");
-        try {
-            File file = resource.getFile();
-            ObjectMapper jsonMapper = new ObjectMapper();
-            customers = jsonMapper.readValue(file, new TypeReference<List<Customer>>() {
-            });
-        } catch (IOException exc) {
-            BFLogger.logWarn("IOException occurred during loading mock collection of customers.");
-        }
-        BFLogger.logInfo("Loaded mock collection of customers.");
-        return customers;
-    }
+	private List<Customer> getCustomers() {
+		List<Customer> customers = new ArrayList<>();
+		Resource resource = new ClassPathResource("data/customers.json");
+		try {
+			File file = resource.getFile();
+			ObjectMapper jsonMapper = new ObjectMapper();
+			customers = jsonMapper.readValue(file, new TypeReference<List<Customer>>() {
+			});
+		} catch (IOException exc) {
+			BFLogger.logWarn("IOException occurred during loading mock collection of customers.");
+		}
+		BFLogger.logInfo("Loaded mock collection of customers.");
+		return customers;
+	}
 }
