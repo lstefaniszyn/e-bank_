@@ -1,12 +1,9 @@
-package contracts.rest
-
-
 import org.springframework.cloud.contract.spec.Contract
 
 
 scriptDir = new File(getClass().protectionDomain.codeSource.location.path).parent
 GroovyShell shell = new GroovyShell()
-def currency = shell.parse(new File(scriptDir + '/CustomerModel.groovy'))
+def currency = shell.parse(new File(scriptDir + '/../../models/CustomerModel.groovy'))
 
 
 Contract.make {
