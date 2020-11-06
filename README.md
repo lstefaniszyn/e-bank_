@@ -340,3 +340,9 @@ Example:
 SerenityRest.get(endpoint.getEndpoint());
 SerenityRest.restAssuredThat(resp -> resp.statusCode(equalTo(200)));
 ```
+
+Integration tests use additional Spring profiles `it-{environment}`. Properties specific for integration tests are set using `application-it-{environment}.properties` files under `src/test/resources` folder. Profiles are added using Maven profiles similar to regular environment switching.
+
+## Logging
+
+For logging, simply use `com.example.ebank.utils.logger.BFLogger` class and it's static methods (`logInfo`, `logWarn`, etc.)

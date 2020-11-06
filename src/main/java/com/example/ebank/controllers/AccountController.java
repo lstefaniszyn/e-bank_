@@ -1,5 +1,14 @@
 package com.example.ebank.controllers;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 import com.example.ebank.generated.api.AccountApi;
 import com.example.ebank.generated.dto.AccountDto;
 import com.example.ebank.generated.dto.TransactionPageDto;
@@ -14,32 +23,22 @@ import com.example.ebank.services.CustomerService;
 import com.example.ebank.services.TransactionService;
 import com.example.ebank.utils.KafkaServerProperties;
 import com.example.ebank.utils.SecurityContextUtils;
-import io.swagger.annotations.Api;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.example.ebank.utils.logger.BFLogger;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import io.swagger.annotations.Api;
 
 @Api(tags = "account")
 @RestController
 public class AccountController implements AccountApi {
 
-    private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
-
     private final static String DATE_FORMAT = "yyyy-MM";
     private final static DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder()
-        .append(DateTimeFormatter.ofPattern(DATE_FORMAT)).parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
-        .toFormatter();
+            .append(DateTimeFormatter.ofPattern(DATE_FORMAT)).parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+            .toFormatter();
 
     private final CustomerService customerService;
     private final AccountService accountService;
@@ -49,13 +48,9 @@ public class AccountController implements AccountApi {
     private final KafkaServerProperties kafkaProperties;
     private final AsyncTransactionService asyncTransactionService;
 
-    public AccountController(CustomerService customerService,
-        AccountService accountService,
-        AccountMapper accountMapper,
-        TransactionService transactionService,
-        TransactionMapper transactionMapper,
-        KafkaServerProperties kafkaProperties,
-        AsyncTransactionService asyncTransactionService) {
+    public AccountController(CustomerService customerService, AccountService accountService,
+            AccountMapper accountMapper, TransactionService transactionService, TransactionMapper transactionMapper,
+            KafkaServerProperties kafkaProperties, AsyncTransactionService asyncTransactionService) {
         this.customerService = customerService;
         this.accountService = accountService;
         this.accountMapper = accountMapper;
@@ -78,7 +73,8 @@ public class AccountController implements AccountApi {
     }
 
     @Override
-    public ResponseEntity<TransactionPageDto> getAccountTransactions(Long customerId, Long accountId, String dateString, Integer page, Integer size) {
+    public ResponseEntity<TransactionPageDto> getAccountTransactions(Long customerId, Long accountId, String dateString,
+            Integer page, Integer size) {
         Account account = accountService.getOne(accountId);
         validateAccessToRequestedCustomerAndAccount(customerId, account);
 
@@ -86,16 +82,16 @@ public class AccountController implements AccountApi {
         Page<Transaction> resultPage = Page.empty();
 
         if (kafkaProperties.readMockedTransactions()) {
-            CompletableFuture<Page<Transaction>> resultPageFuture = asyncTransactionService.findInMonthPaginated(date, page, size);
+            CompletableFuture<Page<Transaction>> resultPageFuture = asyncTransactionService.findInMonthPaginated(date,
+                    page, size);
             CompletableFuture.allOf(resultPageFuture);
             try {
                 resultPage = resultPageFuture.get();
             } catch (InterruptedException | ExecutionException e) {
-                logger.error("Error during reading mocked data from Kafka", e);
+                BFLogger.logError("Error during reading mocked data from Kafka" + e.toString());
             }
         } else {
-            resultPage = transactionService.findForAccountInMonthPaginated(accountId, date, page,
-                size);
+            resultPage = transactionService.findForAccountInMonthPaginated(accountId, date, page, size);
         }
 
         return ResponseEntity.ok(transactionMapper.toTransactionPageDto(resultPage));

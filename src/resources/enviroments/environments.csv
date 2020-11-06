@@ -1,2 +1,0 @@
-service variable,LOCAL,DEV,PROD
-HOST,http://localhost:8080,http://10.40.234.149:8080,
