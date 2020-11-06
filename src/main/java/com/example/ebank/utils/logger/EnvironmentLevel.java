@@ -2,6 +2,7 @@ package com.example.ebank.utils.logger;
 
 import org.apache.log4j.Level;
 
+
 @SuppressWarnings("serial")
 public class EnvironmentLevel extends Level {
     public static final int ENVIRONMENT_INT = ERROR_INT + 10;

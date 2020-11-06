@@ -18,8 +18,6 @@
 
         <!-- Java settings -->
         <java.version>11</java.version>
-        <mrchecker-core-module.version>5.7.0.1</mrchecker-core-module.version>
-        <mrchecker-webapi-module.version>1.2.4</mrchecker-webapi-module.version>
         <allure-junit5.version>2.13.3</allure-junit5.version>
         <allure-java-commons.version>2.13.3</allure-java-commons.version>
         <allure-junit-platform.version>2.13.3</allure-junit-platform.version>
@@ -54,6 +52,20 @@
             <properties>
                 <spring.profiles.active>dev</spring.profiles.active>
             </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <!-- Append integration test Spring profile -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <spring.profiles.active>dev,it-dev</spring.profiles.active>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <profile>
             <id>prod</id>
@@ -66,12 +78,40 @@
             <properties>
                 <spring.profiles.active>local</spring.profiles.active>
             </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <!-- Append integration test Spring profile -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <spring.profiles.active>dev,it-local</spring.profiles.active>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <profile>
             <id>mock</id>
             <properties>
                 <spring.profiles.active>mock,dev</spring.profiles.active>
             </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <!-- Append integration test Spring profile -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <spring.profiles.active>mock,dev,it-dev</spring.profiles.active>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
@@ -200,6 +240,12 @@
             <artifactId>junit</artifactId>
             <version>4.13</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
         </dependency>
 
         <dependency>
