@@ -2,7 +2,7 @@ package com.example.ebank.controllers;
 
 import com.example.ebank.generated.api.AccountApi;
 import com.example.ebank.generated.dto.AccountDto;
-import com.example.ebank.generated.dto.TransactionDto;
+import com.example.ebank.generated.dto.TransactionPageDto;
 import com.example.ebank.mappers.AccountMapper;
 import com.example.ebank.mappers.TransactionMapper;
 import com.example.ebank.models.Account;
@@ -78,7 +78,7 @@ public class AccountController implements AccountApi {
     }
 
     @Override
-    public ResponseEntity<List<TransactionDto>> getAccountTransactions(Long customerId, Long accountId, String dateString, Integer page, Integer size) {
+    public ResponseEntity<TransactionPageDto> getAccountTransactions(Long customerId, Long accountId, String dateString, Integer page, Integer size) {
         Account account = accountService.getOne(accountId);
         validateAccessToRequestedCustomerAndAccount(customerId, account);
 
@@ -98,7 +98,7 @@ public class AccountController implements AccountApi {
                 size);
         }
 
-        return ResponseEntity.ok(transactionMapper.toListDto(resultPage.getContent()));
+        return ResponseEntity.ok(transactionMapper.toTransactionPageDto(resultPage));
     }
 
     private void validateAccessToRequestedCustomerAndAccount(Long customerId, Account account) {
