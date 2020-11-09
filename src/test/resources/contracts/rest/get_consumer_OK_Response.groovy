@@ -31,7 +31,7 @@ then:
 		status 200
 		headers {
 			contentType(applicationJson())
-		
+        }
         body([
                     id: fromRequest().path(3), // get {custumerId}
                     givenName: "Johnny",
@@ -42,44 +42,16 @@ then:
                     'balance.currency.code': "EUR",
         ])  
         bodyMatchers {
-            jsonPath('$[0].id', byRegex(number()).asInteger())
-            jsonPath('$[0].givenName', byRegex('[\\w-_\\s\\.]+').asString())
-            jsonPath('$[0].familyName', byRegex('[\\w-_\\s\\.]+').asString())
+            jsonPath('id', byRegex(number()).asInteger())
+            jsonPath('givenName', byRegex('[\\w-_\\s\\.]+').asString())
+            jsonPath('familyName', byRegex('[\\w-_\\s\\.]+').asString())
+            jsonPath('identityKey', byRegex(number()).asInteger())
+            jsonPath('accounts', byType {
+                // results in verification of size of array (min 1)
+                minOccurrence(1)
+            })
+            jsonPath('balance.value', byRegex(aDouble()).asDouble())
+            jsonPath('balance.currency.code', byRegex('[A-Z]{3}').asString())
         }
-		}
-        
-        // body(  $( p(currency.getJsonCustomerView()) , c(currency.getJsonCustomerView()) )  )
-        // body(  $( p(currency.getJson()) , c(file('one_cutomer_response.json')) )  )
-		}
+	}
 }
-
-
-// Customer:
-//             type: object
-//             properties:
-//                 id:
-//                     type: integer
-//                     format: int64
-//                 givenName:
-//                     type: string
-//                     description: https://schema.org/givenName
-//                 familyName:
-//                     type: string
-//                     description: https://schema.org/familyName
-//                 identityKey:
-//                     type: string
-//                 accounts:
-//                     type: array
-//                     items:
-//                         $ref: "#/components/schemas/Account"
-//                 balance:
-//                     type: object
-//                     properties:
-//                         value:
-//                             type: number
-//                             format: double
-//                             description: Sum up of money status combined from all client's accounts and exchange to GPB
-//                         currency:
-//                             description: Sum up of money status combined from all client's accounts and exchange to GPB
-//                             $ref: "#/components/schemas/Currency"
-

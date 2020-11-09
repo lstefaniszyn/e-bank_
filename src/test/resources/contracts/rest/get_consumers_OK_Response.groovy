@@ -40,9 +40,10 @@ then:
                 ]
         ])
         bodyMatchers {
-            jsonPath('$[0].id', byRegex(number()).asInteger())
-            jsonPath('$[0].givenName', byRegex('[\\w-_\\s\\.]+').asString())
-            jsonPath('$[0].familyName', byRegex('[\\w-_\\s\\.]+').asString())
+            jsonPath('$', byType {
+                // results in verification of size of array (min 1)
+                minOccurrence(1)
+            })
         }
 		}
 	}
