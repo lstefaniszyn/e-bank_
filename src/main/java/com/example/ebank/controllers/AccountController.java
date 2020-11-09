@@ -1,97 +1,110 @@
 package com.example.ebank.controllers;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
+import com.example.ebank.generated.api.AccountApi;
+import com.example.ebank.generated.dto.AccountDto;
+import com.example.ebank.generated.dto.TransactionPageDto;
+import com.example.ebank.mappers.AccountMapper;
+import com.example.ebank.mappers.TransactionMapper;
 import com.example.ebank.models.Account;
 import com.example.ebank.models.Customer;
+import com.example.ebank.models.Transaction;
 import com.example.ebank.services.AccountService;
+import com.example.ebank.services.AsyncTransactionService;
 import com.example.ebank.services.CustomerService;
+import com.example.ebank.services.TransactionService;
+import com.example.ebank.utils.KafkaServerProperties;
+import com.example.ebank.utils.SecurityContextUtils;
+import com.example.ebank.utils.logger.BFLogger;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
-@Api(value = "accounts", tags = "account", description = "the accounts API")
+@Api(tags = "account")
 @RestController
-@RequestMapping("/api/v1")
-public class AccountController {
-    
+public class AccountController implements AccountApi {
+
+    private final static String DATE_FORMAT = "yyyy-MM";
+    private final static DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder()
+            .append(DateTimeFormatter.ofPattern(DATE_FORMAT)).parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+            .toFormatter();
+
     private final CustomerService customerService;
     private final AccountService accountService;
-    
-    public AccountController(CustomerService customerService, AccountService accountService) {
+    private final TransactionService transactionService;
+    private final AccountMapper accountMapper;
+    private final TransactionMapper transactionMapper;
+    private final KafkaServerProperties kafkaProperties;
+    private final AsyncTransactionService asyncTransactionService;
+
+    public AccountController(CustomerService customerService, AccountService accountService,
+            AccountMapper accountMapper, TransactionService transactionService, TransactionMapper transactionMapper,
+            KafkaServerProperties kafkaProperties, AsyncTransactionService asyncTransactionService) {
         this.customerService = customerService;
         this.accountService = accountService;
+        this.accountMapper = accountMapper;
+        this.transactionService = transactionService;
+        this.transactionMapper = transactionMapper;
+        this.kafkaProperties = kafkaProperties;
+        this.asyncTransactionService = asyncTransactionService;
     }
-    
-    @ApiOperation(value = "Get customers's accounts", nickname = "list", notes = "", response = Account.class, responseContainer = "List", tags = {
-            "account", })
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful operation", response = Account.class, responseContainer = "List"),
-            @ApiResponse(code = 400, message = "Invalid customer id supplied"),
-            @ApiResponse(code = 404, message = "Customer not found") })
-    @RequestMapping(value = "/accounts", produces = { "application/json" }, method = RequestMethod.GET)
-    public Iterable<Account> list() {
-        return accountService.getAll();
+
+    @Override
+    public ResponseEntity<List<AccountDto>> getCustomerAccounts(Long customerId) {
+        return ResponseEntity.ok(accountMapper.toListDto(accountService.getByCustomer(customerId)));
     }
-    
-    @ApiOperation(value = "Get customer's accounts", nickname = "get", notes = "", response = Account.class, responseContainer = "List", tags = {
-            "account", })
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful operation", response = Account.class, responseContainer = "List"),
-            @ApiResponse(code = 400, message = "Invalid customer id supplied"),
-            @ApiResponse(code = 404, message = "Customer not found") })
-    @RequestMapping(value = "/accounts/{idAccount}", produces = { "application/json" }, method = RequestMethod.GET)
-    public ResponseEntity<Account> get(
-            @ApiParam(value = "The idAccount that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long idAccount) {
-        return ResponseEntity.ok(accountService.getOne(idAccount));
+
+    @Override
+    public ResponseEntity<AccountDto> getCustomerAccount(Long customerId, Long accountId) {
+        Account account = accountService.getOne(accountId);
+        validateAccessToRequestedCustomerAndAccount(customerId, account);
+        return ResponseEntity.ok(accountMapper.toDto(account));
     }
-    
-    @ApiOperation(value = "Get accounts for given customer", nickname = "getCustomerAccounts", notes = "", response = Account.class, tags = {
-            "customer", })
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "successful operation", response = Account.class),
-            @ApiResponse(code = 400, message = "Invalid client id supplied"),
-            @ApiResponse(code = 404, message = "customer not found") })
-    @RequestMapping(value = "/customers/{idCustomer}/accounts", produces = { "application/json" }, method = RequestMethod.GET)
-    public ResponseEntity<List<Account>> getCustomerAccounts(
-            @ApiParam(value = "The idCustomer that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long idCustomer,
-            @ApiParam(value = "The Page number to fetched. Use \"0\" for testing. ", required = false) @RequestParam(name = "page", defaultValue = "0") int page,
-            @ApiParam(value = "The number of objects fetch. Use \"2\" for testing. ", required = false) @RequestParam(name = "size", defaultValue = "2") int size) {
-        Page<Account> accounts = accountService.getForCustomer(idCustomer, page, size);
-        return ResponseEntity.ok(accounts.getContent());
+
+    @Override
+    public ResponseEntity<TransactionPageDto> getAccountTransactions(Long customerId, Long accountId, String dateString,
+            Integer page, Integer size) {
+        Account account = accountService.getOne(accountId);
+        validateAccessToRequestedCustomerAndAccount(customerId, account);
+
+        LocalDate date = LocalDate.parse(dateString, DATE_FORMATTER);
+        Page<Transaction> resultPage = Page.empty();
+
+        if (kafkaProperties.readMockedTransactions()) {
+            CompletableFuture<Page<Transaction>> resultPageFuture = asyncTransactionService.findInMonthPaginated(date,
+                    page, size);
+            CompletableFuture.allOf(resultPageFuture);
+            try {
+                resultPage = resultPageFuture.get();
+            } catch (InterruptedException | ExecutionException e) {
+                BFLogger.logError("Error during reading mocked data from Kafka" + e.toString());
+            }
+        } else {
+            resultPage = transactionService.findForAccountInMonthPaginated(accountId, date, page, size);
+        }
+
+        return ResponseEntity.ok(transactionMapper.toTransactionPageDto(resultPage));
     }
-    
-    @ApiOperation(value = "Get account details for given customer", nickname = "getCustomerAccount", notes = "", response = Account.class, tags = {
-            "customer", })
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "successful operation", response = Account.class),
-            @ApiResponse(code = 400, message = "Invalid client id supplied"),
-            @ApiResponse(code = 404, message = "Client not found") })
-    @RequestMapping(value = "/customers/{idCustomer}/accounts/{idAccount}", produces = {
-            "application/json" }, method = RequestMethod.GET)
-    public ResponseEntity<Account> getCustomerAccount(
-            @ApiParam(value = "The idCustomer that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long idCustomer,
-            @ApiParam(value = "The idAccount that needs to be fetched. Use \"1\" for testing. ", required = true) @PathVariable Long idAccount,
-            @ApiParam(value = "The Page number to fetched. Use \"0\" for testing. ", required = false) @RequestParam(name = "page", defaultValue = "0") int page,
-            @ApiParam(value = "The number of objects fetch. Use \"2\" for testing. ", required = false) @RequestParam(name = "size", defaultValue = "2") int size) {
-        
-        Customer customer = customerService.getOne(idCustomer);
-        Account account = accountService.getOne(idAccount);
-        if (!account.getCustomer()
-                .getId()
-                .equals(customer.getId())) {
+
+    private void validateAccessToRequestedCustomerAndAccount(Long customerId, Account account) {
+        Customer customer = customerService.getOne(customerId);
+        if (!Objects.equals(customer.getIdentityKey(), SecurityContextUtils.getIdentityKey())) {
             throw new IllegalArgumentException();
         }
-        return ResponseEntity.ok(account);
+        if (!Objects.equals(account.getCustomer().getId(), customer.getId())) {
+            throw new IllegalArgumentException();
+        }
     }
-    
+
 }

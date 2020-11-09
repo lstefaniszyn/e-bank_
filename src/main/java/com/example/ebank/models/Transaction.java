@@ -1,10 +1,9 @@
 package com.example.ebank.models;
 
-import java.util.Date;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-
-import org.springframework.format.annotation.DateTimeFormat;
+import java.util.Date;
 
 @Entity
 @Table(name = "account_transaction", schema = "public")
@@ -30,7 +29,6 @@ public class Transaction {
 
     @Column(length = 250)
     private String description;
-
 
     public Long getId() {
         return id;

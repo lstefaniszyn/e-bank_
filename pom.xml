@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.4.RELEASE</version>
-        <relativePath /> <!-- lookup parent from repository -->
+        <version>2.3.4.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
     <artifactId>e-bank</artifactId>
@@ -18,9 +19,6 @@
 
         <!-- Java settings -->
         <java.version>11</java.version>
-
-        <mrchecker-core-module.version>5.7.0.1</mrchecker-core-module.version>
-        <mrchecker-webapi-module.version>1.2.4</mrchecker-webapi-module.version>
         <allure-junit5.version>2.13.3</allure-junit5.version>
         <allure-java-commons.version>2.13.3</allure-java-commons.version>
         <allure-junit-platform.version>2.13.3</allure-junit-platform.version>
@@ -31,6 +29,8 @@
         <springfox-version>2.9.2</springfox-version>
         <skip.surefire.tests>${skipTests}</skip.surefire.tests>
         <jsonwebtoken-version>0.11.2</jsonwebtoken-version>
+        <openapitools-version>4.3.1</openapitools-version>
+        <mapstruct-version>1.4.1.Final</mapstruct-version>
 
         <!-- Consumer Driven Contract -->
         <spring-cloud-contract.version>2.1.5.RELEASE</spring-cloud-contract.version>
@@ -38,6 +38,10 @@
 
         <spring.mainClass>com.example.ebank.EBankApplication</spring.mainClass>
 
+        <!-- Serenity -->
+        <serenity.version>2.3.6</serenity.version>
+        <rest-assured.version>4.3.1</rest-assured.version>
+        <groovy.version>3.0.3</groovy.version>
     </properties>
 
     <profiles>
@@ -49,6 +53,20 @@
             <properties>
                 <spring.profiles.active>dev</spring.profiles.active>
             </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <!-- Append integration test Spring profile -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <spring.profiles.active>dev,it-dev</spring.profiles.active>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <profile>
             <id>prod</id>
@@ -61,12 +79,40 @@
             <properties>
                 <spring.profiles.active>local</spring.profiles.active>
             </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <!-- Append integration test Spring profile -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <spring.profiles.active>dev,it-local</spring.profiles.active>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <profile>
             <id>mock</id>
             <properties>
                 <spring.profiles.active>mock,dev</spring.profiles.active>
             </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <!-- Append integration test Spring profile -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <spring.profiles.active>mock,dev,it-dev</spring.profiles.active>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
@@ -75,7 +121,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -139,6 +184,30 @@
         </dependency>
 
         <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator</artifactId>
+            <version>${openapitools-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.2.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct-version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.joschi.jackson</groupId>
             <artifactId>jackson-datatype-threetenbp</artifactId>
             <version>2.6.4</version>
@@ -153,6 +222,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.jupiter</groupId>
+                    <artifactId>junit-jupiter</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -162,16 +237,17 @@
         </dependency>
 
         <dependency>
-            <groupId>com.capgemini.mrchecker</groupId>
-            <artifactId>mrchecker-core-module</artifactId>
-            <version>${mrchecker-core-module.version}</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13</version>
+            <scope>test</scope>
         </dependency>
 
-        <!-- <dependency>
-            <groupId>com.capgemini.mrchecker</groupId>
-            <artifactId>mrchecker-webapi-module</artifactId>
-            <version>${mrchecker-webapi-module.version}</version>
-        </dependency> -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
 
         <dependency>
             <!-- Test listener. Binds Junit exec to Allure annotation -->
@@ -213,6 +289,7 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
@@ -222,7 +299,6 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
-
 
         <!-- Consumer Driver contract  -->
         <dependency>
@@ -246,17 +322,58 @@
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured-common</artifactId>
-            <version>4.3.1</version>
+            <version>${rest-assured.version}</version>
         </dependency>
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>spring-mock-mvc</artifactId>
-            <version>4.2.0</version>
+            <version>${rest-assured.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- /Consumer Driver contract  -->
 
-
+        <!-- Serenity -->
+        <dependency>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-core</artifactId>
+            <version>${serenity.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-junit</artifactId>
+            <version>${serenity.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-rest-assured</artifactId>
+            <version>${serenity.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-spring</artifactId>
+            <version>${serenity.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- rest-assured version working with serenity-rest (minimal: 4.2.0) -->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${rest-assured.version}</version>
+        </dependency>
+        <!-- need to explicitly declare json-path (and xml-path) in correct version -->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>json-path</artifactId>
+            <version>${rest-assured.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>xml-path</artifactId>
+            <version>${rest-assured.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -267,7 +384,6 @@
             </resource>
         </resources>
         <plugins>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -275,11 +391,6 @@
                     <jvmArguments>${argLine}</jvmArguments>
                     <mainClass>${spring.mainClass}</mainClass>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <!-- Consumer Driver contract  -->
             <plugin>
@@ -352,9 +463,10 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
-                    <includes>
-                        <include>**/*IT.java</include>
-                    </includes>
+                    <systemPropertyVariables>
+                        <allure.results.directory>target/allure-results-it</allure.results.directory>
+                    </systemPropertyVariables>
+                    <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
                 <executions>
                     <execution>
@@ -363,6 +475,49 @@
                             <goal>integration-test</goal>
                             <goal>verify</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>net.serenity-bdd.maven.plugins</groupId>
+                <artifactId>serenity-maven-plugin</artifactId>
+                <version>${serenity.version}</version>
+                <executions>
+                    <execution>
+                        <id>serenity-reports</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapitools-version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <generatorName>spring</generatorName>
+                            <inputSpec>${project.basedir}/src/test/resources/contracts/e-bank/openapi.yml</inputSpec>
+                            <configOptions>
+                                <sourceFolder>src/main/java</sourceFolder>
+                                <library>spring-boot</library>
+                                <dateLibrary>java11</dateLibrary>
+                                <java11>true</java11>
+                                <interfaceOnly>true</interfaceOnly>
+                                <skipDefaultInterface>true</skipDefaultInterface>
+                                <useTags>true</useTags>
+                            </configOptions>
+                            <modelPackage>com.example.ebank.generated.dto</modelPackage>
+                            <modelNameSuffix>Dto</modelNameSuffix>
+                            <apiPackage>com.example.ebank.generated.api</apiPackage>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

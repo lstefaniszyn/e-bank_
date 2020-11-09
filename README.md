@@ -143,8 +143,8 @@ Feign-based client is implemented in `com.example.ebank.extapi.client.ExchangeRa
 
 ## Security
 
-All endpoints which path starts from `api/v1/customers/` are NOT secured. 
-The rest resources require authorization. 
+All endpoints which path starts from `api/v1/customers/` are NOT secured.
+The rest resources require authorization.
 
 ### JWT
 
@@ -226,3 +226,123 @@ Mocked data are located in json files in: `src/main/resources/data`.
 - `accounts.json` contains 100 accounts with subsequent ids.
 - `customers.json` contains 152 customers with subsequent ids, transaction list is not present here.
 - `transactions_1_1.json` contains 10 transactions per month for each month in period 01/2018 - 12/2019. For one customer and one account, i.e. the same transactions are returned regardless of requested customer and/or account.
+
+## Serenity test reports
+
+[What is Serenity](https://serenity-bdd.github.io/theserenitybook/latest/index.html)
+
+Currently, only basic REST endpoint integration testing is implemented.
+For BDD-style testing, steps definitions must be added and optionally also Cucumber integration. Details on how to do it can be found [here](https://serenity-bdd.github.io/theserenitybook/latest/cucumber.html#_using_cucumber_with_serenity_bdd).
+
+### Dependencies
+
+There are a couple of things to be aware of when using Serenity:
+1.  Serenity only works with JUnit 4. Spring Boot Test starter automatically includes JUnit 5 (Jupiter), so following change needs to be done in `pom.xml`:
+    ```xml
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.jupiter</groupId>
+					<artifactId>junit-jupiter</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+    ```
+    Also, JUnit 4 has to be included in classpath:
+    ```xml
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13</version>
+			<scope>test</scope>
+		</dependency>
+    ```
+    There is [some project](https://github.com/fabianlinz/serenity-junit5) to integrate Serenity with JUnit 5.
+
+2.  To integrate with latest version (4.3.1) of RestAssured, following changes in `pom.xml` are required:
+
+    Include `serenity-rest-assured` integration library
+    ```xml
+		<dependency>
+			<groupId>net.serenity-bdd</groupId>
+			<artifactId>serenity-rest-assured</artifactId>
+			<version>${serenity.version}</version>
+			<scope>test</scope>
+		</dependency>
+    ```
+    Use correct version of RestAssured:
+    ```xml
+		<!-- rest-assured version working with serenity-rest (minimal: 4.2.0) -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${rest-assured.version}</version>
+		</dependency>
+		<!-- need to explicitly declare json-path (and xml-path) in correct version -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>json-path</artifactId>
+			<version>${rest-assured.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>xml-path</artifactId>
+			<version>${rest-assured.version}</version>
+		</dependency>
+    ```
+    Use correct version of Groovy:
+    ```xml
+	<properties>
+		<groovy.version>3.0.3</groovy.version>
+	</properties>
+    ```
+
+### Report generation
+
+In order to generate Serenity report from integration tests, invoke following:
+```bash
+mvn clean integration-test serenity:aggregate
+```
+You can also run report generation automatically during `mvn verify` goal. `pom.xml` configuration:
+```xml
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>net.serenity-bdd.maven.plugins</groupId>
+				<artifactId>serenity-maven-plugin</artifactId>
+				<version>${serenity.version}</version>
+				<executions>
+					<execution>
+						<id>serenity-reports</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>aggregate</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+```
+Generated report is available under `target/site/serenity` folder.
+
+### Test case writing
+
+For convenience and clarity, integration test cases should be created under `src/test/java/com/example/ebank/integration` folder structure. If you wish to include your test case in Serenity report, you can extend `com.example.ebank.integration.serenity.SerenityReportBase` abstract class. This class provides integration with Spring libraries, so useful annotations like `@Autowired` work without any additional configration needed.
+
+To include REST requests in the report, `SerenityRest` class should be used instead of `RestAssured`. `SerenityRest` class is a wrapper around `RestAssured`, so all familiar methods are available.
+
+Example:
+```java
+SerenityRest.get(endpoint.getEndpoint());
+SerenityRest.restAssuredThat(resp -> resp.statusCode(equalTo(200)));
+```
+
+Integration tests use additional Spring profiles `it-{environment}`. Properties specific for integration tests are set using `application-it-{environment}.properties` files under `src/test/resources` folder. Profiles are added using Maven profiles similar to regular environment switching.
+
+## Logging
+
+For logging, simply use `com.example.ebank.utils.logger.BFLogger` class and it's static methods (`logInfo`, `logWarn`, etc.)

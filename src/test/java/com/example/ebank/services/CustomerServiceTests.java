@@ -20,42 +20,41 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CustomerServiceTests {
-    
+
     @Mock
     private CustomerRepository customerRepository;
-    
+
     @InjectMocks
     private CustomerService customerService;
-    
+
     @Test
     public void testGetAll_expectOk() {
         when(customerRepository.findAll()).thenReturn(getList());
-        
+
         Iterable<Customer> result = customerService.getAll();
-        
         assertThat(result).isNotEmpty()
                 .hasSize(4);
     }
-    
+
     @Test
     public void testFindOne_expectOk() {
         long id = 157L;
         when(customerRepository.findById(id))
                 .thenReturn(Optional.of(getCustomer(id)));
-        
+
         Customer result = customerService.getOne(id);
-        
+
         assertThat(result).isNotNull();
     }
-    
+
     @Test
     public void testFindOne_expectEntityNotFoundException() {
         long id = 157L;
         when(customerRepository.findById(id)).thenReturn(Optional.empty());
-        
+
         assertThatThrownBy(() -> customerService.getOne(id)).isInstanceOf(EntityNotFoundException.class);
     }
-    
+
     private List<Customer> getList() {
         return List.of(
                 getCustomer(1L),
@@ -63,7 +62,7 @@ public class CustomerServiceTests {
                 getCustomer(3L),
                 getCustomer(4L));
     }
-    
+
     private Customer getCustomer(Long id) {
         Customer customer = new Customer();
         customer.setId(id);
@@ -72,7 +71,7 @@ public class CustomerServiceTests {
         customer.setIdentityKey(randomString(12));
         return customer;
     }
-    
+
     static String randomString(int length) {
         byte[] array = new byte[length];
         new Random().nextBytes(array);

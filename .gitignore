@@ -7,8 +7,7 @@ target/
 allure-results/
 logs/
 demo.txt
-allure-results/
-logs/
+
 
 ### STS ###
 .apt_generated
