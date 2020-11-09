@@ -1,12 +1,15 @@
 package com.example.ebank.configuration;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
+import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.Produced;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +23,8 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerde;
 
 import com.example.ebank.models.Transaction;
+import com.example.ebank.models.TransactionRequest;
+import com.example.ebank.utils.KafkaFeeder;
 
 @Configuration
 @EnableKafkaStreams
@@ -39,7 +44,6 @@ public class KafkaStreamConfig {
 	@Value("${spring.kafka.consumer.group-id}")
 	private String groupId;
 	
-	@SuppressWarnings("resource")
 	@Bean(name = KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME)
 	public KafkaStreamsConfiguration kStreamsConfigs(KafkaProperties kafkaProperties) {
 		
@@ -48,21 +52,26 @@ public class KafkaStreamConfig {
 		config.put(StreamsConfig.APPLICATION_ID_CONFIG, "other-group");
 		config.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String()
 				.getClass());
-		config.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, new JsonSerde<Transaction>()
+		config.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, new JsonSerde<TransactionRequest>()
 				.getClass());
 		config.put(JsonDeserializer.TRUSTED_PACKAGES, "com.example.ebank.models");
 		return new KafkaStreamsConfiguration(config);
 	}
 	
 	@Bean
-	public KStream<String, Transaction> kStream(StreamsBuilder kStreamBuilder) {
-		KStream<String, Transaction> stream = kStreamBuilder.stream(inputTopic);
-		stream.mapValues(v -> {
+	public KStream<String, List<Transaction>> kStream(StreamsBuilder kStreamBuilder) {
+		
+		Consumed<String, TransactionRequest> consumed = Consumed.with(Serdes.String(), new JsonSerde<TransactionRequest>(TransactionRequest.class));
+		Produced<String, List<Transaction>> produced = Produced.with(Serdes.String(), new JsonSerde<List<Transaction>>(List.class));
+		
+		KStream<String, TransactionRequest> inputStream = kStreamBuilder.stream(inputTopic, consumed);
+		KStream<String, List<Transaction>> outputStream = inputStream.mapValues((k, v) -> {
 			logger.info(String.format("Processing: [%s]", v));
-			return v;
-		})
-				.to(outputTopic);
-		return stream;
+			return KafkaFeeder.getMockedTransactions();
+		});
+		
+		outputStream.to(outputTopic, produced);
+		return outputStream;
 	}
 	
 }

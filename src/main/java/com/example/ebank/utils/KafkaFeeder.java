@@ -12,7 +12,6 @@ import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -46,7 +45,7 @@ public class KafkaFeeder {
 		if (properties.feedKafkaDuringStart()) {
 			deleteTopics();
 			createTopics();
-			feedKafkaTopic();
+			//feedKafkaTopic();
 		} else {
 			logger.info("Loading mocked data into kafka topics disabled!");
 		}
@@ -81,6 +80,14 @@ public class KafkaFeeder {
 	}
 	
 	private void feedKafkaTopic() {
+		List<Transaction> transactions = getMockedTransactions();
+		
+		transactions.forEach(t -> kafkaProducer.sendMessage(String.valueOf(t.getId()), t));
+		
+		logger.info("Kafka topics have been fed with mocked data!");
+	}
+	
+	public static List<Transaction> getMockedTransactions(){
 		List<Transaction> transactions = new ArrayList<>();
 		Resource resource = new ClassPathResource("data/transactions_1_1.json");
 		try {
@@ -91,10 +98,7 @@ public class KafkaFeeder {
 		} catch (IOException exc) {
 			logger.error("Error during loading transactions from file");
 		}
-		
-		transactions.forEach(t -> kafkaProducer.sendMessage(String.valueOf(t.getId()), t));
-		
-		logger.info("Kafka topics have been fed with mocked data!");
+		return transactions;
 	}
 	
 }
