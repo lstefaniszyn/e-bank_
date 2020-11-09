@@ -1,6 +1,7 @@
 package com.example.ebank.api;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -10,18 +11,23 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.capgemini.mrchecker.test.core.logger.BFLogger;
 import com.example.ebank.controllers.AccountController;
 import com.example.ebank.controllers.AppStatusController;
 import com.example.ebank.controllers.CustomerController;
-import com.example.ebank.controllers.TransactionController;
+import com.example.ebank.mappers.AccountMapper;
+import com.example.ebank.mappers.CustomerMapper;
+import com.example.ebank.mappers.TransactionMapper;
 import com.example.ebank.models.Account;
 import com.example.ebank.models.Currency;
 import com.example.ebank.models.Customer;
 import com.example.ebank.models.Transaction;
 import com.example.ebank.services.AccountService;
+import com.example.ebank.services.AsyncTransactionService;
 import com.example.ebank.services.CustomerService;
 import com.example.ebank.services.TransactionService;
+import com.example.ebank.utils.KafkaServerProperties;
+import com.example.ebank.utils.SecurityContextUtils;
+import com.example.ebank.utils.logger.BFLogger;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
@@ -47,6 +53,24 @@ public abstract class RestBase {
     @Mock
     CustomerService customerService;
     
+    @Mock
+    CustomerMapper customerMapper;
+    
+    @Mock
+    SecurityContextUtils securityContextUtils;
+    
+    @Mock
+    AccountMapper accountMapper;
+    
+    @Mock
+    TransactionMapper transactionMapper;
+    
+    @Mock
+    KafkaServerProperties kafkaProperties;
+    
+    @Mock
+    AsyncTransactionService asyncTransactionService;
+    
     @InjectMocks
     CustomerController customerController;
     
@@ -54,19 +78,25 @@ public abstract class RestBase {
     AccountController accountController;
     
     @InjectMocks
-    TransactionController transactionController;
-    
-    @InjectMocks
     AppStatusController appStatusController;
+    
+    private final String identityKey = randomNumber(12);
     
     @Before
     public void setup() {
+        // Mock security service
+        given(securityContextUtils.getIdentityKey()).willReturn(identityKey);
+        
         // Mock customer service
+        doNothing().when(customerController)
+                .validateAccessToRequestedCustomer(getCustomer(1L));
         given(customerService.getOne(1L)).willReturn(getCustomer(1L));
-        given(customerService.getByIdentityKey("P-01")).willReturn(getCustomer(1L));
+        given(customerService.getByIdentityKey(identityKey)).willReturn(getCustomer(1L));
         given(customerService.getAll()).willReturn(getCustomers());
         
         // Mock account service
+        doNothing().when(accountController)
+                .validateAccessToRequestedCustomerAndAccount(1L, getAccount(1L, Currency.CHF));
         given(accountService.getOne(1L)).willReturn(getAccount(1L, Currency.CHF));
         given(accountService.getAll()).willReturn(getAccounts());
         
@@ -81,7 +111,7 @@ public abstract class RestBase {
         
         given(transactionService.findForAccountInMonthPaginated(1L, date, 0, 2)).willReturn(getPagedTransactions(0, 2));
         
-        RestAssuredMockMvc.standaloneSetup(appStatusController, customerController, accountController, transactionController);
+        RestAssuredMockMvc.standaloneSetup(appStatusController, customerController, accountController);
     }
     
     private List<Customer> getCustomers() {
@@ -97,7 +127,7 @@ public abstract class RestBase {
         customer.setId(id);
         customer.setGivenName(randomString(10));
         customer.setFamilyName(randomString(30));
-        customer.setIdentityKey(randomNumber(12));
+        customer.setIdentityKey(identityKey);
         return customer;
     }
     

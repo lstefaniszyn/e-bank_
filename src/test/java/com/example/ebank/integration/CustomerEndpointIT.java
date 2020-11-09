@@ -2,29 +2,20 @@ package com.example.ebank.integration;
 
 import static org.hamcrest.Matchers.equalTo;
 
-import com.capgemini.mrchecker.test.core.BaseTest;
-import com.capgemini.mrchecker.test.core.logger.BFLogger;
-import com.example.ebank.endpoints.CustomerEndpoint;
+import com.example.ebank.integration.endpoints.CustomerEndpoint;
+import com.example.ebank.integration.serenity.SerenityReportBase;
+import com.example.ebank.utils.logger.BFLogger;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import net.serenitybdd.junit.runners.SerenityRunner;
-import net.serenitybdd.junit.spring.integration.SpringIntegrationMethodRule;
 import net.serenitybdd.rest.SerenityRest;
 
-@RunWith(SerenityRunner.class)
-@SpringBootTest
-public class CustomerEndpointIT extends BaseTest {
+public class CustomerEndpointIT extends SerenityReportBase {
 
     @Autowired
     private CustomerEndpoint endpoint;
 
-    @Rule
-    public SpringIntegrationMethodRule springIntegrationMethodRule = new SpringIntegrationMethodRule();
 
     @Test
     public void simpleGetQuery() {

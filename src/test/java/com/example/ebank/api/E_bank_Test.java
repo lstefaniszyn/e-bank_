@@ -3,8 +3,9 @@ package com.example.ebank.api;
 import static com.toomuchcoding.jsonassert.JsonAssertion.assertThatJson;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertThat;
 
-import com.capgemini.mrchecker.test.core.logger.BFLogger;
+import com.example.ebank.utils.logger.BFLogger;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
@@ -13,7 +14,7 @@ import org.junit.Test;
 import io.restassured.module.mockmvc.specification.MockMvcRequestSpecification;
 import io.restassured.response.ResponseOptions;
 
-public class E_bank_Test extends AbstractContractSpec {
+public class E_bank_Test extends RestBase {
     
     @Test
     public void validate_appStatus_OK_Response() throws Exception {
