@@ -331,6 +331,8 @@ paths:
                   required: false
                   schema:
                       type: integer
+                      minimum: 0
+                      default: 0
                   x-contracts:
                       - contractId: 1
                         type: integer
@@ -341,6 +343,8 @@ paths:
                   required: false
                   schema:
                       type: integer
+                      minimum: 1
+                      default: 20
                   x-contracts:
                       - contractId: 1
                         type: integer

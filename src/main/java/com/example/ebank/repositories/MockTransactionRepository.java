@@ -44,6 +44,7 @@ public class MockTransactionRepository {
         int from = pageNumber * pageSize;
         int to = (pageNumber + 1) * pageSize;
         int transactionsSize = allTransactions.size();
+        Collections.sort(allTransactions, (t1, t2) -> t1.getValueDate().compareTo(t2.getValueDate()));
         List<Transaction> transactions = from <= transactionsSize
                 ? to <= transactionsSize ? allTransactions.subList(from, to)
                         : allTransactions.subList(from, transactionsSize)
