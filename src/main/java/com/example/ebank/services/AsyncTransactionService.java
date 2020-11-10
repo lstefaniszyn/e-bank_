@@ -38,25 +38,26 @@ public class AsyncTransactionService {
     private String outputTopic;
 
     @Autowired
-    private ConsumerFactory<String, Transaction> transactionConsumerFactory;
+    private ConsumerFactory<String, List<Transaction>> transactionConsumerFactory;
 
     @Async("asyncExecutor")
     public CompletableFuture<Page<Transaction>> findInMonthPaginated(LocalDate date, int page, int size) {
 
-        KafkaConsumer<String, Transaction> consumer = getConsumer();
+        KafkaConsumer<String, List<Transaction>> consumer = getConsumer();
 
         consumer.subscribe(Arrays.asList(outputTopic));
         List<Transaction> transactions = new ArrayList<Transaction>();
 
         try {
-            ConsumerRecords<String, Transaction> records = consumer.poll(Duration.ofSeconds(10));
+            ConsumerRecords<String, List<Transaction>> records = consumer.poll(Duration.ofSeconds(10));
 
             LocalDate startDate = date.withDayOfMonth(1);
             LocalDate endDate = date.withDayOfMonth(date.lengthOfMonth());
-            transactions = StreamSupport.stream(records.spliterator(), false).filter(v -> {
-                return v.value().getValueDate().after(Date.valueOf(startDate))
-                        && v.value().getValueDate().before(Date.valueOf(endDate));
-            }).map(ConsumerRecord<String, Transaction>::value).collect(Collectors.toList());
+//            transactions = StreamSupport.stream(records.spliterator(), false).filter(v -> {
+//                return v.value().getValueDate().after(Date.valueOf(startDate))
+//                        && v.value().getValueDate().before(Date.valueOf(endDate));
+//            }).map(ConsumerRecord<String, Transaction>::value).collect(Collectors.toList());
+            records.forEach(v -> transactions.addAll(v.value()));
         } catch (Exception e) {
             BFLogger.logError("There was error during polling messages: " + e.toString());
         } finally {
@@ -69,7 +70,7 @@ public class AsyncTransactionService {
     @Async("asyncExecutor")
     public CompletableFuture<Page<Transaction>> findForAccountInMonthPaginated(Long accountId, LocalDate date, int page,
             int size) {
-        KafkaConsumer<String, Transaction> consumer = getConsumer();
+        KafkaConsumer<String, List<Transaction>> consumer = getConsumer();
         consumer.subscribe(Arrays.asList(outputTopic));
 
         List<Transaction> transactions = new ArrayList<Transaction>();
@@ -98,8 +99,8 @@ public class AsyncTransactionService {
         return new PageImpl<>(transactions, pageable, allTransactions.size());
     }
 
-    private KafkaConsumer<String, Transaction> getConsumer() {
-        KafkaConsumer<String, Transaction> consumer = (KafkaConsumer<String, Transaction>) transactionConsumerFactory
+    private KafkaConsumer<String, List<Transaction>> getConsumer() {
+        KafkaConsumer<String, List<Transaction>> consumer = (KafkaConsumer<String, List<Transaction>>) transactionConsumerFactory
                 .createConsumer(UUID.randomUUID().toString(), null, null, getAdditionalConsumerProperties());
         return consumer;
     }
