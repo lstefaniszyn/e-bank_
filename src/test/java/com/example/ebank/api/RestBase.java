@@ -137,7 +137,7 @@ public abstract class RestBase {
         account.setId(id);
         account.setIban(randomString(20));
         account.setCurrency(currency);
-        account.setCustomer(this.getCustomer(1L));
+        account.setCustomerId(1L);
         return account;
     }
     
@@ -177,7 +177,7 @@ public abstract class RestBase {
         transaction.setCurrency(Currency.CHF);
         transaction.setDescription("Test_" + id);
         transaction.setId(id);
-        transaction.setValueDate(new Date());
+        transaction.setDate(new Date());
         return transaction;
     }
     
