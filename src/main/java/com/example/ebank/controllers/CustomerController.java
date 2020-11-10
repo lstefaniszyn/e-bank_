@@ -20,12 +20,14 @@ public class CustomerController implements CustomerApi {
     
     private final CustomerService customerService;
     private final CustomerMapper customerMapper;
+    private final SecurityContextUtils securityContextUtils;
     
     public CustomerController(CustomerService customerService,
-            CustomerMapper customerMapper) {
+            CustomerMapper customerMapper, SecurityContextUtils securityContextUtils) {
         
         this.customerService = customerService;
         this.customerMapper = customerMapper;
+        this.securityContextUtils = securityContextUtils;
     }
     
     @Override
@@ -40,8 +42,8 @@ public class CustomerController implements CustomerApi {
         return ResponseEntity.ok(customerMapper.toDto(customer));
     }
     
-    public void validateAccessToRequestedCustomer(Customer customer) {
-        if (!Objects.equals(customer.getIdentityKey(), new SecurityContextUtils().getIdentityKey())) {
+    private void validateAccessToRequestedCustomer(Customer customer) {
+        if (!Objects.equals(customer.getIdentityKey(), securityContextUtils.getIdentityKey())) {
             throw new IllegalArgumentException();
         }
     }

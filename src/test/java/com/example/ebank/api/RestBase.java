@@ -88,15 +88,11 @@ public abstract class RestBase {
         given(securityContextUtils.getIdentityKey()).willReturn(identityKey);
         
         // Mock customer service
-        doNothing().when(customerController)
-                .validateAccessToRequestedCustomer(getCustomer(1L));
         given(customerService.getOne(1L)).willReturn(getCustomer(1L));
         given(customerService.getByIdentityKey(identityKey)).willReturn(getCustomer(1L));
         given(customerService.getAll()).willReturn(getCustomers());
         
         // Mock account service
-        doNothing().when(accountController)
-                .validateAccessToRequestedCustomerAndAccount(1L, getAccount(1L, Currency.CHF));
         given(accountService.getOne(1L)).willReturn(getAccount(1L, Currency.CHF));
         given(accountService.getAll()).willReturn(getAccounts());
         

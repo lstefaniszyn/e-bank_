@@ -48,10 +48,11 @@ public class AccountController implements AccountApi {
     private final TransactionMapper transactionMapper;
     private final KafkaServerProperties kafkaProperties;
     private final AsyncTransactionService asyncTransactionService;
+    private final SecurityContextUtils securityContextUtils;
     
     public AccountController(CustomerService customerService, AccountService accountService,
             AccountMapper accountMapper, TransactionService transactionService, TransactionMapper transactionMapper,
-            KafkaServerProperties kafkaProperties, AsyncTransactionService asyncTransactionService) {
+            KafkaServerProperties kafkaProperties, AsyncTransactionService asyncTransactionService, SecurityContextUtils securityContextUtils) {
         this.customerService = customerService;
         this.accountService = accountService;
         this.accountMapper = accountMapper;
@@ -59,6 +60,7 @@ public class AccountController implements AccountApi {
         this.transactionMapper = transactionMapper;
         this.kafkaProperties = kafkaProperties;
         this.asyncTransactionService = asyncTransactionService;
+        this.securityContextUtils = securityContextUtils;
     }
     
     @Override
@@ -101,9 +103,9 @@ public class AccountController implements AccountApi {
         return ResponseEntity.ok(transactionMapper.toTransactionPageDto(resultPage));
     }
     
-    public void validateAccessToRequestedCustomerAndAccount(Long customerId, Account account) {
+    private void validateAccessToRequestedCustomerAndAccount(Long customerId, Account account) {
         Customer customer = customerService.getOne(customerId);
-        if (!Objects.equals(customer.getIdentityKey(), new SecurityContextUtils().getIdentityKey())) {
+        if (!Objects.equals(customer.getIdentityKey(), securityContextUtils.getIdentityKey())) {
             throw new IllegalArgumentException();
         }
         if (!Objects.equals(account.getCustomer()
