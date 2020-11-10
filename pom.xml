@@ -221,10 +221,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
             <exclusions>
-                <!-- <exclusion>
-                    <groupId>org.mockito</groupId>
-                    <artifactId>mockito-inline</artifactId>
-                </exclusion> -->
                 <exclusion>
                     <groupId>org.mockito</groupId>
                     <artifactId>mockito-junit-jupiter</artifactId>
@@ -236,23 +232,11 @@
                 <exclusion>
                     <groupId>org.junit.jupiter</groupId>
                     <artifactId>junit-jupiter</artifactId>
-
                 </exclusion>
             </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-inline</artifactId>
-            <version>3.6.0</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.mockito</groupId>
-                    <artifactId>mockito-core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
@@ -407,8 +391,6 @@
                 <extensions>true</extensions>
                 <configuration>
                     <contractsDirectory>${project.basedir}/src/test/resources/contracts</contractsDirectory>
-                    <!-- Provide the base class for your auto-generated tests -->
-                    <baseClassForTests>com.example.ebank.api.AbstractContractSpec</baseClassForTests>
                     <!-- Create package name for your auto-generated tests -->
                     <basePackageForTests>com.example.ebank.api.autogenerate</basePackageForTests>
                     <!-- If there’s a contract under /com/example/ebank/api/<folderName>/*.groovy` then we’ll search for a <folderName>Base.java files -->
