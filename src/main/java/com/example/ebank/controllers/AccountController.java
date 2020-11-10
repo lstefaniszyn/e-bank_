@@ -34,12 +34,13 @@ import io.swagger.annotations.Api;
 @Api(tags = "account")
 @RestController
 public class AccountController implements AccountApi {
-
+    
     private final static String DATE_FORMAT = "yyyy-MM";
     private final static DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder()
-            .append(DateTimeFormatter.ofPattern(DATE_FORMAT)).parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+            .append(DateTimeFormatter.ofPattern(DATE_FORMAT))
+            .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
             .toFormatter();
-
+    
     private final CustomerService customerService;
     private final AccountService accountService;
     private final TransactionService transactionService;
@@ -47,10 +48,11 @@ public class AccountController implements AccountApi {
     private final TransactionMapper transactionMapper;
     private final KafkaServerProperties kafkaProperties;
     private final AsyncTransactionService asyncTransactionService;
-
+    private final SecurityContextUtils securityContextUtils;
+    
     public AccountController(CustomerService customerService, AccountService accountService,
             AccountMapper accountMapper, TransactionService transactionService, TransactionMapper transactionMapper,
-            KafkaServerProperties kafkaProperties, AsyncTransactionService asyncTransactionService) {
+            KafkaServerProperties kafkaProperties, AsyncTransactionService asyncTransactionService, SecurityContextUtils securityContextUtils) {
         this.customerService = customerService;
         this.accountService = accountService;
         this.accountMapper = accountMapper;
@@ -58,29 +60,33 @@ public class AccountController implements AccountApi {
         this.transactionMapper = transactionMapper;
         this.kafkaProperties = kafkaProperties;
         this.asyncTransactionService = asyncTransactionService;
+        this.securityContextUtils = securityContextUtils;
     }
-
+    
     @Override
     public ResponseEntity<List<AccountDto>> getCustomerAccounts(Long customerId) {
         return ResponseEntity.ok(accountMapper.toListDto(accountService.getByCustomer(customerId)));
     }
-
+    
     @Override
     public ResponseEntity<AccountDto> getCustomerAccount(Long customerId, Long accountId) {
         Account account = accountService.getOne(accountId);
         validateAccessToRequestedCustomerAndAccount(customerId, account);
         return ResponseEntity.ok(accountMapper.toDto(account));
     }
-
+    
     @Override
-    public ResponseEntity<TransactionPageDto> getAccountTransactions(Long customerId, Long accountId, String dateString,
-            Integer page, Integer size) {
+    public ResponseEntity<TransactionPageDto> getAccountTransactions(Long customerId,
+            Long accountId,
+            String dateString,
+            Integer page,
+            Integer size) {
         Account account = accountService.getOne(accountId);
         validateAccessToRequestedCustomerAndAccount(customerId, account);
-
+        
         LocalDate date = LocalDate.parse(dateString, DATE_FORMATTER);
         Page<Transaction> resultPage = Page.empty();
-
+        
         if (kafkaProperties.readMockedTransactions()) {
             CompletableFuture<Page<Transaction>> resultPageFuture = asyncTransactionService.findInMonthPaginated(date,
                     page, size);
@@ -93,18 +99,19 @@ public class AccountController implements AccountApi {
         } else {
             resultPage = transactionService.findForAccountInMonthPaginated(accountId, date, page, size);
         }
-
+        
         return ResponseEntity.ok(transactionMapper.toTransactionPageDto(resultPage));
     }
-
+    
     private void validateAccessToRequestedCustomerAndAccount(Long customerId, Account account) {
         Customer customer = customerService.getOne(customerId);
-        if (!Objects.equals(customer.getIdentityKey(), SecurityContextUtils.getIdentityKey())) {
+        if (!Objects.equals(customer.getIdentityKey(), securityContextUtils.getIdentityKey())) {
             throw new IllegalArgumentException();
         }
-        if (!Objects.equals(account.getCustomer().getId(), customer.getId())) {
+        if (!Objects.equals(account.getCustomer()
+                .getId(), customer.getId())) {
             throw new IllegalArgumentException();
         }
     }
-
+    
 }

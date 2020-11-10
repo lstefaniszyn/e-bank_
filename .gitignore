@@ -7,6 +7,8 @@ target/
 allure-results/
 logs/
 demo.txt
+dependencytree.txt
+
 
 
 ### STS ###

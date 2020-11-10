@@ -1,0 +1,57 @@
+import org.springframework.cloud.contract.spec.Contract
+
+
+scriptDir = new File(getClass().protectionDomain.codeSource.location.path).parent
+GroovyShell shell = new GroovyShell()
+def currency = shell.parse(new File(scriptDir + '/../../models/CustomerModel.groovy'))
+
+
+Contract.make {
+	description("""
+Represents a successful scenario of get one customer
+
+```
+given:
+	/api/v1/customers/{customerID} endpoint
+when:
+	make GET request
+then:
+	we'll get given customer for E-Bank application
+```
+
+""")
+	request {
+		method('GET')
+        url( $(p("api/v1/customers/1"), c("api/v1/customers/${regex('[0-9]+')}")) )
+		headers {
+			contentType(applicationJson())
+		}
+	}
+	response {
+		status 200
+		headers {
+			contentType(applicationJson())
+        }
+        body([
+                    id: fromRequest().path(3), // get {custumerId}
+                    givenName: "Johnny",
+                    familyName: "Bravo",
+                    identityKey: "",
+                    accounts: [[]],
+                    'balance.value': 123.12, 
+                    'balance.currency.code': "EUR",
+        ])  
+        bodyMatchers {
+            jsonPath('id', byRegex(number()).asInteger())
+            jsonPath('givenName', byRegex('[\\w-_\\s\\.]+').asString())
+            jsonPath('familyName', byRegex('[\\w-_\\s\\.]+').asString())
+            jsonPath('identityKey', byRegex(number()).asInteger())
+            jsonPath('accounts', byType {
+                // results in verification of size of array (min 1)
+                minOccurrence(1)
+            })
+            jsonPath('balance.value', byRegex(aDouble()).asDouble())
+            jsonPath('balance.currency.code', byRegex('[A-Z]{3}').asString())
+        }
+	}
+}

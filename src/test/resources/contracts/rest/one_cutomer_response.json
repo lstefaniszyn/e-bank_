@@ -1,0 +1,29 @@
+{
+    "id": 1,
+    "givenName": "Johnny",
+    "familyName": "Bravo",
+    "accounts": [
+        {
+            "id": 1,
+            "name": "For fun account",
+            "iban": "PL10105000997603123456789123",
+            "currency": { "code": "PLN", "name": "Zloty" }
+        },
+        {
+            "id": 2,
+            "name": "For life account",
+            "iban": "PT50002700000001234567833",
+            "currency": { "code": "EUR", "name": "Euro" }
+        },
+        {
+            "id": 3,
+            "name": "For retire account",
+            "iban": "GB33BUKB20201555555555",
+            "currency": { "code": "GBP", "name": "Pound Sterling" }
+        }
+    ],
+    "balance": {
+        "value": 123.12,
+        "currency": { "code": "EUR", "name": "Euro" }
+    }
+}
