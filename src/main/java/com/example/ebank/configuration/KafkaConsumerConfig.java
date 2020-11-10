@@ -1,6 +1,7 @@
 package com.example.ebank.configuration;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -43,20 +44,20 @@ public class KafkaConsumerConfig {
 	}
 	
 	@Bean
-	public ConsumerFactory<String, Transaction> transactionConsumerFactory() {
+	public ConsumerFactory<String, List<Transaction>> transactionConsumerFactory() {
 		Map<String, Object> props = new HashMap<>();
 		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
 		props.put(ConsumerConfig.GROUP_ID_CONFIG, UUID.randomUUID()
 				.toString());
 		return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(),
-				new JsonDeserializer<>(Transaction.class));
+				new JsonDeserializer<>(List.class));
 	}
 	
-	@Bean
-	public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, Transaction>> kafkaListenerContainerFactory() {
-		ConcurrentKafkaListenerContainerFactory<String, Transaction> factory = new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory(transactionConsumerFactory());
-		return factory;
-	}
+//	@Bean
+//	public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, Transaction>> kafkaListenerContainerFactory() {
+//		ConcurrentKafkaListenerContainerFactory<String, Transaction> factory = new ConcurrentKafkaListenerContainerFactory<>();
+//		factory.setConsumerFactory(transactionConsumerFactory());
+//		return factory;
+//	}
 	
 }
