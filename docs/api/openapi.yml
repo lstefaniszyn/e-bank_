@@ -34,10 +34,6 @@ paths:
                 - app
             summary: Get API status
             operationId: getStatus
-            x-contracts:
-                - contractId: 1
-                  name: AppStatus-OK-Response
-                  priority: 1
             responses:
                 "200":
                     description: successful operation
@@ -45,17 +41,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/AppStatus"
-                    x-contracts:
-                        - contractId: 1
-                          headers:
-                              Content-Type: application/json
-                          body:
-                              app-version: "1.0.0"
-                          matchers:
-                              body:
-                                  - path: $.['app-version']
-                                    type: by_regex
-                                    value: "[0-9]+\\.[0-9]+\\.[0-9]+"
                 "400":
                     description: Error
                     content: {}
@@ -68,11 +53,6 @@ paths:
                 - customer
             summary: Get all customers
             operationId: getCustomers
-            x-contracts:
-                - contractId: 1
-                  name: get-customers-OK-Response
-                  description: Positive, to get list of customers
-                  priority: 1
             responses:
                 "200":
                     description: successful operation
@@ -82,22 +62,6 @@ paths:
                                 type: array
                                 items:
                                     $ref: "#/components/schemas/CustomerListItem"
-                    x-contracts:
-                        - contractId: 1
-                          headers:
-                              Content-Type: application/json
-                          items:
-                          matchers:
-                              body:
-                                  - path: $[0].id
-                                    type: by_regex
-                                    value: "[\\d]+"
-                                  - path: $[0].givenName
-                                    type: by_regex
-                                    value: "[\\w-_\\.]+"
-                                  - path: $[0].familyName
-                                    type: by_regex
-                                    value: "[\\w-_\\.]+"
                 "400":
                     description: Invalid customer id supplied
                     content: {}
@@ -112,11 +76,6 @@ paths:
             operationId: getCustomerById
             security:
                 - bearerAuth: []
-            x-contracts:
-                - contractId: 1
-                  name: get-one-customer-OK-Response
-                  description: Positive, to one customer
-                  priority: 1
             parameters:
                 - name: customerId
                   in: path
@@ -125,9 +84,6 @@ paths:
                   schema:
                       type: integer
                       format: int64
-                  x-contracts:
-                      - contractId: 1
-                        value: 1
             responses:
                 "200":
                     description: successful operation
@@ -135,27 +91,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Customer"
-                    x-contracts:
-                        - contractId: 1
-                          headers:
-                              Content-Type: application/json
-                          items:
-                          body:
-                              "id": "1"
-                              "balance.value": ""
-                              "balance.currency.code": "GPB"
-                              "balance.currency.name": "Pound Sterling"
-                          matchers:
-                              body:
-                                  - path: $.givenName
-                                    type: by_regex
-                                    value: "[\\w-_\\.]+"
-                                  - path: $.familyName
-                                    type: by_regex
-                                    value: "[\\w-_\\.]+"
-                                  - path: $.balance.value
-                                    type: by_regex
-                                    value: "[-+]?[\\d]+\\.{1}\\d{2}"
                 "400":
                     description: Invalid customer id supplied
                     content: {}
@@ -172,10 +107,6 @@ paths:
             operationId: getCustomerAccounts
             security:
                 - bearerAuth: []
-            x-contracts:
-                - contractId: 1
-                  name: get-accounts-for-customer-OK-Response
-                  priority: 1
             parameters:
                 - name: customerId
                   in: path
@@ -184,9 +115,6 @@ paths:
                   schema:
                       type: integer
                       format: int64
-                  x-contracts:
-                      - contractId: 1
-                        value: 1
             responses:
                 "200":
                     description: successful operation
@@ -196,27 +124,6 @@ paths:
                                 type: array
                                 items:
                                     $ref: "#/components/schemas/Account"
-                    x-contracts:
-                        - contractId: 1
-                          headers:
-                              Content-Type: application/json
-                          items:
-                          body:
-                              nullValue: null
-                          matchers:
-                              body:
-                                  - path: $[0].id
-                                    type: by_regex
-                                    value: "[\\d]+"
-                                  - path: $[0].name
-                                    type: by_regex
-                                    value: "[\\w-_\\.]+"
-                                  - path: $[0].currency.name
-                                    type: by_regex
-                                    value: "[\\w]+"
-                                  - path: $[0].currency.code
-                                    type: by_regex
-                                    value: "[\\w]+"
                 "400":
                     description: Invalid customer id supplied
                     content: {}
@@ -233,10 +140,6 @@ paths:
             operationId: getCustomerAccount
             security:
                 - bearerAuth: []
-            x-contracts:
-                - contractId: 1
-                  name: get-account-for-one-customer-OK-Response
-                  priority: 1
             parameters:
                 - name: customerId
                   in: path
@@ -245,9 +148,6 @@ paths:
                   schema:
                       type: integer
                       format: int64
-                  x-contracts:
-                      - contractId: 1
-                        value: 1
                 - name: accountId
                   in: path
                   description: 'The accountId that needs to be fetched. Use "1" for testing. '
@@ -255,9 +155,6 @@ paths:
                   schema:
                       type: integer
                       format: int64
-                  x-contracts:
-                      - contractId: 1
-                        value: 1
             responses:
                 "200":
                     description: successful operation
@@ -265,16 +162,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Account"
-                    x-contracts:
-                        - contractId: 1
-                          headers:
-                              Content-Type: application/json
-                          items:
-                          body:
-                              "id": "1"
-                              "name": "1"
-                              "currency.name": "Euro"
-                              "currency.code": "EUR"
                 "400":
                     description: Invalid customer id supplied
                     content: {}
@@ -291,10 +178,6 @@ paths:
             operationId: getAccountTransactions
             security:
                 - bearerAuth: []
-            x-contracts:
-                - contractId: 1
-                  name: get-transactions-for-account-for-customer-OK-Response
-                  priority: 1
             parameters:
                 - name: customerId
                   in: path
@@ -303,9 +186,6 @@ paths:
                   schema:
                       type: integer
                       format: int64
-                  x-contracts:
-                      - contractId: 1
-                        value: 1
                 - name: accountId
                   in: path
                   description: 'The accountId that needs to be fetched. Use "1" for testing. '
@@ -313,38 +193,24 @@ paths:
                   schema:
                       type: integer
                       format: int64
-                  x-contracts:
-                      - contractId: 1
-                        value: 1
                 - name: date
                   in: query
                   description: 'The date to filter. Use \"2019-01\" for testing.'
                   required: true
                   schema:
                       type: string
-                  x-contracts:
-                      - contractId: 1
-                        value: "2019-01"
                 - name: page
                   in: query
                   description: 'The Page number to fetched. Use \"0\" for testing.'
                   required: false
                   schema:
                       type: integer
-                  x-contracts:
-                      - contractId: 1
-                        type: integer
-                        value: 0
                 - name: size
                   in: query
                   description: 'The number of objects fetch. Use \"2\" for testing.'
                   required: false
                   schema:
                       type: integer
-                  x-contracts:
-                      - contractId: 1
-                        type: integer
-                        value: 2
             responses:
                 "200":
                     description: successful operation
@@ -352,36 +218,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/TransactionPage"
-                    x-contracts:
-                        - contractId: 1
-                          headers:
-                              Content-Type: application/json
-                          items:
-                          body:
-                              nullValue: null
-                          matchers:
-                              body:
-                                  - path: $[0].id
-                                    type: by_regex
-                                    value: "[\\d]+"
-                                  - path: $[0].value.amount
-                                    type: by_regex
-                                    value: "[\\d]+"
-                                  - path: $[0].value.currency.name
-                                    type: by_regex
-                                    value: "[\\w]+"
-                                  - path: $[0].value.currency.code
-                                    type: by_regex
-                                    value: "[\\w]+"
-                                  - path: $[0].iban
-                                    type: by_regex
-                                    value: "\\w\\w[\\d]{16,24}"
-                                  - path: $[0].date
-                                    type: by_regex
-                                    value: "\\d{4}-\\d{2}-\\d{2}(T|t)\\d{2}:\\d{2}:\\d{2}[\\w]?"
-                                  - path: $[0].description
-                                    type: by_regex
-                                    value: "[\\w]*"
                 "400":
                     description: Invalid customer id supplied
                     content: {}
