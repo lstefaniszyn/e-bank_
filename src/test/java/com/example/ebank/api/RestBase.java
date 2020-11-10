@@ -1,22 +1,9 @@
 package com.example.ebank.api;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.example.ebank.controllers.AccountController;
 import com.example.ebank.controllers.AppStatusController;
 import com.example.ebank.controllers.CustomerController;
-import com.example.ebank.mappers.AccountMapper;
-import com.example.ebank.mappers.CustomerMapper;
-import com.example.ebank.mappers.TransactionMapper;
+import com.example.ebank.mappers.*;
 import com.example.ebank.models.Account;
 import com.example.ebank.models.Currency;
 import com.example.ebank.models.Customer;
@@ -28,49 +15,58 @@ import com.example.ebank.services.TransactionService;
 import com.example.ebank.utils.KafkaServerProperties;
 import com.example.ebank.utils.SecurityContextUtils;
 import com.example.ebank.utils.logger.BFLogger;
-
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public abstract class RestBase {
     
     @Mock
     AccountService accountService;
-    
+
     @Mock
     TransactionService transactionService;
-    
+
     @Mock
     CustomerService customerService;
-    
-    @Mock
-    CustomerMapper customerMapper;
-    
+
     @Mock
     SecurityContextUtils securityContextUtils;
-    
-    @Mock
-    AccountMapper accountMapper;
-    
-    @Mock
-    TransactionMapper transactionMapper;
-    
+
+    @Spy
+    CustomerMapper customerMapper = new CustomerMapperImpl();
+
+    @Spy
+    AccountMapper accountMapper = new AccountMapperImpl();
+
+    @Spy
+    TransactionMapper transactionMapper = new TransactionMapperImpl();
+
     @Mock
     KafkaServerProperties kafkaProperties;
-    
+
     @Mock
     AsyncTransactionService asyncTransactionService;
-    
+
     @InjectMocks
     CustomerController customerController;
     
@@ -81,20 +77,20 @@ public abstract class RestBase {
     AppStatusController appStatusController;
     
     private final String identityKey = randomNumber(12);
-    
+
     @Before
     public void setup() {
         // Mock security service
         given(securityContextUtils.getIdentityKey()).willReturn(identityKey);
-        
+
         // Mock customer service
         given(customerService.getOne(1L)).willReturn(getCustomer(1L));
         given(customerService.getByIdentityKey(identityKey)).willReturn(getCustomer(1L));
         given(customerService.getAll()).willReturn(getCustomers());
-        
+
         // Mock account service
         given(accountService.getOne(1L)).willReturn(getAccount(1L, Currency.CHF));
-        given(accountService.getAll()).willReturn(getAccounts());
+        given(accountService.getByCustomer(1L)).willReturn(getAccounts());
         
         // Mock transaction service
         final String DATE_FORMAT = "yyyy-MM";
