@@ -15,8 +15,7 @@ public abstract class TransactionMapper {
 
     @Mappings({
         @Mapping(target = "value.amount", source = "transaction.amount"),
-        @Mapping(target = "value.currency", source = "transaction.currency"),
-        @Mapping(target = "date", source = "transaction.valueDate")
+        @Mapping(target = "value.currency", source = "transaction.currency")
     })
     public abstract TransactionDto toDto(Transaction transaction);
 

@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,9 +18,12 @@ public class MockTransactionRepositoryTests {
 
     @Test
     public void testFindAllTransactions() {
-        List<Transaction> result = transactionRepository.findAll();
+        int size = 5;
+
+        Page<Transaction> result = transactionRepository.findAll(getPageable(size));
 
         assertThat(result).isNotEmpty();
+        assertThat(result.getContent()).isNotEmpty().hasSize(size);
     }
 
     @Test
@@ -43,8 +45,8 @@ public class MockTransactionRepositoryTests {
         Date startDate = createDate(2018, Calendar.MARCH, 1);
         Date endDate = createDate(2018, Calendar.MARCH, 31);
         int size = 5;
-        Pageable pageable = PageRequest.of(0, size);
-        Page<Transaction> result = transactionRepository.findByValueDateBetween(startDate, endDate, pageable);
+
+        Page<Transaction> result = transactionRepository.findByValueDateBetween(startDate, endDate, getPageable(size));
 
         assertThat(result).isNotEmpty();
         assertThat(result.getContent()).isNotEmpty().hasSize(size);
@@ -54,5 +56,9 @@ public class MockTransactionRepositoryTests {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
         return calendar.getTime();
+    }
+
+    private Pageable getPageable(int size) {
+        return PageRequest.of(0, size);
     }
 }

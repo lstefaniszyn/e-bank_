@@ -1,16 +1,7 @@
 package com.example.ebank.services;
 
-import java.sql.Date;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 import com.example.ebank.models.Transaction;
 import com.example.ebank.utils.logger.BFLogger;
-
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -24,9 +15,16 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 /**
  * @author gwlodawiec
- *
  */
 @Service
 public class AsyncTransactionService {
@@ -54,8 +52,8 @@ public class AsyncTransactionService {
             LocalDate startDate = date.withDayOfMonth(1);
             LocalDate endDate = date.withDayOfMonth(date.lengthOfMonth());
             transactions = StreamSupport.stream(records.spliterator(), false).filter(v -> {
-                return v.value().getValueDate().after(Date.valueOf(startDate))
-                        && v.value().getValueDate().before(Date.valueOf(endDate));
+                return v.value().getDate().after(Date.valueOf(startDate))
+                    && v.value().getDate().before(Date.valueOf(endDate));
             }).map(ConsumerRecord<String, Transaction>::value).collect(Collectors.toList());
         } catch (Exception e) {
             BFLogger.logError("There was error during polling messages: " + e.toString());

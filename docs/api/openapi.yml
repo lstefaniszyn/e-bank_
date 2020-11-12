@@ -1,0 +1,369 @@
+openapi: "3.0.0"
+info:
+    title: Swagger E-Banking
+    description: This is E-banking server.
+    termsOfService: "http://swagger.io/terms/"
+    contact:
+        email: lukasz.stefaniszyn@capgemini.com
+    license:
+        name: Apache 2.0
+        url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+    version: "1.0.0"
+servers:
+    - url: "{protocol}://10.40.234.149:{port}/api/v1"
+      variables:
+          protocol:
+              enum:
+                  - "http"
+                  - "https"
+              default: "http"
+          port:
+              enum:
+                  - "8080"
+                  - "8443"
+              default: "8080"
+tags:
+    - name: customer
+      description: Operations about customer
+    - name: account
+      description: Operations about account
+paths:
+    "/api":
+        get:
+            tags:
+                - app
+            summary: Get API status
+            operationId: getStatus
+            responses:
+                "200":
+                    description: successful operation
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/AppStatus"
+                "400":
+                    description: Error
+                    content: {}
+                "404":
+                    description: Error
+                    content: {}
+    "/api/v1/customers":
+        get:
+            tags:
+                - customer
+            summary: Get all customers
+            operationId: getCustomers
+            responses:
+                "200":
+                    description: successful operation
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/CustomerListItem"
+                "400":
+                    description: Invalid customer id supplied
+                    content: {}
+                "404":
+                    description: customer not found
+                    content: {}
+    "/api/v1/customers/{customerId}":
+        get:
+            tags:
+                - customer
+            summary: Get customer by customerId
+            operationId: getCustomerById
+            security:
+                - bearerAuth: []
+            parameters:
+                - name: customerId
+                  in: path
+                  description: 'The id that needs to be fetched. Use "1" for testing. '
+                  required: true
+                  schema:
+                      type: integer
+                      format: int64
+            responses:
+                "200":
+                    description: successful operation
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Customer"
+                "400":
+                    description: Invalid customer id supplied
+                    content: {}
+                "401":
+                    $ref: '#/components/responses/UnauthorizedError'
+                "404":
+                    description: customer not found
+                    content: {}
+    "/api/v1/customers/{customerId}/accounts":
+        get:
+            tags:
+                - account
+            summary: Get customer's accounts
+            operationId: getCustomerAccounts
+            security:
+                - bearerAuth: []
+            parameters:
+                - name: customerId
+                  in: path
+                  description: 'The customerId that needs to be fetched. Use "1" for testing. '
+                  required: true
+                  schema:
+                      type: integer
+                      format: int64
+            responses:
+                "200":
+                    description: successful operation
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/Account"
+                "400":
+                    description: Invalid customer id supplied
+                    content: {}
+                "401":
+                    $ref: '#/components/responses/UnauthorizedError'
+                "404":
+                    description: customer not found
+                    content: {}
+    "/api/v1/customers/{customerId}/accounts/{accountId}":
+        get:
+            tags:
+                - account
+            summary: Get customer's account
+            operationId: getCustomerAccount
+            security:
+                - bearerAuth: []
+            parameters:
+                - name: customerId
+                  in: path
+                  description: 'The customerId that needs to be fetched. Use "1" for testing. '
+                  required: true
+                  schema:
+                      type: integer
+                      format: int64
+                - name: accountId
+                  in: path
+                  description: 'The accountId that needs to be fetched. Use "1" for testing. '
+                  required: true
+                  schema:
+                      type: integer
+                      format: int64
+            responses:
+                "200":
+                    description: successful operation
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Account"
+                "400":
+                    description: Invalid customer id supplied
+                    content: {}
+                "401":
+                    $ref: '#/components/responses/UnauthorizedError'
+                "404":
+                    description: customer not found
+                    content: {}
+    "/api/v1/customers/{customerId}/accounts/{accountId}/transactions":
+        get:
+            tags:
+                - account
+            summary: Get account's transactions
+            operationId: getAccountTransactions
+            security:
+                - bearerAuth: []
+            parameters:
+                - name: customerId
+                  in: path
+                  description: 'The customerId that needs to be fetched. Use "1" for testing. '
+                  required: true
+                  schema:
+                      type: integer
+                      format: int64
+                - name: accountId
+                  in: path
+                  description: 'The accountId that needs to be fetched. Use "1" for testing. '
+                  required: true
+                  schema:
+                      type: integer
+                      format: int64
+                - name: date
+                  in: query
+                  description: 'The date to filter. Use \"2019-01\" for testing.'
+                  required: true
+                  schema:
+                      type: string
+                - name: page
+                  in: query
+                  description: 'The Page number to fetched. Use \"0\" for testing.'
+                  required: false
+                  schema:
+                      type: integer
+                      minimum: 0
+                      default: 0
+                - name: size
+                  in: query
+                  description: 'The number of objects fetch. Use \"2\" for testing.'
+                  required: false
+                  schema:
+                      type: integer
+                      minimum: 1
+                      default: 20
+            responses:
+                "200":
+                    description: successful operation
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/TransactionPage"
+                "400":
+                    description: Invalid customer id supplied
+                    content: {}
+                "401":
+                    $ref: '#/components/responses/UnauthorizedError'
+                "404":
+                    description: customer not found
+                    content: {}
+components:
+    securitySchemes:
+        bearerAuth:
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
+    responses:
+        UnauthorizedError:
+            description: Access token is missing or invalid
+            content: {}
+    schemas:
+        Currency:
+            type: string
+            enum: [ AED, AUD, BRL, CAD, CHF, CLP, CNY, COP, CZK, DKK, EUR,
+                    GBP, HKD, HUF, IDR, ILS, INR, JPY, KRW, MXN, MYR, NOK,
+                    NZD, PHP, PLN, RON, RUB, SAR, SEK, SGD, THB, TRY, TWD, ZAR ]
+            xml:
+                name: Currency
+        Account:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                name:
+                    type: string
+                iban:
+                    type: string
+                currency:
+                    $ref: "#/components/schemas/Currency"
+                balance:
+                    type: object
+                    properties:
+                        value:
+                            type: number
+                            format: double
+                            description: Sum up of money from this account
+                        currency:
+                            $ref: "#/components/schemas/Currency"
+        CustomerListItem:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                givenName:
+                    type: string
+                    description: https://schema.org/givenName
+                familyName:
+                    type: string
+                    description: https://schema.org/familyName
+        Customer:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                givenName:
+                    type: string
+                    description: https://schema.org/givenName
+                familyName:
+                    type: string
+                    description: https://schema.org/familyName
+                identityKey:
+                    type: string
+                accounts:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/Account"
+                balance:
+                    type: object
+                    properties:
+                        value:
+                            type: number
+                            format: double
+                            description: Sum up of money status combined from all client's accounts and exchange to GPB
+                        currency:
+                            description: Sum up of money status combined from all client's accounts and exchange to GPB
+                            $ref: "#/components/schemas/Currency"
+        AppStatus:
+            type: object
+            properties:
+                app-version:
+                    type: string
+                    description: https://schema.org/version
+        Transaction:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                value:
+                    type: object
+                    properties:
+                        amount:
+                            type: number
+                            format: double
+                        currency:
+                            $ref: "#/components/schemas/Currency"
+                iban:
+                    type: string
+                date:
+                    type: string
+                    format: date-time
+                description:
+                    type: string
+        Page:
+            type: object
+            properties:
+                size:
+                    type: integer
+                totalElements:
+                    type: integer
+                    format: int64
+                totalPages:
+                    type: integer
+                number:
+                    type: integer
+        TransactionPage:
+            type: object
+            properties:
+                page:
+                    $ref: "#/components/schemas/Page"
+                content:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/Transaction"
+        ApiResponse:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                type:
+                    type: string
+                message:
+                    type: string

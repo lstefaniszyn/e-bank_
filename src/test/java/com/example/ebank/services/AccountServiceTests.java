@@ -2,7 +2,6 @@ package com.example.ebank.services;
 
 import com.example.ebank.models.Account;
 import com.example.ebank.models.Currency;
-import com.example.ebank.models.Customer;
 import com.example.ebank.repositories.AccountRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -70,7 +69,7 @@ public class AccountServiceTests {
         account.setId(id);
         account.setIban(randomString(20));
         account.setCurrency(currency);
-        account.setCustomer(new Customer());
+        account.setCustomerId(1L);
         return account;
     }
 

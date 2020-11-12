@@ -1,15 +1,9 @@
 package com.example.ebank.repositories;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.example.ebank.models.Transaction;
 import com.example.ebank.utils.logger.BFLogger;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -17,12 +11,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
+
 @Component
 public class MockTransactionRepository {
-
-    public List<Transaction> findAll() {
-        return getTransactions();
-    }
 
     public Optional<Transaction> findById(Long id) {
         return getTransactions().stream().filter(c -> Objects.equals(c.getId(), id)).findFirst();
@@ -34,7 +29,7 @@ public class MockTransactionRepository {
 
     public Page<Transaction> findByValueDateBetween(Date startDate, Date endDate, Pageable pageable) {
         List<Transaction> allTransactions = getTransactions().stream()
-                .filter(t -> isInPeriod(t.getValueDate(), startDate, endDate)).collect(Collectors.toList());
+            .filter(t -> isInPeriod(t.getDate(), startDate, endDate)).collect(Collectors.toList());
         return getPagedTransactions(pageable, allTransactions);
     }
 
@@ -46,14 +41,14 @@ public class MockTransactionRepository {
         int transactionsSize = allTransactions.size();
         Collections.sort(allTransactions, (t1, t2) -> t1.getValueDate().compareTo(t2.getValueDate()));
         List<Transaction> transactions = from <= transactionsSize
-                ? to <= transactionsSize ? allTransactions.subList(from, to)
-                        : allTransactions.subList(from, transactionsSize)
-                : List.of();
+            ? to <= transactionsSize ? allTransactions.subList(from, to)
+            : allTransactions.subList(from, transactionsSize)
+            : List.of();
         return new PageImpl<>(transactions, pageable, allTransactions.size());
     }
 
     public Page<Transaction> findByValueDateBetweenAndAccountId(Date startDate, Date endDate, Long accountId,
-            Pageable pageable) {
+        Pageable pageable) {
         return findByValueDateBetween(startDate, endDate, pageable);
     }
 
