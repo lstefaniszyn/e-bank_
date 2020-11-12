@@ -89,9 +89,10 @@ public class AsyncTransactionService {
     }
 
     private Page<Transaction> getPageSortedByDate(int page, int size, List<Transaction> allTransactions) {
-        Collections.sort(allTransactions, (t1, t2) -> t1.getValueDate().compareTo(t2.getValueDate()));
+        Collections.sort(allTransactions, (t1, t2) -> t1.getDate().compareTo(t2.getDate()));
         return getPage(page, size, allTransactions);
     }
+
     private Page<Transaction> getPage(int page, int size, List<Transaction> allTransactions) {
         Pageable pageable = PageRequest.of(page, size);
         int start = (int) pageable.getOffset();
