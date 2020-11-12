@@ -85,7 +85,7 @@
                         <artifactId>maven-failsafe-plugin</artifactId>
                         <configuration>
                             <systemPropertyVariables>
-                                <spring.profiles.active>dev,it-local</spring.profiles.active>
+                                <spring.profiles.active>local,it-local</spring.profiles.active>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
@@ -107,6 +107,17 @@
                             <systemPropertyVariables>
                                 <spring.profiles.active>mock,dev,it-dev</spring.profiles.active>
                             </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <profiles>
+                                <!-- need to setup here for multiple profiles -->
+                                <profile>mock</profile>
+                                <profile>dev</profile>
+                            </profiles>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -381,6 +392,11 @@
                 <configuration>
                     <jvmArguments>${argLine}</jvmArguments>
                     <mainClass>${spring.mainClass}</mainClass>
+                    <profiles>
+                        <!-- only works if there is only one profile active -->
+                        <!-- for multiple profiles, setup plugin in maven profile accordingly -->
+                        <profile>${spring.profiles.active}</profile>
+                    </profiles>
                 </configuration>
             </plugin>
             <!-- Consumer Driver contract  -->
