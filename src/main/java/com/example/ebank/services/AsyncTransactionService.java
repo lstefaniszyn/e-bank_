@@ -63,7 +63,7 @@ public class AsyncTransactionService {
             consumer.close();
         }
 
-        return CompletableFuture.completedFuture(getPage(page, size, transactions));
+        return CompletableFuture.completedFuture(getPageSortedByDate(page, size, transactions));
     }
 
     @Async("asyncExecutor")
@@ -76,7 +76,7 @@ public class AsyncTransactionService {
 
         // poll for messages and filter them
 
-        return CompletableFuture.completedFuture(getPage(page, size, transactions));
+        return CompletableFuture.completedFuture(getPageSortedByDate(page, size, transactions));
 
     }
 
@@ -90,6 +90,10 @@ public class AsyncTransactionService {
         return props;
     }
 
+    private Page<Transaction> getPageSortedByDate(int page, int size, List<Transaction> allTransactions) {
+        Collections.sort(allTransactions, (t1, t2) -> t1.getValueDate().compareTo(t2.getValueDate()));
+        return getPage(page, size, allTransactions);
+    }
     private Page<Transaction> getPage(int page, int size, List<Transaction> allTransactions) {
         Pageable pageable = PageRequest.of(page, size);
         int start = (int) pageable.getOffset();
