@@ -45,8 +45,8 @@ declare
 begin
 -- stored procedure body
 	-- populate customers
- 	insert into public.customer(name,identity_key) 
-    select CONCAT('cust_JDoo_0',i),concat('P-0',i) 
+ 	insert into public.customer(given_name,family_name,identity_key) 
+    select CONCAT('John_0',i),CONCAT('cust_Doe_0',i),concat('P-0',i) 
     from generate_series(1,nbClient) i; 
 	commit;
 	
@@ -55,9 +55,10 @@ begin
     loop 
 		for nb_account in 1..random_between(1,2)
 		loop
-			INSERT INTO public.account(customer_id, iban, currency)
+			INSERT INTO public.account(customer_id, iban, name, currency)
 			values (f.id,
 				   CONCAT('CH93-',random_between(1000,9999),'-',random_between(1000,9999),'-',random_between(1000,9999),'-',random_between(1000,9999),'-',random_between(1,9)),
+				   CONCAT('JDoe_0', f.id, '_account_0', nb_account),
 				   random_currency());
 		end loop;
 	end loop;
@@ -74,9 +75,10 @@ begin
 				for tr in 1..nbTransaction
 				loop
 					dateTransaction := date (concat(y,'-',nb_month,'-',random_between(1,28)));
-					INSERT INTO public.account_transaction(account_id, value_date, amount, currency, description)
+					INSERT INTO public.account_transaction(account_id, iban, transaction_date, amount, currency, description)
 					values(f.id,
-						   dateTransaction ,
+						   CONCAT('CH93-',random_between(1000,9999),'-',random_between(1000,9999),'-',random_between(1000,9999),'-',random_between(1000,9999),'-',random_between(1,9)),
+                           dateTransaction,
 						   (random() * 1000 +1), 
 						   f.currency, 
 						   concat('payment ',f.currency)
@@ -94,7 +96,7 @@ delete from public.account_transaction cascade;
 delete from public.account cascade;
 delete from public.customer cascade;
 
-ALTER SEQUENCE public."accountTransaction_id_seq" RESTART;
+ALTER SEQUENCE public."account_transaction_id_seq" RESTART;
 ALTER SEQUENCE public."account_id_seq" RESTART;
 ALTER SEQUENCE public."customer_id_seq" RESTART;
 UPDATE public.account_transaction SET id = DEFAULT;

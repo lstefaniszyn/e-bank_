@@ -1,9 +1,6 @@
 package com.example.ebank.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class Account {
@@ -12,19 +9,20 @@ public class Account {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "iban", length = 50)
+    @Column(name = "customer_id", nullable = false)
+    private Long customerId;
+
+    @Column(length = 50)
     private String iban;
+
+    @Column(length = 250)
+    private String name;
 
     @Enumerated(EnumType.STRING)
     private Currency currency;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
-
-    @OneToMany(mappedBy = "account")
-    @JsonIgnore
-    private List<Transaction> transactions;
+    @Transient
+    private Balance balance;
 
     public Long getId() {
         return id;
@@ -32,6 +30,14 @@ public class Account {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public String getIban() {
@@ -42,6 +48,14 @@ public class Account {
         this.iban = iban;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Currency getCurrency() {
         return currency;
     }
@@ -50,25 +64,11 @@ public class Account {
         this.currency = currency;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public Balance getBalance() {
+        return balance;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    /**
-     * @return List<Transaction> return the transactions
-     */
-    public List<Transaction> getTransactions() {
-        return transactions;
-    }
-
-    /**
-     * @param transactions the transactions to set
-     */
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
+    public void setBalance(Balance balance) {
+        this.balance = balance;
     }
 }

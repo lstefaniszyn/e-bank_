@@ -1,9 +1,10 @@
 package com.example.ebank.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Customer {
@@ -12,7 +13,7 @@ public class Customer {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "name", length = 250)
+    @Column(name = "family_name", length = 250)
     private String familyName;
 
     @Column(name = "given_name", length = 250)
@@ -21,13 +22,12 @@ public class Customer {
     @Column(name = "identity_key", length = 50)
     private String identityKey;
 
-    public String getFamilyName() {
-        return familyName;
-    }
+    @OneToMany(mappedBy = "customerId")
+    @JsonIgnore
+    private List<Account> accounts = new ArrayList<>();
 
-    public void setFamilyName(String familyName) {
-        this.familyName = familyName;
-    }
+    @Transient
+    private Balance balance;
 
     public Long getId() {
         return id;
@@ -35,6 +35,14 @@ public class Customer {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getFamilyName() {
+        return familyName;
+    }
+
+    public void setFamilyName(String familyName) {
+        this.familyName = familyName;
     }
 
     public String getGivenName() {
@@ -53,4 +61,19 @@ public class Customer {
         this.identityKey = identityKey;
     }
 
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public Balance getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Balance balance) {
+        this.balance = balance;
+    }
 }
