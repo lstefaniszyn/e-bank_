@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.3.4.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath /> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
     <artifactId>e-bank</artifactId>
@@ -87,7 +86,7 @@
                         <artifactId>maven-failsafe-plugin</artifactId>
                         <configuration>
                             <systemPropertyVariables>
-                                <spring.profiles.active>dev,it-local</spring.profiles.active>
+                                <spring.profiles.active>local,it-local</spring.profiles.active>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
@@ -109,6 +108,17 @@
                             <systemPropertyVariables>
                                 <spring.profiles.active>mock,dev,it-dev</spring.profiles.active>
                             </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <profiles>
+                                <!-- need to setup here for multiple profiles -->
+                                <profile>mock</profile>
+                                <profile>dev</profile>
+                            </profiles>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -390,6 +400,11 @@
                 <configuration>
                     <jvmArguments>${argLine}</jvmArguments>
                     <mainClass>${spring.mainClass}</mainClass>
+                    <profiles>
+                        <!-- only works if there is only one profile active -->
+                        <!-- for multiple profiles, setup plugin in maven profile accordingly -->
+                        <profile>${spring.profiles.active}</profile>
+                    </profiles>
                 </configuration>
             </plugin>
             <!-- Consumer Driver contract  -->
