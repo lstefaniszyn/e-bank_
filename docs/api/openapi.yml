@@ -242,12 +242,10 @@ components:
             content: {}
     schemas:
         Currency:
-            type: string
-            enum: [ AED, AUD, BRL, CAD, CHF, CLP, CNY, COP, CZK, DKK, EUR,
-                    GBP, HKD, HUF, IDR, ILS, INR, JPY, KRW, MXN, MYR, NOK,
-                    NZD, PHP, PLN, RON, RUB, SAR, SEK, SGD, THB, TRY, TWD, ZAR ]
-            xml:
-                name: Currency
+            type: object
+            properties:
+                code:
+                    type: string
         Account:
             type: object
             properties:

@@ -31,12 +31,13 @@ import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public abstract class RestBase {
-    
+
     @Mock
     AccountService accountService;
 
@@ -66,13 +67,13 @@ public abstract class RestBase {
 
     @InjectMocks
     CustomerController customerController;
-    
+
     @InjectMocks
     AccountController accountController;
-    
+
     @InjectMocks
     AppStatusController appStatusController;
-    
+
     private final String identityKey = randomNumber(12);
 
     @Before
@@ -97,12 +98,12 @@ public abstract class RestBase {
             .toFormatter();
         LocalDate date = LocalDate.parse("2019-01", DATE_FORMATTER);
         BFLogger.logDebug("Transactions: " + getPagedTransactions(0, 3));
-        
+
         given(transactionService.findForAccountInMonthPaginated(1L, date, 0, 2)).willReturn(getPagedTransactions(0, 2));
-        
+
         RestAssuredMockMvc.standaloneSetup(appStatusController, customerController, accountController);
     }
-    
+
     private List<Customer> getCustomers() {
         return List.of(
                 getCustomer(1L),
@@ -110,7 +111,7 @@ public abstract class RestBase {
                 getCustomer(3L),
                 getCustomer(4L));
     }
-    
+
     private Customer getCustomer(Long id) {
         Customer customer = new Customer();
         customer.setId(id);
@@ -134,7 +135,8 @@ public abstract class RestBase {
     private Account getAccount(Long id, Long customerId, Currency currency) {
         Account account = new Account();
         account.setId(id);
-        account.setIban(randomString(20));
+        account.setName(randomString(30));
+        account.setIban(randomIBAN());
         account.setCurrency(currency);
         account.setCustomerId(customerId);
         account.setBalance(getBalance(currency));
@@ -156,19 +158,19 @@ public abstract class RestBase {
         int total = transactions.size();
         int start = Math.toIntExact(pageRequest.getOffset());
         int end = Math.min((start + pageRequest.getPageSize()), total);
-        
+
         List<Transaction> output = new ArrayList<>();
-        
+
         if (start <= end) {
             output = transactions.subList(start, end);
         }
-        
+
         return new PageImpl<>(
                 output,
                 pageRequest,
                 total);
     }
-    
+
     private List<Transaction> getTransactions() {
         return List.of(
                 getTransaction(1L),
@@ -177,7 +179,7 @@ public abstract class RestBase {
                 getTransaction(4L),
                 getTransaction(5L));
     }
-    
+
     private Transaction getTransaction(Long id) {
         Transaction transaction = new Transaction();
         transaction.setAmount(123.12);
@@ -187,12 +189,20 @@ public abstract class RestBase {
         transaction.setDate(new Date());
         return transaction;
     }
-    
+
     static String randomString(int length) {
         return RandomStringUtils.randomAlphabetic(length);
     }
-    
+
     static String randomNumber(int length) {
         return RandomStringUtils.randomNumeric(length);
+    }
+
+    static String randomIBAN() {
+        StringBuilder ibanBuilder = new StringBuilder();
+        ibanBuilder.append(RandomStringUtils.randomAlphabetic(2).toUpperCase());
+        ibanBuilder.append(RandomStringUtils.randomNumeric(2));
+        ibanBuilder.append(RandomStringUtils.randomAlphanumeric(new Random().nextInt(31)).toUpperCase());
+        return ibanBuilder.toString();
     }
 }

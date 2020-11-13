@@ -35,9 +35,11 @@ then:
             accounts   : [[]],
             balance    : [
                 value   : 123.12,
-                currency: "EUR"
+                currency: [
+                    code: "EUR"
+                ]
             ]
-        ])  
+        ])
         bodyMatchers {
             jsonPath('id', byRegex(number()).asInteger())
             jsonPath('givenName', byRegex('[\\w-_\\s\\.]+').asString())
@@ -48,7 +50,7 @@ then:
                 minOccurrence(1)
             })
             jsonPath('balance.value', byRegex(aDouble()).asDouble())
-            jsonPath('balance.currency', byRegex('[A-Z]{3}').asString())
+            jsonPath('balance.currency.code', byRegex('[A-Z]{3}').asString())
         }
 	}
 }
