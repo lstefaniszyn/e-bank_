@@ -27,17 +27,18 @@ then:
 	response {
 		status 200
 		headers {
-			contentType(applicationJson())
+            contentType(applicationJson())
+        }
 		body([
-                [
-                    id: 1,
-                    givenName: "Johnny",
-                    familyName: "Bravo"
-                ], [
-                    id: 2,
-                    givenName: "Audrey",
-                    familyName: "Hepburn"
-                ]
+            [
+                id        : $(consumer(1), producer(regex(number()))),
+                givenName : $(consumer("Johnny"), producer(regex('[\\w-_\\s\\.]+'))),
+                familyName: $(consumer("Bravo"), producer(regex('[\\w-_\\s\\.]+')))
+            ], [
+                id        : $(consumer(2), producer(regex(number()))),
+                givenName : $(consumer("Audrey"), producer(regex('[\\w-_\\s\\.]+'))),
+                familyName: $(consumer("Hepburn"), producer(regex('[\\w-_\\s\\.]+')))
+            ]
         ])
         bodyMatchers {
             jsonPath('$', byType {
@@ -45,6 +46,5 @@ then:
                 minOccurrence(1)
             })
         }
-		}
 	}
 }

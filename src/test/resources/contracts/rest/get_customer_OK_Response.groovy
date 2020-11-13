@@ -28,13 +28,15 @@ then:
 			contentType(applicationJson())
         }
         body([
-                    id: fromRequest().path(3), // get {custumerId}
-                    givenName: "Johnny",
-                    familyName: "Bravo",
-                    identityKey: "",
-                    accounts: [[]],
-                    'balance.value': 123.12, 
-                    'balance.currency.code': "EUR",
+            id         : fromRequest().path(3), // get {customerId}
+            givenName  : "Johnny",
+            familyName : "Bravo",
+            identityKey: "",
+            accounts   : [[]],
+            balance    : [
+                value   : 123.12,
+                currency: "EUR"
+            ]
         ])  
         bodyMatchers {
             jsonPath('id', byRegex(number()).asInteger())
@@ -46,7 +48,7 @@ then:
                 minOccurrence(1)
             })
             jsonPath('balance.value', byRegex(aDouble()).asDouble())
-            jsonPath('balance.currency.code', byRegex('[A-Z]{3}').asString())
+            jsonPath('balance.currency', byRegex('[A-Z]{3}').asString())
         }
 	}
 }

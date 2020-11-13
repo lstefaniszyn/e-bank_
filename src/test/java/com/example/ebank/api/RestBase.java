@@ -4,10 +4,7 @@ import com.example.ebank.controllers.AccountController;
 import com.example.ebank.controllers.AppStatusController;
 import com.example.ebank.controllers.CustomerController;
 import com.example.ebank.mappers.*;
-import com.example.ebank.models.Account;
-import com.example.ebank.models.Currency;
-import com.example.ebank.models.Customer;
-import com.example.ebank.models.Transaction;
+import com.example.ebank.models.*;
 import com.example.ebank.services.AccountService;
 import com.example.ebank.services.AsyncTransactionService;
 import com.example.ebank.services.CustomerService;
@@ -53,10 +50,10 @@ public abstract class RestBase {
     SecurityContextUtils securityContextUtils;
 
     @Spy
-    CustomerMapper customerMapper = new CustomerMapperImpl();
+    AccountMapper accountMapper = new AccountMapperImpl();
 
     @Spy
-    AccountMapper accountMapper = new AccountMapperImpl();
+    CustomerMapper customerMapper = new CustomerMapperImpl(accountMapper);
 
     @Spy
     TransactionMapper transactionMapper = new TransactionMapperImpl();
@@ -89,15 +86,15 @@ public abstract class RestBase {
         given(customerService.getAll()).willReturn(getCustomers());
 
         // Mock account service
-        given(accountService.getOne(1L)).willReturn(getAccount(1L, Currency.CHF));
-        given(accountService.getByCustomer(1L)).willReturn(getAccounts());
-        
+        given(accountService.getOne(1L)).willReturn(getAccount(1L, 1L, Currency.CHF));
+        given(accountService.getByCustomer(1L)).willReturn(getAccounts(1L));
+
         // Mock transaction service
         final String DATE_FORMAT = "yyyy-MM";
         final DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder()
-                .append(DateTimeFormatter.ofPattern(DATE_FORMAT))
-                .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
-                .toFormatter();
+            .append(DateTimeFormatter.ofPattern(DATE_FORMAT))
+            .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+            .toFormatter();
         LocalDate date = LocalDate.parse("2019-01", DATE_FORMATTER);
         BFLogger.logDebug("Transactions: " + getPagedTransactions(0, 3));
         
@@ -120,32 +117,42 @@ public abstract class RestBase {
         customer.setGivenName(randomString(10));
         customer.setFamilyName(randomString(30));
         customer.setIdentityKey(identityKey);
+        customer.setAccounts(getAccounts(id));
+        customer.setBalance(getBalance(Currency.GBP));
         return customer;
     }
-    
-    private List<Account> getAccounts() {
+
+    private List<Account> getAccounts(Long customerId) {
         return List.of(
-                getAccount(1L, Currency.CHF),
-                getAccount(2L, Currency.GBP),
-                getAccount(3L, Currency.CHF),
-                getAccount(4L, Currency.EUR),
-                getAccount(5L, Currency.GBP));
+            getAccount(1L, customerId, Currency.CHF),
+            getAccount(2L, customerId, Currency.GBP),
+            getAccount(3L, customerId, Currency.CHF),
+            getAccount(4L, customerId, Currency.EUR),
+            getAccount(5L, customerId, Currency.GBP));
     }
-    
-    private Account getAccount(Long id, Currency currency) {
+
+    private Account getAccount(Long id, Long customerId, Currency currency) {
         Account account = new Account();
         account.setId(id);
         account.setIban(randomString(20));
         account.setCurrency(currency);
-        account.setCustomerId(1L);
+        account.setCustomerId(customerId);
+        account.setBalance(getBalance(currency));
         return account;
     }
-    
+
+    private Balance getBalance(Currency currency) {
+        Balance balance = new Balance();
+        balance.setValue(123.12);
+        balance.setCurrency(currency);
+        return balance;
+    }
+
     private Page<Transaction> getPagedTransactions(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        
+
         List<Transaction> transactions = getTransactions();
-        
+
         int total = transactions.size();
         int start = Math.toIntExact(pageRequest.getOffset());
         int end = Math.min((start + pageRequest.getPageSize()), total);
