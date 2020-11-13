@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.example.ebank.models.TransactionRequest;
@@ -19,10 +18,9 @@ public class TransactionRequestProducer {
 		this.kafkaProducer = kafkaProducer;
 	}
 	
-	//@Scheduled(fixedDelay = 2000)
 	@Async("asyncExecutor")
-	public CompletableFuture<TransactionRequest> send() {
-		TransactionRequest request = new TransactionRequest(1l, 1l, LocalDate.of(2018, 01, 01));
+	public CompletableFuture<TransactionRequest> send(Long customerId, Long accountId, LocalDate date) {
+		TransactionRequest request = new TransactionRequest(customerId, accountId, date);
 		kafkaProducer.sendMessage(request);
 		return CompletableFuture.completedFuture(request);
 	}

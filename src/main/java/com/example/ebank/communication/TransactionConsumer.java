@@ -14,7 +14,7 @@ public class TransactionConsumer {
 	
 	private static final Logger logger = LoggerFactory.getLogger(TransactionConsumer.class);
 	
-	//@KafkaListener(topics = "${default.kafka.output.topic.name}", groupId = "${spring.kafka.consumer.group-id}")
+//	@KafkaListener(topics = "${default.kafka.output.topic.name}", groupId = "${spring.kafka.consumer.group-id}")
 	public void consume(List<Transaction> message) {
 		logger.info(String.format("Consumed message: %s", message));
 	}
