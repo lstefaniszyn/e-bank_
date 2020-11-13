@@ -187,6 +187,7 @@ public abstract class RestBase {
         transaction.setDescription("Test_" + id);
         transaction.setId(id);
         transaction.setDate(new Date());
+        transaction.setIban("CH" + randomNumber(19));
         return transaction;
     }
 

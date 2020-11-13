@@ -331,7 +331,7 @@ components:
                     type: string
                 date:
                     type: string
-                    format: date-time
+                    format: date
                 description:
                     type: string
         Page:
