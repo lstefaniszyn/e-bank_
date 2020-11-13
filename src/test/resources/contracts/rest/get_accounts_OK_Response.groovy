@@ -29,14 +29,36 @@ then:
         }
         body([
             [
-                    id: 1,
-                    name: "For fun account",
-                    iban: "PL10105000997603123456789123",
-                    'currency.code': "PLN",
-                    'balance.value': 123.12, 
-                    'balance.currency.code': "PLN",
+                [
+                    id:             $(consumer(1), producer(regex(number()))),
+                    name:           $(consumer("Account 1"), producer(regex('[\\w_\\s\\.-]+'))),
+                    iban:           $(consumer("PL01234567890123456789012345"), producer(regex('[A-Z]{2}\\d{2}[A-Z0-9]{0,30}'))),
+                    currency: [
+                        code:       $(consumer("EUR"), producer(regex('([A-Z]|[0-9]){3}')))
+                    ],
+                    balance: [
+                        value:      $(consumer(123.45), producer(regex(number()))),
+                        currency: [
+                            code:   $(consumer("EUR"), producer(regex('([A-Z]|[0-9]){3}')))
+                        ]
+                    ]
+                ],
+                [
+                    id:             $(consumer(2), producer(regex(number()))),
+                    name:           $(consumer("Account 2"), producer(regex('[\\w_\\s\\.-]+'))),
+                    iban:           $(consumer("CH5604835012345678009"), producer(regex('[A-Z]{2}\\d{2}[A-Z0-9]{0,30}'))),
+                    currency: [
+                        code:       $(consumer("CHF"), producer(regex('([A-Z]|[0-9]){3}')))
+                    ],
+                    balance: [
+                        value:      $(consumer(5000.00), producer(regex(number()))),
+                        currency: [
+                            code:   $(consumer("CHF"), producer(regex('([A-Z]|[0-9]){3}')))
+                        ]
+                    ]
+                ]
             ]
-        ])  
+        ])
         bodyMatchers {
             jsonPath('$', byType {
                 // results in verification of size of array (min 1)
