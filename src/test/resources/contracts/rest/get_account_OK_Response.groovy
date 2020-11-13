@@ -28,7 +28,7 @@ then:
 			contentType(applicationJson())
         }
         body([
-                    id: 1,
+                    id: fromRequest().path(5), // get {accountId}
                     name: "Account 1",
                     iban: "PL01234567890123456789012345",
                     currency: [
