@@ -31,7 +31,7 @@ then:
             [
                 [
                     id:             $(consumer(1), producer(regex(number()))),
-                    name:           $(consumer("Account 1"), producer(regex('[\\w_\\s\\.-]+'))),
+                    name:           $(consumer("Account 1"), producer(regex('.+'))),
                     iban:           $(consumer("PL01234567890123456789012345"), producer(regex('[A-Z]{2}\\d{2}[A-Z0-9]{0,30}'))),
                     currency: [
                         code:       $(consumer("EUR"), producer(regex('([A-Z]|[0-9]){3}')))
@@ -45,7 +45,7 @@ then:
                 ],
                 [
                     id:             $(consumer(2), producer(regex(number()))),
-                    name:           $(consumer("Account 2"), producer(regex('[\\w_\\s\\.-]+'))),
+                    name:           $(consumer("Account 2"), producer(regex('.+'))),
                     iban:           $(consumer("CH5604835012345678009"), producer(regex('[A-Z]{2}\\d{2}[A-Z0-9]{0,30}'))),
                     currency: [
                         code:       $(consumer("CHF"), producer(regex('([A-Z]|[0-9]){3}')))

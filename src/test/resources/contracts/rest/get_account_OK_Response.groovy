@@ -29,19 +29,25 @@ then:
         }
         body([
                     id: 1,
-                    name: "For fun account",
-                    iban: "PL10105000997603123456789123",
-                    'currency.code': "PLN",
-                    'balance.value': 123.12, 
-                    'balance.currency.code': "PLN",
-        ])  
+                    name: "Account 1",
+                    iban: "PL01234567890123456789012345",
+                    currency: [
+                        code: "PLN"
+                    ],
+                    balance: [
+                        value: 123.12,
+                        currency: [
+                            code: "PLN"
+                        ]
+                    ]
+        ])
         bodyMatchers {
             jsonPath('id', byRegex(number()).asInteger())
             jsonPath('name', byRegex('.+').asString())
-            jsonPath('iban', byRegex('\\w\\w[\\d]{16,24}').asString())
-            jsonPath('currency.code', byRegex('[A-Z]{3}').asString())
+            jsonPath('iban', byRegex('[A-Z]{2}\\d{2}[A-Z0-9]{0,30}').asString())
+            jsonPath('currency.code', byRegex('([A-Z]|[0-9]){3}').asString())
             jsonPath('balance.value', byRegex(aDouble()).asDouble())
-            jsonPath('balance.currency.code', byRegex('[A-Z]{3}').asString())
+            jsonPath('balance.currency.code', byRegex('([A-Z]|[0-9]){3}').asString())
             }
     }
 }
