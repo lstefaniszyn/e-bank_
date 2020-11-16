@@ -4,7 +4,7 @@ package contracts.rest
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-	description("""
+    description("""
 Represents a successful scenario of get customers list
 
 ```
@@ -25,19 +25,20 @@ then:
 		}
 	}
 	response {
-		status 200
-		headers {
+        status 200
+        headers {
             contentType(applicationJson())
         }
-		body([
+        def NAME = '[\\w-_\\s\\.]+'
+        body([
             [
                 id        : $(consumer(1), producer(regex(number()))),
-                givenName : $(consumer("Johnny"), producer(regex('[\\w-_\\s\\.]+'))),
-                familyName: $(consumer("Bravo"), producer(regex('[\\w-_\\s\\.]+')))
+                givenName : $(consumer("Johnny"), producer(regex(NAME))),
+                familyName: $(consumer("Bravo"), producer(regex(NAME)))
             ], [
                 id        : $(consumer(2), producer(regex(number()))),
-                givenName : $(consumer("Audrey"), producer(regex('[\\w-_\\s\\.]+'))),
-                familyName: $(consumer("Hepburn"), producer(regex('[\\w-_\\s\\.]+')))
+                givenName : $(consumer("Audrey"), producer(regex(NAME))),
+                familyName: $(consumer("Hepburn"), producer(regex(NAME)))
             ]
         ])
         bodyMatchers {

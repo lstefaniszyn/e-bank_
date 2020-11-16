@@ -1,8 +1,10 @@
+package contracts.rest
+
+
 import org.springframework.cloud.contract.spec.Contract
 
-
 Contract.make {
-	description("""
+    description("""
 Represents a successful scenario of get transactions attached to  account
 
 ```
@@ -29,20 +31,22 @@ then:
 		}
 	}
 	response {
-		status 200
-		headers {
-			contentType(applicationJson())
+        status 200
+        headers {
+            contentType(applicationJson())
         }
+        def CURRENCY_CODE = '[A-Z]{3}'
+        def IBAN = '[A-Z]{2}\\d{2}[A-Z0-9]{4}\\d{0,26}'
         body([
-                    page : [
-                        size: 2,
-                        totalElements: 6,
-                        totalPages: 3,
-                        number: 1,
-                        ],
-                    content: [
-                        [
-                            id         : 1,
+            page   : [
+                size         : 2,
+                totalElements: 6,
+                totalPages   : 3,
+                number       : 1,
+            ],
+            content: [
+                [
+                    id                 : 1,
                             value      : [
                                 amount  : 123.12,
                                 currency: "EUR"
@@ -75,8 +79,8 @@ then:
             })
             jsonPath("\$.['content'][0].['id']", byRegex(number()).asInteger())
             jsonPath("\$.['content'][0].['value'].['amount']", byRegex(aDouble()).asDouble())
-            jsonPath("\$.['content'][0].['value'].['currency'].['code']", byRegex('[A-Z]{3}').asString())
-            jsonPath("\$.['content'][0].['iban']", byRegex('\\w\\w[\\d]{16,24}').asString())
+            jsonPath("\$.['content'][0].['value'].['currency'].['code']", byRegex(CURRENCY_CODE).asString())
+            jsonPath("\$.['content'][0].['iban']", byRegex(IBAN).asString())
             jsonPath("\$.['content'][0].['date']", byDate())
             jsonPath("\$.['content'][0].['description']", byRegex('.+').asString())
         }

@@ -1,18 +1,5 @@
 package com.example.ebank.api;
 
-import static org.mockito.BDDMockito.given;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-
 import com.example.ebank.controllers.AccountController;
 import com.example.ebank.controllers.AppStatusController;
 import com.example.ebank.controllers.CustomerController;
@@ -27,7 +14,7 @@ import com.example.ebank.utils.SecurityContextUtils;
 import com.example.ebank.utils.logger.BFLogger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -41,7 +28,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+
+import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public abstract class RestBase {
@@ -196,7 +193,7 @@ public abstract class RestBase {
         transaction.setDescription("Test_" + id);
         transaction.setId(id);
         transaction.setDate(new Date());
-        transaction.setIban("CH" + randomNumber(19));
+        transaction.setIban(randomIBAN());
         return transaction;
     }
 
@@ -212,7 +209,8 @@ public abstract class RestBase {
         StringBuilder ibanBuilder = new StringBuilder();
         ibanBuilder.append(RandomStringUtils.randomAlphabetic(2).toUpperCase());
         ibanBuilder.append(RandomStringUtils.randomNumeric(2));
-        ibanBuilder.append(RandomStringUtils.randomAlphanumeric(new Random().nextInt(31)).toUpperCase());
+        ibanBuilder.append(RandomStringUtils.randomAlphanumeric(4).toUpperCase());
+        ibanBuilder.append(RandomStringUtils.randomNumeric(new Random().nextInt(27)).toUpperCase());
         return ibanBuilder.toString();
     }
 }
