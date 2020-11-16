@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.3.4.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath /> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
     <artifactId>e-bank</artifactId>
@@ -33,8 +32,7 @@
         <mapstruct-version>1.4.1.Final</mapstruct-version>
 
         <!-- Consumer Driven Contract -->
-        <spring-cloud-contract.version>2.1.5.RELEASE</spring-cloud-contract.version>
-        <scc-oa3-version>2.1.2.0</scc-oa3-version>
+        <spring-cloud-contract.version>2.2.4.RELEASE</spring-cloud-contract.version>
 
         <spring.mainClass>com.example.ebank.EBankApplication</spring.mainClass>
 
@@ -87,7 +85,7 @@
                         <artifactId>maven-failsafe-plugin</artifactId>
                         <configuration>
                             <systemPropertyVariables>
-                                <spring.profiles.active>dev,it-local</spring.profiles.active>
+                                <spring.profiles.active>local,it-local</spring.profiles.active>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
@@ -109,6 +107,17 @@
                             <systemPropertyVariables>
                                 <spring.profiles.active>mock,dev,it-dev</spring.profiles.active>
                             </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <profiles>
+                                <!-- need to setup here for multiple profiles -->
+                                <profile>mock</profile>
+                                <profile>dev</profile>
+                            </profiles>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -224,11 +233,28 @@
             <scope>test</scope>
             <exclusions>
                 <exclusion>
+                    <groupId>org.mockito</groupId>
+                    <artifactId>mockito-junit-jupiter</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.mockito</groupId>
+                    <artifactId>mockito-core</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>org.junit.jupiter</groupId>
                     <artifactId>junit-jupiter</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
+
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.6.0</version>
+            <scope>test</scope>
+        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -236,12 +262,12 @@
             <scope>runtime</scope>
         </dependency>
 
-        <dependency>
+        <!-- <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13</version>
             <scope>test</scope>
-        </dependency>
+        </dependency> -->
 
         <dependency>
             <groupId>log4j</groupId>
@@ -305,32 +331,8 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-contract-verifier</artifactId>
             <version>${spring-cloud-contract.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>io.rest-assured</groupId>
-                    <artifactId>spring-mock-mvc</artifactId>
-                </exclusion>
-            </exclusions>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>guru.springframework</groupId>
-            <artifactId>spring-cloud-contract-oa3</artifactId>
-            <version>${scc-oa3-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured-common</artifactId>
-            <version>${rest-assured.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>spring-mock-mvc</artifactId>
-            <version>${rest-assured.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- /Consumer Driver contract  -->
 
         <!-- Serenity -->
         <dependency>
@@ -390,6 +392,11 @@
                 <configuration>
                     <jvmArguments>${argLine}</jvmArguments>
                     <mainClass>${spring.mainClass}</mainClass>
+                    <profiles>
+                        <!-- only works if there is only one profile active -->
+                        <!-- for multiple profiles, setup plugin in maven profile accordingly -->
+                        <profile>${spring.profiles.active}</profile>
+                    </profiles>
                 </configuration>
             </plugin>
             <!-- Consumer Driver contract  -->
@@ -400,19 +407,11 @@
                 <extensions>true</extensions>
                 <configuration>
                     <contractsDirectory>${project.basedir}/src/test/resources/contracts</contractsDirectory>
-                    <!-- Provide the base class for your auto-generated tests -->
-                    <baseClassForTests>com.example.ebank.api.AbstractContractSpec</baseClassForTests>
                     <!-- Create package name for your auto-generated tests -->
-                    <basePackageForTests>com.example.ebank.api.generate</basePackageForTests>
+                    <basePackageForTests>com.example.ebank.api.autogenerate</basePackageForTests>
+                    <!-- If there’s a contract under /com/example/ebank/api/<folderName>/*.groovy` then we’ll search for a <folderName>Base.java files -->
+                    <packageWithBaseClasses>com.example.ebank.api</packageWithBaseClasses>
                 </configuration>
-                <dependencies>
-                    <!--needed to include oa3 converter-->
-                    <dependency>
-                        <groupId>guru.springframework</groupId>
-                        <artifactId>spring-cloud-contract-oa3</artifactId>
-                        <version>${scc-oa3-version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
 
             <plugin>
@@ -503,7 +502,7 @@
                         </goals>
                         <configuration>
                             <generatorName>spring</generatorName>
-                            <inputSpec>${project.basedir}/src/test/resources/contracts/e-bank/openapi.yml</inputSpec>
+                            <inputSpec>${project.basedir}/docs/api/openapi.yml</inputSpec>
                             <configOptions>
                                 <sourceFolder>src/main/java</sourceFolder>
                                 <library>spring-boot</library>
@@ -536,4 +535,11 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>opencastproject</id>
+            <url>http://repository.opencastproject.org/nexus/content/repositories/public/</url>
+        </repository>
+    </repositories>
 </project>

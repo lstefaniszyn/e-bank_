@@ -4,13 +4,14 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ebank.communication.TransactionRequestProducer;
 import com.example.ebank.generated.api.AccountApi;
@@ -30,10 +31,6 @@ import com.example.ebank.utils.KafkaServerProperties;
 import com.example.ebank.utils.SecurityContextUtils;
 import com.example.ebank.utils.logger.BFLogger;
 
-import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.Api;
 
 @Api(tags = "account")
@@ -52,11 +49,17 @@ public class AccountController implements AccountApi {
     private final TransactionMapper transactionMapper;
     private final KafkaServerProperties kafkaProperties;
     private final AsyncTransactionService asyncTransactionService;
+    private final SecurityContextUtils securityContextUtils;
     private final TransactionRequestProducer transactionRequestProducer;
 
-    public AccountController(CustomerService customerService, AccountService accountService,
-            AccountMapper accountMapper, TransactionService transactionService, TransactionMapper transactionMapper,
-            KafkaServerProperties kafkaProperties, AsyncTransactionService asyncTransactionService,
+    public AccountController(CustomerService customerService,
+            AccountService accountService,
+            AccountMapper accountMapper,
+            TransactionService transactionService,
+            TransactionMapper transactionMapper,
+            KafkaServerProperties kafkaProperties,
+            AsyncTransactionService asyncTransactionService,
+            SecurityContextUtils securityContextUtils,
             TransactionRequestProducer transactionRequestProducer) {
         this.customerService = customerService;
         this.accountService = accountService;
@@ -65,6 +68,7 @@ public class AccountController implements AccountApi {
         this.transactionMapper = transactionMapper;
         this.kafkaProperties = kafkaProperties;
         this.asyncTransactionService = asyncTransactionService;
+        this.securityContextUtils = securityContextUtils;
         this.transactionRequestProducer = transactionRequestProducer;
     }
 
@@ -81,8 +85,11 @@ public class AccountController implements AccountApi {
     }
 
     @Override
-    public ResponseEntity<TransactionPageDto> getAccountTransactions(Long customerId, Long accountId, String dateString,
-            Integer page, Integer size) {
+    public ResponseEntity<TransactionPageDto> getAccountTransactions(Long customerId,
+        Long accountId,
+        String dateString,
+        Integer page,
+        Integer size) {
         Account account = accountService.getOne(accountId);
         validateAccessToRequestedCustomerAndAccount(customerId, account);
 
@@ -92,7 +99,7 @@ public class AccountController implements AccountApi {
         if (kafkaProperties.readMockedTransactions()) {
         	CompletableFuture<TransactionRequest> producer = transactionRequestProducer.send(customerId, accountId, date);
             CompletableFuture<Page<Transaction>> resultPageFuture = asyncTransactionService.findInMonthPaginated(date,
-                    page, size);
+                page, size);
             CompletableFuture.allOf(producer, resultPageFuture);
             try {
                 resultPage = resultPageFuture.get();
@@ -108,10 +115,10 @@ public class AccountController implements AccountApi {
 
     private void validateAccessToRequestedCustomerAndAccount(Long customerId, Account account) {
         Customer customer = customerService.getOne(customerId);
-        if (!Objects.equals(customer.getIdentityKey(), SecurityContextUtils.getIdentityKey())) {
+        if (!Objects.equals(customer.getIdentityKey(), securityContextUtils.getIdentityKey())) {
             throw new IllegalArgumentException();
         }
-        if (!Objects.equals(account.getCustomer().getId(), customer.getId())) {
+        if (!Objects.equals(account.getCustomerId(), customer.getId())) {
             throw new IllegalArgumentException();
         }
     }

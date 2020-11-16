@@ -17,10 +17,13 @@ public class Transaction {
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
+    @Column(length = 50)
+    private String iban;
+
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column(name = "value_date")
-    private Date valueDate;
+    @Column(name = "transaction_date")
+    private Date date;
 
     private Double amount;
 
@@ -38,12 +41,28 @@ public class Transaction {
         this.id = id;
     }
 
-    public Date getValueDate() {
-        return valueDate;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setValueDate(Date valueDate) {
-        this.valueDate = valueDate;
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public String getIban() {
+        return iban;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public Double getAmount() {

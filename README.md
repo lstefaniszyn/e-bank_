@@ -76,7 +76,7 @@ Example using data from DEV DB with exchange rate service enabled.
 ```
 curl --location --request GET 'localhost:8080/api/v1/transactions?date=2019-01&size=5'
 
-[{"id":377041,"valueDate":"2019-01-05","amount":304.2898786561228,"currency":"GBP","description":"payment CHF"},{"id":377042,"valueDate":"2019-01-21","amount":219.8950045234303,"currency":"GBP","description":"payment CHF"},{"id":377043,"valueDate":"2019-01-11","amount":336.1576287515951,"currency":"GBP","description":"payment CHF"},{"id":377044,"valueDate":"2019-01-27","amount":108.30920607371392,"currency":"GBP","description":"payment CHF"},{"id":377045,"valueDate":"2019-01-25","amount":125.46708661282963,"currency":"GBP","description":"payment CHF"}]
+[{"id":377041,"date":"2019-01-05","amount":304.2898786561228,"currency":"GBP","description":"payment CHF"},{"id":377042,"date":"2019-01-21","amount":219.8950045234303,"currency":"GBP","description":"payment CHF"},{"id":377043,"date":"2019-01-11","amount":336.1576287515951,"currency":"GBP","description":"payment CHF"},{"id":377044,"date":"2019-01-27","amount":108.30920607371392,"currency":"GBP","description":"payment CHF"},{"id":377045,"date":"2019-01-25","amount":125.46708661282963,"currency":"GBP","description":"payment CHF"}]
 ```
 
 #### Application properties

@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
@@ -26,7 +27,6 @@ import com.example.ebank.utils.logger.BFLogger;
 
 /**
  * @author gwlodawiec
- *
  */
 @Service
 public class AsyncTransactionService {
@@ -57,7 +57,7 @@ public class AsyncTransactionService {
             consumer.close();
         }
 
-        return CompletableFuture.completedFuture(getPage(page, size, transactions));
+        return CompletableFuture.completedFuture(getPageSortedByDate(page, size, transactions));
     }
 
     @Async("asyncExecutor")
@@ -70,7 +70,7 @@ public class AsyncTransactionService {
 
         // poll for messages and filter them
 
-        return CompletableFuture.completedFuture(getPage(page, size, transactions));
+        return CompletableFuture.completedFuture(getPageSortedByDate(page, size, transactions));
 
     }
 
@@ -82,6 +82,11 @@ public class AsyncTransactionService {
         props.setProperty("max.poll.records", String.valueOf(Integer.MAX_VALUE));
 
         return props;
+    }
+
+    private Page<Transaction> getPageSortedByDate(int page, int size, List<Transaction> allTransactions) {
+        Collections.sort(allTransactions, (t1, t2) -> t1.getDate().compareTo(t2.getDate()));
+        return getPage(page, size, allTransactions);
     }
 
     private Page<Transaction> getPage(int page, int size, List<Transaction> allTransactions) {

@@ -17,41 +17,35 @@ public class TransactionRepository {
     private final ProfileManager profileManager;
 
     public TransactionRepository(JpaTransactionRepository jpaRepository,
-                                 MockTransactionRepository mockRepository,
-                                 ProfileManager profileManager) {
+        MockTransactionRepository mockRepository,
+        ProfileManager profileManager) {
         this.jpaRepository = jpaRepository;
         this.mockRepository = mockRepository;
         this.profileManager = profileManager;
     }
 
-    public Iterable<Transaction> findAll() {
-        return profileManager.isMockProfileActive()
-                ? mockRepository.findAll()
-                : jpaRepository.findAll();
-    }
-
     public Optional<Transaction> findById(Long id) {
         return profileManager.isMockProfileActive()
-                ? mockRepository.findById(id)
-                : jpaRepository.findById(id);
+            ? mockRepository.findById(id)
+            : jpaRepository.findById(id);
     }
 
     public Page<Transaction> findAll(Pageable pageable) {
         return profileManager.isMockProfileActive()
-                ? mockRepository.findAll(pageable)
-                : jpaRepository.findAll(pageable);
+            ? mockRepository.findAll(pageable)
+            : jpaRepository.findAll(pageable);
     }
 
     public Page<Transaction> findByValueDateBetween(Date startDate, Date endDate, Pageable pageable) {
         return profileManager.isMockProfileActive()
-                ? mockRepository.findByValueDateBetween(startDate, endDate, pageable)
-                : jpaRepository.findByValueDateBetween(startDate, endDate, pageable);
+            ? mockRepository.findByValueDateBetween(startDate, endDate, pageable)
+            : jpaRepository.findByDateBetween(startDate, endDate, pageable);
     }
 
     public Page<Transaction> findByValueDateBetweenAndAccountId(Date startDate, Date endDate, Long accountId, Pageable pageable) {
         return profileManager.isMockProfileActive()
-                ? mockRepository.findByValueDateBetweenAndAccountId(startDate, endDate, accountId, pageable)
-                : jpaRepository.findByValueDateBetweenAndAccountId(startDate, endDate, accountId, pageable);
+            ? mockRepository.findByValueDateBetweenAndAccountId(startDate, endDate, accountId, pageable)
+            : jpaRepository.findByDateBetweenAndAccountId(startDate, endDate, accountId, pageable);
     }
 
 }

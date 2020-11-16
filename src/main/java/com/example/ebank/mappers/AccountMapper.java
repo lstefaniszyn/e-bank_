@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public abstract class AccountMapper {
 
-	public abstract AccountDto toDto(Account account);
+    public abstract AccountDto toDto(Account account);
 
-	public abstract List<AccountDto> toListDto(List<Account> accounts);
+    public abstract List<AccountDto> toListDto(List<Account> accounts);
 }
