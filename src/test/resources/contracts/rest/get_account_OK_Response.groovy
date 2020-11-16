@@ -1,8 +1,7 @@
 import org.springframework.cloud.contract.spec.Contract
 
-
 Contract.make {
-	description("""
+    description("""
 Represents a successful scenario of get account attached to customer
 
 ```
@@ -23,31 +22,33 @@ then:
 		}
 	}
 	response {
-		status 200
-		headers {
-			contentType(applicationJson())
+        status 200
+        headers {
+            contentType(applicationJson())
         }
+        def CURRENCY_CODE = '[A-Z]{3}'
+        def IBAN = '[A-Z]{2}\\d{2}[A-Z0-9]{4}\\d{0,26}'
         body([
-                    id: fromRequest().path(5), // get {accountId}
-                    name: "Account 1",
-                    iban: "PL01234567890123456789012345",
-                    currency: [
-                        code: "PLN"
-                    ],
-                    balance: [
-                        value: 123.12,
-                        currency: [
-                            code: "PLN"
-                        ]
-                    ]
+            id      : fromRequest().path(5), // get {accountId}
+            name    : "Account 1",
+            iban    : "PL10105009976312345678913",
+            currency: [
+                code: "PLN"
+            ],
+            balance : [
+                value   : 123.12,
+                currency: [
+                    code: "PLN"
+                ]
+            ]
         ])
         bodyMatchers {
             jsonPath('id', byRegex(number()).asInteger())
             jsonPath('name', byRegex('.+').asString())
-            jsonPath('iban', byRegex('[A-Z]{2}\\d{2}[A-Z0-9]{0,30}').asString())
-            jsonPath('currency.code', byRegex('([A-Z]|[0-9]){3}').asString())
+            jsonPath('iban', byRegex(IBAN).asString())
+            jsonPath('currency.code', byRegex(CURRENCY_CODE).asString())
             jsonPath('balance.value', byRegex(aDouble()).asDouble())
-            jsonPath('balance.currency.code', byRegex('([A-Z]|[0-9]){3}').asString())
-            }
+            jsonPath('balance.currency.code', byRegex(CURRENCY_CODE).asString())
+        }
     }
 }

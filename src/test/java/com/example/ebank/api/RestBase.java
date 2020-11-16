@@ -12,6 +12,8 @@ import com.example.ebank.services.TransactionService;
 import com.example.ebank.utils.KafkaServerProperties;
 import com.example.ebank.utils.SecurityContextUtils;
 import com.example.ebank.utils.logger.BFLogger;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
@@ -23,7 +25,10 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -83,7 +88,6 @@ public abstract class RestBase {
 
         // Mock customer service
         given(customerService.getOne(1L)).willReturn(getCustomer(1L));
-        given(customerService.getByIdentityKey(identityKey)).willReturn(getCustomer(1L));
         given(customerService.getAll()).willReturn(getCustomers());
 
         // Mock account service
@@ -93,15 +97,20 @@ public abstract class RestBase {
         // Mock transaction service
         final String DATE_FORMAT = "yyyy-MM";
         final DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder()
-            .append(DateTimeFormatter.ofPattern(DATE_FORMAT))
-            .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
-            .toFormatter();
+                .append(DateTimeFormatter.ofPattern(DATE_FORMAT))
+                .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+                .toFormatter();
         LocalDate date = LocalDate.parse("2019-01", DATE_FORMATTER);
         BFLogger.logDebug("Transactions: " + getPagedTransactions(0, 3));
 
         given(transactionService.findForAccountInMonthPaginated(1L, date, 0, 2)).willReturn(getPagedTransactions(0, 2));
-
-        RestAssuredMockMvc.standaloneSetup(appStatusController, customerController, accountController);
+        MappingJackson2HttpMessageConverter transactionMessageConverter = new MappingJackson2HttpMessageConverter();
+        transactionMessageConverter
+                .setObjectMapper(new ObjectMapper().disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                        .setDateFormat(new SimpleDateFormat("yyyy-MM-dd")));
+        RestAssuredMockMvc.standaloneSetup(
+                MockMvcBuilders.standaloneSetup(appStatusController, customerController, accountController)
+                        .setMessageConverters(transactionMessageConverter));
     }
 
     private List<Customer> getCustomers() {
@@ -165,10 +174,7 @@ public abstract class RestBase {
             output = transactions.subList(start, end);
         }
 
-        return new PageImpl<>(
-                output,
-                pageRequest,
-                total);
+        return new PageImpl<>(output, pageRequest, total);
     }
 
     private List<Transaction> getTransactions() {
@@ -187,6 +193,7 @@ public abstract class RestBase {
         transaction.setDescription("Test_" + id);
         transaction.setId(id);
         transaction.setDate(new Date());
+        transaction.setIban(randomIBAN());
         return transaction;
     }
 
@@ -202,7 +209,8 @@ public abstract class RestBase {
         StringBuilder ibanBuilder = new StringBuilder();
         ibanBuilder.append(RandomStringUtils.randomAlphabetic(2).toUpperCase());
         ibanBuilder.append(RandomStringUtils.randomNumeric(2));
-        ibanBuilder.append(RandomStringUtils.randomAlphanumeric(new Random().nextInt(31)).toUpperCase());
+        ibanBuilder.append(RandomStringUtils.randomAlphanumeric(4).toUpperCase());
+        ibanBuilder.append(RandomStringUtils.randomNumeric(new Random().nextInt(27)).toUpperCase());
         return ibanBuilder.toString();
     }
 }

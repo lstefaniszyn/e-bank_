@@ -1,8 +1,7 @@
 import org.springframework.cloud.contract.spec.Contract
 
-
 Contract.make {
-	description("""
+    description("""
 Represents a successful scenario of get one customer
 
 ```
@@ -27,6 +26,7 @@ then:
 		headers {
 			contentType(applicationJson())
         }
+        def NAME = '[\\w-_\\s\\.]+'
         body([
             id         : fromRequest().path(3), // get {customerId}
             givenName  : "Johnny",
@@ -42,8 +42,8 @@ then:
         ])
         bodyMatchers {
             jsonPath('id', byRegex(number()).asInteger())
-            jsonPath('givenName', byRegex('[\\w-_\\s\\.]+').asString())
-            jsonPath('familyName', byRegex('[\\w-_\\s\\.]+').asString())
+            jsonPath('givenName', byRegex(NAME).asString())
+            jsonPath('familyName', byRegex(NAME).asString())
             jsonPath('identityKey', byRegex(number()).asInteger())
             jsonPath('accounts', byType {
                 // results in verification of size of array (min 1)

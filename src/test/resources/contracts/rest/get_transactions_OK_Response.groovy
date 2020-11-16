@@ -1,8 +1,10 @@
+package contracts.rest
+
+
 import org.springframework.cloud.contract.spec.Contract
 
-
 Contract.make {
-	description("""
+    description("""
 Represents a successful scenario of get transactions attached to  account
 
 ```
@@ -29,33 +31,39 @@ then:
 		}
 	}
 	response {
-		status 200
-		headers {
-			contentType(applicationJson())
+        status 200
+        headers {
+            contentType(applicationJson())
         }
+        def CURRENCY_CODE = '[A-Z]{3}'
+        def IBAN = '[A-Z]{2}\\d{2}[A-Z0-9]{4}\\d{0,26}'
         body([
-                    page : [
-                        size: 2,
-                        totalElements: 6,
-                        totalPages: 3,
-                        number: 1,
+            page   : [
+                size         : 2,
+                totalElements: 6,
+                totalPages   : 3,
+                number       : 1,
+            ],
+            content: [
+                [
+                    id                 : 1,
+                            value      : [
+                                amount  : 123.12,
+                                currency: "EUR"
+                            ],
+                            iban       : "PL10105009976312345678913",
+                            date       : "2119-06-30",
+                            description: "wow1!",
                         ],
-                    content: [
                         [
-                            'id': 1, 
-                            'value.amount': 123.12, 
-                            'value.currency.code': "EUR",
-                            'iban': "PL10105000997603123456789123",
-                            'date': "2119.06.30 08:29:36 PDT",
-                            'description': "wow1!",
-                        ],
-                        [
-                            'id': 2, 
-                            'value.amount': 1111.1, 
-                            'value.currency.code': "EUR",
-                            'iban': "GB33BUKB20201555555555",
-                            'date': "2133.01.01 03:29:36 PDT",
-                            'description': "superb*",
+                            id         : 2,
+                            value      : [
+                                amount  : 1111.1,
+                                currency: "EUR"
+                            ],
+                            iban       : "GB33943720201555555555",
+                            date       : "2133-01-01",
+                            description: "superb*",
                         ],
                     ]
         ])  
@@ -66,11 +74,15 @@ then:
             jsonPath('page.totalPages', byRegex(number()).asInteger())
             jsonPath('page.number', byRegex(number()).asInteger())
             //content
+            jsonPath('$.content', byType {
+                minOccurrence(1)
+            })
+            jsonPath("\$.['content'][0].['id']", byRegex(number()).asInteger())
             jsonPath("\$.['content'][0].['value'].['amount']", byRegex(aDouble()).asDouble())
-            jsonPath("\$.['content'][0].['value'].['currency'].['code']", byRegex('[A-Z]{3}').asString())
-            jsonPath("\$.['content'][0].['iban']", byRegex('\\w\\w[\\d]{16,24}').asString())
-            jsonPath("\$.['content'][0].['date']", byRegex('\\d{4}-\\d{2}-\\d{2}(T|t)\\d{2}:\\d{2}:\\d{2}[\\w]?').asString())
+            jsonPath("\$.['content'][0].['value'].['currency'].['code']", byRegex(CURRENCY_CODE).asString())
+            jsonPath("\$.['content'][0].['iban']", byRegex(IBAN).asString())
+            jsonPath("\$.['content'][0].['date']", byDate())
             jsonPath("\$.['content'][0].['description']", byRegex('.+').asString())
-            }
+        }
     }
 }
