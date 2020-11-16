@@ -8,6 +8,10 @@ public class TransactionRequest {
 	private Long accountId;
 	private LocalDate date;
 	
+	private TransactionRequest() {
+		super();
+	}
+	
 	public TransactionRequest(Long customerId, Long accountId, LocalDate date) {
 		this.customerId = customerId;
 		this.accountId = accountId;

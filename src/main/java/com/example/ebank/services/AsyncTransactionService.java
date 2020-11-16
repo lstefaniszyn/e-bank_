@@ -1,8 +1,15 @@
 package com.example.ebank.services;
 
-import com.example.ebank.models.Transaction;
-import com.example.ebank.utils.logger.BFLogger;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Properties;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +22,8 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import com.example.ebank.models.Transaction;
+import com.example.ebank.utils.logger.BFLogger;
 
 /**
  * @author gwlodawiec
@@ -36,25 +38,19 @@ public class AsyncTransactionService {
     private String outputTopic;
 
     @Autowired
-    private ConsumerFactory<String, Transaction> transactionConsumerFactory;
+    private ConsumerFactory<String, List<Transaction>> transactionConsumerFactory;
 
     @Async("asyncExecutor")
     public CompletableFuture<Page<Transaction>> findInMonthPaginated(LocalDate date, int page, int size) {
 
-        KafkaConsumer<String, Transaction> consumer = getConsumer();
+        KafkaConsumer<String, List<Transaction>> consumer = getConsumer();
 
         consumer.subscribe(Arrays.asList(outputTopic));
         List<Transaction> transactions = new ArrayList<Transaction>();
 
         try {
-            ConsumerRecords<String, Transaction> records = consumer.poll(Duration.ofSeconds(10));
-
-            LocalDate startDate = date.withDayOfMonth(1);
-            LocalDate endDate = date.withDayOfMonth(date.lengthOfMonth());
-            transactions = StreamSupport.stream(records.spliterator(), false).filter(v -> {
-                return v.value().getDate().after(Date.valueOf(startDate))
-                    && v.value().getDate().before(Date.valueOf(endDate));
-            }).map(ConsumerRecord<String, Transaction>::value).collect(Collectors.toList());
+            ConsumerRecords<String, List<Transaction>> records = consumer.poll(Duration.ofSeconds(10));
+            records.forEach(v -> transactions.addAll(v.value()));
         } catch (Exception e) {
             BFLogger.logError("There was error during polling messages: " + e.toString());
         } finally {
@@ -67,7 +63,7 @@ public class AsyncTransactionService {
     @Async("asyncExecutor")
     public CompletableFuture<Page<Transaction>> findForAccountInMonthPaginated(Long accountId, LocalDate date, int page,
             int size) {
-        KafkaConsumer<String, Transaction> consumer = getConsumer();
+        KafkaConsumer<String, List<Transaction>> consumer = getConsumer();
         consumer.subscribe(Arrays.asList(outputTopic));
 
         List<Transaction> transactions = new ArrayList<Transaction>();
@@ -98,11 +94,11 @@ public class AsyncTransactionService {
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), allTransactions.size());
         List<Transaction> transactions = allTransactions.subList(start, end);
-        return new PageImpl<>(transactions, pageable, allTransactions.size());
+        return new PageImpl<Transaction>(transactions, pageable, size);
     }
 
-    private KafkaConsumer<String, Transaction> getConsumer() {
-        KafkaConsumer<String, Transaction> consumer = (KafkaConsumer<String, Transaction>) transactionConsumerFactory
+    private KafkaConsumer<String, List<Transaction>> getConsumer() {
+        KafkaConsumer<String, List<Transaction>> consumer = (KafkaConsumer<String, List<Transaction>>) transactionConsumerFactory
                 .createConsumer(UUID.randomUUID().toString(), null, null, getAdditionalConsumerProperties());
         return consumer;
     }

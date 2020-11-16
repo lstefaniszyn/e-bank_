@@ -8,12 +8,6 @@ import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 
-import com.example.ebank.models.Transaction;
-import com.example.ebank.services.KafkaProducer;
-import com.example.ebank.utils.logger.BFLogger;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +15,12 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.stereotype.Component;
+
+import com.example.ebank.models.Transaction;
+import com.example.ebank.services.KafkaProducer;
+import com.example.ebank.utils.logger.BFLogger;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class KafkaFeeder {
@@ -41,7 +41,7 @@ public class KafkaFeeder {
         if (properties.feedKafkaDuringStart()) {
             deleteTopics();
             createTopics();
-            feedKafkaTopic();
+            //feedKafkaTopic();
         } else {
             BFLogger.logInfo("Loading mocked data into kafka topics disabled!");
         }
@@ -74,20 +74,25 @@ public class KafkaFeeder {
     }
 
     private void feedKafkaTopic() {
-        List<Transaction> transactions = new ArrayList<>();
-        Resource resource = new ClassPathResource("data/transactions_1_1.json");
-        try {
-            File file = resource.getFile();
-            ObjectMapper jsonMapper = new ObjectMapper();
-            transactions = jsonMapper.readValue(file, new TypeReference<List<Transaction>>() {
-            });
-        } catch (IOException exc) {
-            BFLogger.logError("Error during loading transactions from file");
-        }
+        List<Transaction> transactions = getMockedTransactions();
 
         transactions.forEach(t -> kafkaProducer.sendMessage(String.valueOf(t.getId()), t));
 
         BFLogger.logInfo("Kafka topics have been fed with mocked data!");
     }
+	
+	public static List<Transaction> getMockedTransactions(){
+		List<Transaction> transactions = new ArrayList<>();
+		Resource resource = new ClassPathResource("data/transactions_1_1.json");
+		try {
+			File file = resource.getFile();
+			ObjectMapper jsonMapper = new ObjectMapper();
+			transactions = jsonMapper.readValue(file, new TypeReference<List<Transaction>>() {
+			});
+		} catch (IOException exc) {
+			BFLogger.logError("Error during loading transactions from file");
+		}
+		return transactions;
+	}
 
 }

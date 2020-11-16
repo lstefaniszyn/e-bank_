@@ -1,6 +1,7 @@
 package com.example.ebank.configuration;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -20,13 +21,13 @@ import com.example.ebank.models.Transaction;
 
 @Configuration
 public class KafkaConsumerConfig {
-
+	
 	@Value("${spring.kafka.bootstrap-servers}")
 	private String bootstrapServers;
-
+	
 	@Value("${spring.kafka.consumer.group-id}")
 	private String groupId;
-
+	
 	@Bean
 	public Map<String, Object> consumerConfigs() {
 		Map<String, Object> props = new HashMap<>();
@@ -36,27 +37,27 @@ public class KafkaConsumerConfig {
 		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 		return props;
 	}
-
+	
 	@Bean
 	public ConsumerFactory<String, String> consumerFactory() {
 		return new DefaultKafkaConsumerFactory<>(consumerConfigs());
 	}
-
+	
 	@Bean
-	public ConsumerFactory<String, Transaction> transactionConsumerFactory() {
+	public ConsumerFactory<String, List<Transaction>> transactionConsumerFactory() {
 		Map<String, Object> props = new HashMap<>();
 		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-		props.put(ConsumerConfig.GROUP_ID_CONFIG, UUID.randomUUID().toString());
+		props.put(ConsumerConfig.GROUP_ID_CONFIG, UUID.randomUUID()
+				.toString());
 		return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(),
-				new JsonDeserializer<>(Transaction.class));
-
+				new JsonDeserializer<>(List.class));
 	}
-
-	@Bean
-	public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
-		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory(consumerFactory());
-		return factory;
-	}
-
+	
+//	@Bean
+//	public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, Transaction>> kafkaListenerContainerFactory() {
+//		ConcurrentKafkaListenerContainerFactory<String, Transaction> factory = new ConcurrentKafkaListenerContainerFactory<>();
+//		factory.setConsumerFactory(transactionConsumerFactory());
+//		return factory;
+//	}
+	
 }
