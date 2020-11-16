@@ -420,7 +420,7 @@
                 <version>2.22.2</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <allure.results.directory>target/allure-results</allure.results.directory>
+                        <allure.results.directory>target/allure/results/unit</allure.results.directory>
                     </systemPropertyVariables>
                     <skipTests>${skip.surefire.tests}</skipTests>
                 </configuration>
@@ -437,6 +437,30 @@
                 <configuration>
                     <reportVersion>${allure-cli-runner.version}</reportVersion>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>allure-unit-report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <resultsDirectory>allure/results/unit</resultsDirectory>
+                            <reportDirectory>${project.basedir}/target/site/allure/report/unit</reportDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>allure-it-report</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <resultsDirectory>allure/results/it</resultsDirectory>
+                            <reportDirectory>${project.basedir}/target/site/allure/report/it</reportDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -450,8 +474,8 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>default-report</id>
-                        <phase>site</phase>
+                        <id>jacoco-report</id>
+                        <phase>test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
@@ -463,19 +487,9 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
                     <systemPropertyVariables>
-                        <allure.results.directory>target/allure-results-it</allure.results.directory>
+                        <allure.results.directory>target/allure/results/it</allure.results.directory>
                     </systemPropertyVariables>
-                    <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
-                <executions>
-                    <execution>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>net.serenity-bdd.maven.plugins</groupId>
