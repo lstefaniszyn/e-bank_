@@ -4,11 +4,15 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
+import com.example.ebank.communication.TransactionRequestProducer;
 import com.example.ebank.generated.api.AccountApi;
 import com.example.ebank.generated.dto.AccountDto;
 import com.example.ebank.generated.dto.TransactionPageDto;
@@ -17,6 +21,7 @@ import com.example.ebank.mappers.TransactionMapper;
 import com.example.ebank.models.Account;
 import com.example.ebank.models.Customer;
 import com.example.ebank.models.Transaction;
+import com.example.ebank.models.TransactionRequest;
 import com.example.ebank.services.AccountService;
 import com.example.ebank.services.AsyncTransactionService;
 import com.example.ebank.services.CustomerService;
@@ -47,10 +52,12 @@ public class AccountController implements AccountApi {
     private final TransactionMapper transactionMapper;
     private final KafkaServerProperties kafkaProperties;
     private final AsyncTransactionService asyncTransactionService;
+    private final TransactionRequestProducer transactionRequestProducer;
 
     public AccountController(CustomerService customerService, AccountService accountService,
             AccountMapper accountMapper, TransactionService transactionService, TransactionMapper transactionMapper,
-            KafkaServerProperties kafkaProperties, AsyncTransactionService asyncTransactionService) {
+            KafkaServerProperties kafkaProperties, AsyncTransactionService asyncTransactionService,
+            TransactionRequestProducer transactionRequestProducer) {
         this.customerService = customerService;
         this.accountService = accountService;
         this.accountMapper = accountMapper;
@@ -58,6 +65,7 @@ public class AccountController implements AccountApi {
         this.transactionMapper = transactionMapper;
         this.kafkaProperties = kafkaProperties;
         this.asyncTransactionService = asyncTransactionService;
+        this.transactionRequestProducer = transactionRequestProducer;
     }
 
     @Override
@@ -82,9 +90,10 @@ public class AccountController implements AccountApi {
         Page<Transaction> resultPage = Page.empty();
 
         if (kafkaProperties.readMockedTransactions()) {
+        	CompletableFuture<TransactionRequest> producer = transactionRequestProducer.send(customerId, accountId, date);
             CompletableFuture<Page<Transaction>> resultPageFuture = asyncTransactionService.findInMonthPaginated(date,
                     page, size);
-            CompletableFuture.allOf(resultPageFuture);
+            CompletableFuture.allOf(producer, resultPageFuture);
             try {
                 resultPage = resultPageFuture.get();
             } catch (InterruptedException | ExecutionException e) {

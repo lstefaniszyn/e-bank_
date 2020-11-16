@@ -41,7 +41,7 @@ public class KafkaFeeder {
         if (properties.feedKafkaDuringStart()) {
             deleteTopics();
             createTopics();
-            feedKafkaTopic();
+            //feedKafkaTopic();
         } else {
             BFLogger.logInfo("Loading mocked data into kafka topics disabled!");
         }

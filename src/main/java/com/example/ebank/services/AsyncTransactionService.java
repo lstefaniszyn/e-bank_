@@ -14,6 +14,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.core.ConsumerFactory;
@@ -21,7 +22,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.example.ebank.models.Transaction;
-import com.example.ebank.utils.CustomChunk;
 import com.example.ebank.utils.logger.BFLogger;
 
 /**
@@ -89,7 +89,7 @@ public class AsyncTransactionService {
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), allTransactions.size());
         List<Transaction> transactions = allTransactions.subList(start, end);
-        return new CustomChunk(transactions, pageable);
+        return new PageImpl<Transaction>(transactions, pageable, size);
     }
 
     private KafkaConsumer<String, List<Transaction>> getConsumer() {
