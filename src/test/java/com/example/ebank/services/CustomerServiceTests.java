@@ -33,14 +33,14 @@ public class CustomerServiceTests {
 
         Iterable<Customer> result = customerService.getAll();
         assertThat(result).isNotEmpty()
-                .hasSize(4);
+            .hasSize(4);
     }
 
     @Test
     public void testFindOne_expectOk() {
         long id = 157L;
         when(customerRepository.findById(id))
-                .thenReturn(Optional.of(getCustomer(id)));
+            .thenReturn(Optional.of(getCustomer(id)));
 
         Customer result = customerService.getOne(id);
 
@@ -57,10 +57,10 @@ public class CustomerServiceTests {
 
     private List<Customer> getList() {
         return List.of(
-                getCustomer(1L),
-                getCustomer(2L),
-                getCustomer(3L),
-                getCustomer(4L));
+            getCustomer(1L),
+            getCustomer(2L),
+            getCustomer(3L),
+            getCustomer(4L));
     }
 
     private Customer getCustomer(Long id) {

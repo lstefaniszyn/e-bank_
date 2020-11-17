@@ -30,6 +30,8 @@
         <jsonwebtoken-version>0.11.2</jsonwebtoken-version>
         <openapitools-version>4.3.1</openapitools-version>
         <mapstruct-version>1.4.1.Final</mapstruct-version>
+        <flyway.version>6.5.7</flyway.version>
+        <h2.version>1.4.200</h2.version>
 
         <!-- Consumer Driven Contract -->
         <spring-cloud-contract.version>2.2.4.RELEASE</spring-cloud-contract.version>
@@ -95,7 +97,7 @@
         <profile>
             <id>mock</id>
             <properties>
-                <spring.profiles.active>mock,dev</spring.profiles.active>
+                <spring.profiles.active>mock</spring.profiles.active>
             </properties>
             <build>
                 <plugins>
@@ -105,19 +107,8 @@
                         <artifactId>maven-failsafe-plugin</artifactId>
                         <configuration>
                             <systemPropertyVariables>
-                                <spring.profiles.active>mock,dev,it-dev</spring.profiles.active>
+                                <spring.profiles.active>mock,it-dev</spring.profiles.active>
                             </systemPropertyVariables>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <profiles>
-                                <!-- need to setup here for multiple profiles -->
-                                <profile>mock</profile>
-                                <profile>dev</profile>
-                            </profiles>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -357,6 +348,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>${flyway.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.joschi.jackson</groupId>
             <artifactId>jackson-datatype-threetenbp</artifactId>
             <version>2.6.4</version>
@@ -516,6 +513,14 @@
             <artifactId>xml-path</artifactId>
             <version>${rest-assured.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
     </dependencies>
 
     <build>

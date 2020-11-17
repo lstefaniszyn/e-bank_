@@ -1,0 +1,1 @@
+CALL public.generatesampledata(100, 1000);
