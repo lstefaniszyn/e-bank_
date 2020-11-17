@@ -130,6 +130,21 @@
             <build>
                 <plugins>
                     <plugin>
+                        <!-- dependency of pmd for source references -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jxr-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <executions>
+                            <execution>
+                                <id>jxr-xref-generation</id>
+                                <goals>
+                                    <goal>jxr</goal>
+                                </goals>
+                                <phase>test</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-pmd-plugin</artifactId>
                         <version>3.13.0</version>
@@ -137,6 +152,11 @@
                             <failOnViolation>true</failOnViolation>
                             <printFailingErrors>true</printFailingErrors>
                             <targetJdk>${java.version}</targetJdk>
+                            <linkXref>true</linkXref>
+                            <sourceEncoding>utf-8</sourceEncoding>
+                            <excludeRoots>
+                                <excludeRoot>target/generated-sources</excludeRoot>
+                            </excludeRoots>
                         </configuration>
                         <executions>
                             <execution>
