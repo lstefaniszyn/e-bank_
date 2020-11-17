@@ -3,6 +3,7 @@ package com.example.ebank.api;
 import com.example.ebank.controllers.AccountController;
 import com.example.ebank.controllers.AppStatusController;
 import com.example.ebank.controllers.CustomerController;
+import com.example.ebank.controllers.RestResponseEntityExceptionHandler;
 import com.example.ebank.mappers.*;
 import com.example.ebank.models.*;
 import com.example.ebank.services.AccountService;
@@ -37,6 +38,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+
+import javax.persistence.EntityNotFoundException;
 
 import static org.mockito.BDDMockito.given;
 
@@ -89,6 +92,8 @@ public abstract class RestBase {
         // Mock customer service
         given(customerService.getOne(1L)).willReturn(getCustomer(1L));
         given(customerService.getAll()).willReturn(getCustomers());
+        
+        given(customerService.getOne(999L)).willThrow(EntityNotFoundException.class);
 
         // Mock account service
         given(accountService.getOne(1L)).willReturn(getAccount(1L, 1L, Currency.CHF));
@@ -110,7 +115,7 @@ public abstract class RestBase {
                         .setDateFormat(new SimpleDateFormat("yyyy-MM-dd")));
         RestAssuredMockMvc.standaloneSetup(
                 MockMvcBuilders.standaloneSetup(appStatusController, customerController, accountController)
-                        .setMessageConverters(transactionMessageConverter));
+                        .setMessageConverters(transactionMessageConverter).setControllerAdvice(new RestResponseEntityExceptionHandler())/*, new RestResponseEntityExceptionHandler()*/);
     }
 
     private List<Customer> getCustomers() {
