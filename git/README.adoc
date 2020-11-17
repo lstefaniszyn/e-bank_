@@ -1,0 +1,33 @@
+How to install and use git hooks
+================================
+
+= Hooks used in Ebank repo
+Ebank repository uses following client-side hooks:
+
+[[pre-push]]
+Pre-push::
+    Pre-push hook is used to ensure that code being published in repository is of good quality. For quality checks performed, see xref:qualitychecks[Quality checks] section.
+
+[[qualitychecks]]
+== Quality checks
+Following quality checks are performed as part of the xref:pre-push[`pre-push`] hook.
+
+. https://pmd.github.io/[pmd] static analysis to find common flaws such as unused variable, empty catch blocks,unnecessary object creation etc.
+. http://findbugs.sourceforge.net/[findbugs] static analysis to find bugs.
+. https://www.jacoco.org/jacoco/[jacoco] for checking unit test code coverage - should be above 80%.
+
+= Hooks installation
+
+To install the hooks, run appropriate scripts from *project's base directory* as described below. You _may_ need to make script executable first.
+
+Hooks need to be installed manually on each developer's machine.
+
+== Windows batch script
+
+Pre-push::
+    Run +git\scripts\pre-push-install.cmd+
+
+== Linux shell (Git Bash)
+
+Pre-push::
+    Run +./git/scripts/pre-push-install.sh+
