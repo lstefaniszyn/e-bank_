@@ -4,11 +4,11 @@ import com.example.ebank.models.Currency;
 
 public interface ExternalAPIClient {
 
-    public static final Currency TARGET_CURRENCY = Currency.GBP;
+    Currency TARGET_CURRENCY = Currency.GBP;
 
-    public Double getExchangeRate(Currency currency);
+    Double getExchangeRate(Currency currency);
 
-    default public Currency getTargetCurrency() {
+    default Currency getTargetCurrency() {
         return TARGET_CURRENCY;
     }
 }
