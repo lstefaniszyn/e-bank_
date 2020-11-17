@@ -123,6 +123,35 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <!-- Profile for running static analysis tools -->
+            <!-- Used by git pre-push hook -->
+            <id>static-analysis</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-pmd-plugin</artifactId>
+                        <version>3.13.0</version>
+                        <configuration>
+                            <failOnViolation>true</failOnViolation>
+                            <printFailingErrors>true</printFailingErrors>
+                            <targetJdk>${java.version}</targetJdk>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>pmd-analysis</id>
+                                <goals>
+                                    <goal>check</goal>
+                                    <goal>pmd</goal>
+                                </goals>
+                                <phase>test</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     <dependencies>

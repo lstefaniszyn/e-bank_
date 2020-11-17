@@ -6,7 +6,10 @@ Ebank repository uses following client-side hooks:
 
 [[pre-push]]
 Pre-push::
-    Pre-push hook is used to ensure that code being published in repository is of good quality. For quality checks performed, see xref:qualitychecks[Quality checks] section.
+    Pre-push hook is used to ensure that code being published in repository is of good quality. For quality checks performed, see xref:qualitychecks[Quality checks] section. Due to performing extensive actions, push may take some time. +
+    Pre-push hook uses Maven +static-analysis+ profile which adds tools configuration and executes tools (and generates reports) during +test+ phase. You may run +mvn -P static-analysis clean test+ manually to see if your code will pass quality checks before pushing it to repository (so you have a chance to fix issues).
+
+TIP: To investigate why push didn't happen, use +git push+ command from terminal instead of using git client built into IDE. You may also try to find tools' reports (should be under +target/site+ directory).
 
 [[qualitychecks]]
 == Quality checks
