@@ -17,7 +17,9 @@ Following quality checks are performed as part of the xref:pre-push[`pre-push`] 
 
 . https://pmd.github.io/[pmd] static analysis to find common flaws such as unused variable, empty catch blocks,unnecessary object creation etc.
 . http://findbugs.sourceforge.net/[findbugs] static analysis to find bugs.
-. https://www.jacoco.org/jacoco/[jacoco] for checking unit test code coverage - should be above 80%.
+. https://www.jacoco.org/jacoco/[jacoco] for checking unit test code coverage - should be above 80% (this is the goal, you can set lower value by specifying +jacoco.instruction.minimum+ property, e.g. +mvn -P static-analysis clean test -Djacoco.instruction.minimum=0.65+). Threshold is also specified in +src/test/resources/static-analysis/static-analysis.properties+ file that is read by Maven during +git push+.
+
+TIP: Good practice is to never decrease threshold. Once certain level of coverage is achieved, it should be maintained or increased when more tests are added.
 
 = Hooks installation
 
