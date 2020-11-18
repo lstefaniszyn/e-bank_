@@ -56,7 +56,7 @@ import org.springframework.cloud.contract.spec.Contract
 		}
 	},
 	Contract.make {
-		name("should Not Found exception returned")
+		name("get customer not found response")
 		request {
 			method('GET')
 			url( $(p("api/v1/customers/999"), c("api/v1/customers/999")) )
@@ -69,10 +69,10 @@ import org.springframework.cloud.contract.spec.Contract
 		}
 	},
 	Contract.make {
-		name("invalid customer id provided")
+		name("get customer with invalid customer id")
 		request {
 			method('GET')
-			url( $(p("api/v1/customers/abc"), c("api/v1/customers/abc")) )
+			url( $(p("api/v1/customers/12c"), c("api/v1/customers/${regex('(?!^\\d+$)^.+$')}")) )
 			headers {
 				contentType(applicationJson())
 			}

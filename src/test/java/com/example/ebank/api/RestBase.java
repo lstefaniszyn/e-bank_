@@ -97,8 +97,11 @@ public abstract class RestBase {
 
         // Mock account service
         given(accountService.getOne(1L)).willReturn(getAccount(1L, 1L, Currency.CHF));
+        given(accountService.getOne(2L)).willReturn(getAccount(2L, 2L, Currency.CHF));
         given(accountService.getByCustomer(1L)).willReturn(getAccounts(1L));
 
+        given(accountService.getOne(999L)).willThrow(EntityNotFoundException.class);
+        
         // Mock transaction service
         final String DATE_FORMAT = "yyyy-MM";
         final DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder()
