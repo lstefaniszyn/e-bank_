@@ -163,7 +163,6 @@
                                 <id>pmd-analysis</id>
                                 <goals>
                                     <goal>check</goal>
-                                    <goal>pmd</goal>
                                 </goals>
                                 <phase>test</phase>
                             </execution>
@@ -222,11 +221,32 @@
                                     </rules>
                                     <includes>
                                         <include>com/example/ebank/**/*.class</include>
-                                        <include>com/example/ebank/EBankApplication.class</include>
                                     </includes>
+                                    <excludes>
+                                        <exclude>com/example/ebank/EBankApplication.class</exclude>
+                                        <exclude>com/example/ebank/configuration/*.class</exclude>
+                                        <exclude>com/example/ebank/repositories/Mock*.class</exclude>
+                                    </excludes>
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.github.spotbugs</groupId>
+                        <artifactId>spotbugs-maven-plugin</artifactId>
+                        <version>4.1.4</version>
+                        <executions>
+                            <execution>
+                                <id>spotbugs-report</id>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                                <phase>test</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <excludeFilterFile>src/test/resources/static-analysis/spotbugs-exclude.xml</excludeFilterFile>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
