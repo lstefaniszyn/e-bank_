@@ -239,7 +239,7 @@
                             <execution>
                                 <id>spotbugs-report</id>
                                 <goals>
-                                    <goal>check</goal>
+                                    <!-- <goal>check</goal> -->
                                 </goals>
                                 <phase>test</phase>
                             </execution>
