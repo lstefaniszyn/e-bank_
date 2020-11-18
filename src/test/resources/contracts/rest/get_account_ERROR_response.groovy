@@ -15,7 +15,7 @@ import org.springframework.cloud.contract.spec.Contract
 		}
 	},
 	Contract.make {
-		name("get account not autorized response")
+		name("get account not authorized response")
 		request {
 			method('GET')
 			url( $(p("api/v1/customers/1/accounts/2"), c("api/v1/customers/1/accounts/2")) )

@@ -28,6 +28,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -116,9 +117,12 @@ public abstract class RestBase {
         transactionMessageConverter
                 .setObjectMapper(new ObjectMapper().disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                         .setDateFormat(new SimpleDateFormat("yyyy-MM-dd")));
+        ResponseEntityExceptionHandler responseEntityExceptionHandler = new RestResponseEntityExceptionHandler();
         RestAssuredMockMvc.standaloneSetup(
                 MockMvcBuilders.standaloneSetup(appStatusController, customerController, accountController)
-                        .setMessageConverters(transactionMessageConverter).setControllerAdvice(new RestResponseEntityExceptionHandler())/*, new RestResponseEntityExceptionHandler()*/);
+                        .setMessageConverters(transactionMessageConverter)
+                        .setControllerAdvice(responseEntityExceptionHandler)
+                        );
     }
 
     private List<Customer> getCustomers() {
