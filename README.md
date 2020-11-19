@@ -2,20 +2,20 @@
 
 REST API for an E-Banking Portal for returning list of transactions. Contains following features:
 
-- Java 11
-- Spring Boot 2
-- Postgres DB
-- Swagger 2 API documentation
-- MrChecker for integration testing
-- JMeter for performace testing
-- CI/CD Jenkins pipeline configured
-- Two environments (DEV and PROD)
+-   Java 11
+-   Spring Boot 2
+-   Postgres DB
+-   Swagger 2 API documentation
+-   MrChecker for integration testing
+-   JMeter for performace testing
+-   CI/CD Jenkins pipeline configured
+-   Two environments (DEV and PROD)
 
 ## Code formatter
 
 Import code formatter into your IDE
 
-Download:  [Format_code_standards](Utility/eclipse_format_code_standards.xml)
+Download: [Format_code_standards](Utility/eclipse_format_code_standards.xml)
 
 ### IntelliJ
 
@@ -39,9 +39,9 @@ Download:  [Format_code_standards](Utility/eclipse_format_code_standards.xml)
 
 ## Endpoints
 
-- Application - http://localhost:8080/
-- Swagger UI - http://localhost:8080/swagger-ui.html
-- Application status - http://localhost:8080/api/
+-   Application - http://localhost:8080/
+-   Swagger UI - http://localhost:8080/swagger-ui.html
+-   Application status - http://localhost:8080/api/
 
 ## Building & running
 
@@ -82,13 +82,15 @@ curl --location --request GET 'localhost:8080/api/v1/transactions?date=2019-01&s
 #### Application properties
 
 The way of communicating with external exchange rate API is controlled by 3 properties (example properties in `application-dev.properties` file):
-- service.exchangerate.client - which type of client to use, possible values: `feign`, `resttemplate`
-- service.exchangerate.url - URL (host and optionally port) on which exchange rate service is available (not including endpoint). See below for details.
-- eureka.client.enabled - whether application should register itself in Eureka service discovery server, required for `resttemplate` client type
+
+-   service.exchangerate.client - which type of client to use, possible values: `feign`, `resttemplate`
+-   service.exchangerate.url - URL (host and optionally port) on which exchange rate service is available (not including endpoint). See below for details.
+-   eureka.client.enabled - whether application should register itself in Eureka service discovery server, required for `resttemplate` client type
 
 #### Spring Cloud Eureka server
 
 Properties settings:
+
 ```
 service.exchangerate.client=resttemplate
 service.exchangerate.url=http://exchange-rate-service
@@ -120,6 +122,7 @@ RestTemplate-based client is implemented in `com.example.ebank.extapi.client.Exc
 #### Spring Feign client
 
 Properties settings:
+
 ```
 service.exchangerate.client=feign
 service.exchangerate.url=http://localhost:8081
@@ -139,7 +142,6 @@ mvn -Pdev -DskipTests=true -Dspring-boot.run.arguments="--db.user=<user> --db.pa
 ```
 
 Feign-based client is implemented in `com.example.ebank.extapi.client.ExchangeRateFeignClient` class using `com.example.ebank.extapi.client.FeignAPIClient` interface for defining REST operations provided by external API.
-
 
 ## Security
 
@@ -223,9 +225,9 @@ Use `mock` profile while running the application to switch to mocked data instea
 
 Mocked data are located in json files in: `src/main/resources/data`.
 
-- `accounts.json` contains 100 accounts with subsequent ids.
-- `customers.json` contains 152 customers with subsequent ids, transaction list is not present here.
-- `transactions_1_1.json` contains 10 transactions per month for each month in period 01/2018 - 12/2019. For one customer and one account, i.e. the same transactions are returned regardless of requested customer and/or account.
+-   `accounts.json` contains 100 accounts with subsequent ids.
+-   `customers.json` contains 152 customers with subsequent ids, transaction list is not present here.
+-   `transactions_1_1.json` contains 10 transactions per month for each month in period 01/2018 - 12/2019. For one customer and one account, i.e. the same transactions are returned regardless of requested customer and/or account.
 
 ## Serenity test reports
 
@@ -237,76 +239,89 @@ For BDD-style testing, steps definitions must be added and optionally also Cucum
 ### Dependencies
 
 There are a couple of things to be aware of when using Serenity:
+
 1.  Serenity only works with JUnit 4. Spring Boot Test starter automatically includes JUnit 5 (Jupiter), so following change needs to be done in `pom.xml`:
+
     ```xml
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.junit.jupiter</groupId>
-					<artifactId>junit-jupiter</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+    	<dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-test</artifactId>
+    		<scope>test</scope>
+    		<exclusions>
+    			<exclusion>
+    				<groupId>org.junit.jupiter</groupId>
+    				<artifactId>junit-jupiter</artifactId>
+    			</exclusion>
+    		</exclusions>
+    	</dependency>
     ```
+
     Also, JUnit 4 has to be included in classpath:
+
     ```xml
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.13</version>
-			<scope>test</scope>
-		</dependency>
+    	<dependency>
+    		<groupId>junit</groupId>
+    		<artifactId>junit</artifactId>
+    		<version>4.13</version>
+    		<scope>test</scope>
+    	</dependency>
     ```
+
     There is [some project](https://github.com/fabianlinz/serenity-junit5) to integrate Serenity with JUnit 5.
 
 2.  To integrate with latest version (4.3.1) of RestAssured, following changes in `pom.xml` are required:
 
     Include `serenity-rest-assured` integration library
+
     ```xml
-		<dependency>
-			<groupId>net.serenity-bdd</groupId>
-			<artifactId>serenity-rest-assured</artifactId>
-			<version>${serenity.version}</version>
-			<scope>test</scope>
-		</dependency>
+    	<dependency>
+    		<groupId>net.serenity-bdd</groupId>
+    		<artifactId>serenity-rest-assured</artifactId>
+    		<version>${serenity.version}</version>
+    		<scope>test</scope>
+    	</dependency>
     ```
+
     Use correct version of RestAssured:
+
     ```xml
-		<!-- rest-assured version working with serenity-rest (minimal: 4.2.0) -->
-		<dependency>
-			<groupId>io.rest-assured</groupId>
-			<artifactId>rest-assured</artifactId>
-			<version>${rest-assured.version}</version>
-		</dependency>
-		<!-- need to explicitly declare json-path (and xml-path) in correct version -->
-		<dependency>
-			<groupId>io.rest-assured</groupId>
-			<artifactId>json-path</artifactId>
-			<version>${rest-assured.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.rest-assured</groupId>
-			<artifactId>xml-path</artifactId>
-			<version>${rest-assured.version}</version>
-		</dependency>
+    	<!-- rest-assured version working with serenity-rest (minimal: 4.2.0) -->
+    	<dependency>
+    		<groupId>io.rest-assured</groupId>
+    		<artifactId>rest-assured</artifactId>
+    		<version>${rest-assured.version}</version>
+    	</dependency>
+    	<!-- need to explicitly declare json-path (and xml-path) in correct version -->
+    	<dependency>
+    		<groupId>io.rest-assured</groupId>
+    		<artifactId>json-path</artifactId>
+    		<version>${rest-assured.version}</version>
+    	</dependency>
+    	<dependency>
+    		<groupId>io.rest-assured</groupId>
+    		<artifactId>xml-path</artifactId>
+    		<version>${rest-assured.version}</version>
+    	</dependency>
     ```
+
     Use correct version of Groovy:
+
     ```xml
-	<properties>
-		<groovy.version>3.0.3</groovy.version>
-	</properties>
+    <properties>
+    	<groovy.version>3.0.3</groovy.version>
+    </properties>
     ```
 
 ### Report generation
 
 In order to generate Serenity report from integration tests, invoke following:
+
 ```bash
 mvn clean integration-test serenity:aggregate
 ```
+
 You can also run report generation automatically during `mvn verify` goal. `pom.xml` configuration:
+
 ```xml
 	<build>
 		<plugins>
@@ -327,6 +342,7 @@ You can also run report generation automatically during `mvn verify` goal. `pom.
 		</plugins>
 	</build>
 ```
+
 Generated report is available under `target/site/serenity` folder.
 
 ### Test case writing
@@ -336,6 +352,7 @@ For convenience and clarity, integration test cases should be created under `src
 To include REST requests in the report, `SerenityRest` class should be used instead of `RestAssured`. `SerenityRest` class is a wrapper around `RestAssured`, so all familiar methods are available.
 
 Example:
+
 ```java
 SerenityRest.get(endpoint.getEndpoint());
 SerenityRest.restAssuredThat(resp -> resp.statusCode(equalTo(200)));
