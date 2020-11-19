@@ -30,12 +30,9 @@ node{
     }
 
     stage('Static analysis') {
-        docker.image('rawdee/pmd:latest').inside('-v $PWD/src/main/java:/src'){
-            sh(script: 'pmd -language java -dir . -rulesets rulesets/java/quickstart.xml -f html > pmd.html', returnStatus: true)
-            // TODO: publishHTML report
+        docker.image('maven:3.6.3-openjdk-11').inside{
+            sh 'mvn -P static-analysis test'
         }
-        // TODO: checkstyle
-        // TODO: findbugs
     }
     stage('Security scan') {
         echo 'TODO: Security scan'
