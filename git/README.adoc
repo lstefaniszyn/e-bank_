@@ -16,7 +16,7 @@ TIP: To investigate why push didn't happen, use +git push+ command from terminal
 Following quality checks are performed as part of the xref:pre-push[`pre-push`] hook.
 
 . https://pmd.github.io/[pmd] static analysis to find common flaws such as unused variable, empty catch blocks,unnecessary object creation etc.
-. https://github.com/spotbugs/spotbugs[spotbugs] static analysis to find bugs.
+. https://github.com/spotbugs/spotbugs[spotbugs] static analysis to find bugs. Spotbugs exclusions are configured in +src/test/resources/static-analysis/spotbugs-exclude.xml+ filter file.
 . https://www.jacoco.org/jacoco/[jacoco] for checking unit test code coverage - should be above 80% (this is the goal, you can set lower value by specifying +jacoco.instruction.minimum+ property, e.g. +mvn -P static-analysis clean test -Djacoco.instruction.minimum=0.65+). Threshold is also specified in +src/test/resources/static-analysis/static-analysis.properties+ file that is read by Maven during +git push+.
 
 TIP: Good practice is to never decrease threshold. Once certain level of coverage is achieved, it should be maintained or increased when more tests are added.
