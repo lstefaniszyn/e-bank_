@@ -3,6 +3,7 @@ package com.example.ebank.api;
 import com.example.ebank.controllers.AccountController;
 import com.example.ebank.controllers.AppStatusController;
 import com.example.ebank.controllers.CustomerController;
+import com.example.ebank.controllers.RestResponseEntityExceptionHandler;
 import com.example.ebank.mappers.*;
 import com.example.ebank.models.*;
 import com.example.ebank.services.AccountService;
@@ -27,6 +28,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -37,6 +39,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+
+import javax.persistence.EntityNotFoundException;
 
 import static org.mockito.BDDMockito.given;
 
@@ -89,11 +93,16 @@ public abstract class RestBase {
         // Mock customer service
         given(customerService.getOne(1L)).willReturn(getCustomer(1L));
         given(customerService.getAll()).willReturn(getCustomers());
+        
+        given(customerService.getOne(999L)).willThrow(EntityNotFoundException.class);
 
         // Mock account service
         given(accountService.getOne(1L)).willReturn(getAccount(1L, 1L, Currency.CHF));
+        given(accountService.getOne(2L)).willReturn(getAccount(2L, 2L, Currency.CHF));
         given(accountService.getByCustomer(1L)).willReturn(getAccounts(1L));
 
+        given(accountService.getOne(999L)).willThrow(EntityNotFoundException.class);
+        
         // Mock transaction service
         final String DATE_FORMAT = "yyyy-MM";
         final DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder()
@@ -108,9 +117,12 @@ public abstract class RestBase {
         transactionMessageConverter
                 .setObjectMapper(new ObjectMapper().disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                         .setDateFormat(new SimpleDateFormat("yyyy-MM-dd")));
+        ResponseEntityExceptionHandler responseEntityExceptionHandler = new RestResponseEntityExceptionHandler();
         RestAssuredMockMvc.standaloneSetup(
                 MockMvcBuilders.standaloneSetup(appStatusController, customerController, accountController)
-                        .setMessageConverters(transactionMessageConverter));
+                        .setMessageConverters(transactionMessageConverter)
+                        .setControllerAdvice(responseEntityExceptionHandler)
+                        );
     }
 
     private List<Customer> getCustomers() {
