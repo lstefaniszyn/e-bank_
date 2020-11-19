@@ -21,7 +21,7 @@ node{
         } finally {
             junit 'target/surefire-reports/*.xml'
             //allure includeProperties: true, jdk: '', report: 'target/site/allure/report/unit', results: [[path: 'target/allure/results/unit']]
-            publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'target/site/allure', reportFiles: 'index.html', reportName: 'Allure Unit Tests Report', reportTitles: ''])
+            publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'target/site/allure/report/unit', reportFiles: 'index.html', reportName: 'Allure Unit Tests Report', reportTitles: ''])
             //jacoco classPattern: 'target/classes', exclusionPattern: '**/*Test*.class', execPattern: 'target/jacoco.exec', inclusionPattern: '**/*.class', sourcePattern: 'src/main/java'
         }
         if (unitTestsFailed) {
