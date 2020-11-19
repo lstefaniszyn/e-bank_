@@ -1,9 +1,9 @@
 package com.example.ebank.utils.logger;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import com.google.common.base.Charsets;
@@ -184,9 +184,9 @@ public class BFLoggerInstance {
      */
     protected void startSeparateLog() {
         try {
-            PrintWriter pw = new PrintWriter(getLogFile());
+            PrintWriter pw = new PrintWriter(getLogFile(), StandardCharsets.UTF_8);
             pw.close();
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

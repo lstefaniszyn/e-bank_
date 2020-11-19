@@ -3,4 +3,18 @@
     <Match>
         <Package name="~com\.example\.ebank\.generated\..*" />
     </Match>
+    <Match>
+        <Package name="~com\.example\.ebank\.models.*" />
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2" />
+    </Match>
+    <Match>
+        <Class name="com.example.ebank.services.KafkaProducer" />
+        <Method name="sendMessage" />
+        <Bug pattern="NP_NULL_PARAM_DEREF_ALL_TARGETS_DANGEROUS" />
+    </Match>
+    <Match>
+        <Class name="com.example.ebank.utils.logger.BFLoggerInstance" />
+        <Method name="getDirectory" />
+        <Bug pattern="RV_RETURN_VALUE_IGNORED_BAD_PRACTICE" />
+    </Match>
 </FindBugsFilter>
