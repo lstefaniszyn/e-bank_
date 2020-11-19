@@ -130,6 +130,18 @@
             <build>
                 <plugins>
                     <plugin>
+                        <!-- disable allure report generation -->
+                        <groupId>io.qameta.allure</groupId>
+                        <artifactId>allure-maven</artifactId>
+                        <version>2.10.0</version>
+                        <executions>
+                            <execution>
+                                <id>allure-unit-report</id>
+                                <phase>none</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <!-- dependency of pmd for source references -->
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jxr-plugin</artifactId>

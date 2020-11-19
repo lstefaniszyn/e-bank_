@@ -20,9 +20,9 @@ node{
             unitTestsFailed = true
         } finally {
             junit 'target/surefire-reports/*.xml'
-            allure includeProperties: true, jdk: '', report: 'target/site/allure/report/unit', results: [[path: 'target/allure/results/unit']]
-            jacoco classPattern: 'target/classes', exclusionPattern: '**/*Test*.class', execPattern: 'target/jacoco.exec', inclusionPattern: '**/*.class', sourcePattern: 'src/main/java'
-            publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'target/site/jacoco', reportFiles: 'index.html', reportName: 'Coverage Report', reportTitles: ''])
+            //allure includeProperties: true, jdk: '', report: 'target/site/allure/report/unit', results: [[path: 'target/allure/results/unit']]
+            publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'target/site/allure', reportFiles: 'index.html', reportName: 'Allure Unit Tests Report', reportTitles: ''])
+            //jacoco classPattern: 'target/classes', exclusionPattern: '**/*Test*.class', execPattern: 'target/jacoco.exec', inclusionPattern: '**/*.class', sourcePattern: 'src/main/java'
         }
         if (unitTestsFailed) {
             error 'Unit tests failed'
@@ -33,6 +33,8 @@ node{
         docker.image('maven:3.6.3-openjdk-11').inside{
             sh 'mvn -P static-analysis test'
         }
+        publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'target/site/jacoco', reportFiles: 'index.html', reportName: 'Coverage Report', reportTitles: ''])
+        publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'target/site', reportFiles: 'pmd.html', reportName: 'PMD Report', reportTitles: ''])
     }
     stage('Security scan') {
         echo 'TODO: Security scan'
