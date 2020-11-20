@@ -33,6 +33,7 @@ public class GenerateAdocsFromContractsTests {
     public void should_convert_contracts_into_adoc() throws IOException {
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(header);
+        
         final Path rootDir = this.contracts.getFile()
                 .toPath();
         
