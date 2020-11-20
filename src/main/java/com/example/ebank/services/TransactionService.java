@@ -7,8 +7,8 @@ import java.time.LocalDate;
 
 public interface TransactionService {
 
-    public Page<Transaction> findInMonthPaginated(LocalDate date, int page, int size);
+    Page<Transaction> findInMonthPaginated(LocalDate date, int page, int size);
 
-    public Page<Transaction> findForAccountInMonthPaginated(Long accountId, LocalDate date, int page, int size);
+    Page<Transaction> findForAccountInMonthPaginated(Long accountId, LocalDate date, int page, int size);
 
 }

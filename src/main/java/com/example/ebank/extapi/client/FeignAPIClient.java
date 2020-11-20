@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface FeignAPIClient {
 
     @RequestMapping(method = RequestMethod.GET, path = "/exchangeRate")
-    public Double getExchangeRate(@RequestParam("baseCurrency") String baseCurrency,
+    Double getExchangeRate(@RequestParam("baseCurrency") String baseCurrency,
             @RequestParam("targetCurrency") String targetCurrency);
 }

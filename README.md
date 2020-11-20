@@ -11,20 +11,24 @@ REST API for an E-Banking Portal for returning list of transactions. Contains fo
 -   CI/CD Jenkins pipeline configured
 -   Two environments (DEV and PROD)
 
-## Code formatter
+## Development environment
+
+Section describes additional setup that is needed if you are going to contribute to repository.
+
+### Code formatter
 
 Import code formatter into your IDE
 
 Download: [Format_code_standards](Utility/eclipse_format_code_standards.xml)
 
-### IntelliJ
+#### IntelliJ
 
 1. Download the config (attached)
 2. In the Intellij settings (Ctrl+Alt+S), go to Code Style
 3. Next to Scheme, click Manage and then Import...
 4. Select 'Eclipse XML Profile' and browse to the downloaded config file.
 
-### Eclipse
+#### Eclipse
 
 1. Download the config (attached)
 2. Navigate to Window->Preferences
@@ -32,10 +36,16 @@ Download: [Format_code_standards](Utility/eclipse_format_code_standards.xml)
 4. Click on Import and navigate to the downloaded config file
 5. Click Apply and Ok
 
-### Visual Studio Code
+#### Visual Studio Code
 
 1. Install the extension [Language Support for Java(TM) by Red Hat](https://marketplace.visualstudio.com/items?itemName=redhat.java).
 2. File → Preferences → Settings → java.format.settings.url: Set URL (or local file path) pointing to Eclipse Formatter Profile file.
+
+### Git hooks
+
+Repository uses client-side git hooks that need to be configured in each development machine separately. See [Git hooks](git/README.adoc) document for more details.
+
+Git hooks installation is required.
 
 ## Endpoints
 

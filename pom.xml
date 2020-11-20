@@ -123,6 +123,146 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <!-- Profile for running static analysis tools -->
+            <!-- Used by git pre-push hook -->
+            <id>static-analysis</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <!-- disable allure report generation -->
+                        <groupId>io.qameta.allure</groupId>
+                        <artifactId>allure-maven</artifactId>
+                        <version>2.10.0</version>
+                        <executions>
+                            <execution>
+                                <id>allure-unit-report</id>
+                                <phase>none</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <!-- dependency of pmd for source references -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jxr-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <executions>
+                            <execution>
+                                <id>jxr-xref-generation</id>
+                                <goals>
+                                    <goal>jxr</goal>
+                                </goals>
+                                <phase>generate-sources</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-pmd-plugin</artifactId>
+                        <version>3.13.0</version>
+                        <configuration>
+                            <failOnViolation>true</failOnViolation>
+                            <printFailingErrors>true</printFailingErrors>
+                            <targetJdk>${java.version}</targetJdk>
+                            <linkXref>true</linkXref>
+                            <sourceEncoding>utf-8</sourceEncoding>
+                            <excludeRoots>
+                                <excludeRoot>target/generated-sources</excludeRoot>
+                            </excludeRoots>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>pmd-analysis</id>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                                <phase>test</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <!-- for reading additional properties file -->
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>properties-maven-plugin</artifactId>
+                        <version>1.0.0</version>
+                        <executions>
+                            <execution>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>read-project-properties</goal>
+                                </goals>
+                                <configuration>
+                                    <files>
+                                        <file>src/test/resources/static-analysis/static-analysis.properties</file>
+                                    </files>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.6</version>
+                        <executions>
+                            <execution>
+                                <id>default-prepare-agent</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>jacoco-report</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>report</goal>
+                                    <goal>check</goal>
+                                </goals>
+                                <configuration>
+                                    <haltOnFailure>true</haltOnFailure>
+                                    <rules>
+                                        <rule>
+                                            <element>BUNDLE</element>
+                                            <limits>
+                                                <limit>
+                                                    <counter>INSTRUCTION</counter>
+                                                    <value>COVEREDRATIO</value>
+                                                    <minimum>${jacoco.instruction.minimum}</minimum>
+                                                </limit>
+                                            </limits>
+                                        </rule>
+                                    </rules>
+                                    <includes>
+                                        <include>com/example/ebank/**/*.class</include>
+                                    </includes>
+                                    <excludes>
+                                        <exclude>com/example/ebank/EBankApplication.class</exclude>
+                                        <exclude>com/example/ebank/configuration/*.class</exclude>
+                                        <exclude>com/example/ebank/repositories/Mock*.class</exclude>
+                                    </excludes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.github.spotbugs</groupId>
+                        <artifactId>spotbugs-maven-plugin</artifactId>
+                        <version>4.1.4</version>
+                        <executions>
+                            <execution>
+                                <id>spotbugs-report</id>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                                <phase>test</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <excludeFilterFile>src/test/resources/static-analysis/spotbugs-exclude.xml</excludeFilterFile>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     <dependencies>
@@ -462,26 +602,6 @@
                             <resultsDirectory>allure/results/it</resultsDirectory>
                             <reportDirectory>${project.basedir}/target/site/allure/report/it</reportDirectory>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.6</version>
-                <executions>
-                    <execution>
-                        <id>default-prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>jacoco-report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>

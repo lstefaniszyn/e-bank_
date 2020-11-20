@@ -31,9 +31,6 @@ import com.example.ebank.utils.logger.BFLogger;
 @Service
 public class AsyncTransactionService {
 
-    @Value("${spring.kafka.bootstrap-servers}")
-    private String bootstrapServers;
-
     @Value("${default.kafka.output.topic.name}")
     private String outputTopic;
 
@@ -92,7 +89,7 @@ public class AsyncTransactionService {
     private Page<Transaction> getPage(int page, int size, List<Transaction> allTransactions) {
         Pageable pageable = PageRequest.of(page, size);
         int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), allTransactions.size());
+        int end = Math.min(start + pageable.getPageSize(), allTransactions.size());
         List<Transaction> transactions = allTransactions.subList(start, end);
         return new PageImpl<Transaction>(transactions, pageable, size);
     }
