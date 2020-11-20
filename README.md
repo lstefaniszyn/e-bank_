@@ -73,7 +73,7 @@ To run jar app with arguments
 
 ### Running with external exchange rate service
 
-Exchange rate service is implemented as a mocked microservice (`com.example.exchangerate.microservice.ExchangeRateApplication` class).
+Exchange rate service is implemented as a mocked microservice in https://github.com/lstefaniszyn/e-bank_exchange-rate repository.
 
 EBank application can be run without exchange rate service. In this case, no currency conversion is performed.
 
@@ -115,11 +115,7 @@ To run Eureka registration server, use below command.
 mvn spring-boot:run -DskipTests=true -Dspring.mainClass=com.example.exchangerate.registration.RegistrationServer
 ```
 
-Then run exchange rate service using below command.
-
-```bash
-mvn spring-boot:run -DskipTests=true -Dspring.mainClass=com.example.exchangerate.microservice.ExchangeRateApplication
-```
+Then run exchange rate service.
 
 Then run EBank application as usual, for example
 
@@ -139,11 +135,7 @@ service.exchangerate.url=http://localhost:8081
 eureka.client.enabled=false
 ```
 
-For communication with third-party APIs, Feign client can be used. To test it, run exchange rate application first:
-
-```bash
-mvn spring-boot:run -DskipTests=true -Dspring.mainClass=com.example.exchangerate.microservice.ExchangeRateApplication
-```
+For communication with third-party APIs, Feign client can be used. To test it, run exchange rate application first.
 
 Then run EBank application as usual, for example
 
