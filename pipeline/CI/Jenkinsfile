@@ -7,7 +7,7 @@ node{
 
     stage('Compile'){
         docker.image('maven:3.6.3-openjdk-11').inside{
-            sh 'mvn compile'
+            sh 'mvn compile test-compile'
         }
     }
     stage('Test'){
