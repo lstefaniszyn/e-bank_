@@ -46,7 +46,7 @@ public class TransactionServiceImpl implements TransactionService {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "date"));
         LocalDate startDate = date.withDayOfMonth(1);
         LocalDate endDate = date.withDayOfMonth(date.lengthOfMonth());
-        Page<Transaction> transactionsPage = transactionRepository.findByValueDateBetween(Date.valueOf(startDate),
+        Page<Transaction> transactionsPage = transactionRepository.findByDateBetween(Date.valueOf(startDate),
             Date.valueOf(endDate), pageable);
         Map<Currency, Double> exchangeRates = new HashMap<>();
         return transactionsPage.map(t -> {
@@ -66,7 +66,7 @@ public class TransactionServiceImpl implements TransactionService {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "date"));
         LocalDate startDate = date.withDayOfMonth(1);
         LocalDate endDate = date.withDayOfMonth(date.lengthOfMonth());
-        return transactionRepository.findByValueDateBetweenAndAccountId(Date.valueOf(startDate), Date.valueOf(endDate),
+        return transactionRepository.findByDateBetweenAndAccountId(Date.valueOf(startDate), Date.valueOf(endDate),
             accountId, pageable);
     }
 

@@ -57,6 +57,8 @@ Git hooks installation is required.
 
 To run spring app with application-{profile_name}.properties Profile. Default is "dev"
 
+> mvn -Pmock spring-boot:run
+
 > mvn -Plocal spring-boot:run
 
 > mvn -Pdev spring-boot:run
@@ -147,7 +149,7 @@ Feign-based client is implemented in `com.example.ebank.extapi.client.ExchangeRa
 
 ## Security
 
-All endpoints which path starts from `api/v1/customers/` are NOT secured.
+The endpoints `/api` and `/api/v1/customers` are NOT secured.
 The rest resources require authorization.
 
 ### JWT
@@ -219,17 +221,39 @@ jwt.sec=
 
 <img src="Database\RBS-CodingChallenge_DatabaseModel.svg"/>
 
-## Mocked data
+## Database version control - Flyway
 
-Use `mock` profile while running the application to switch to mocked data instead of PostgreSQL.
+Flyway is used as a db version control. Flyway files are located in paths:
+
+- `src/main/resources/db/migration` - all script connected with db schema
+- `src/main/resources/db/generate` - scripts used to generate sample data
+- `src/main/resources/db/populate` - scripts with simple inserting sample data 
+
+Please be aware that 
+
+- `/generate` and `populate` scripts are mutually exclusive, you should attach at most one of them to the specific profile
+- `/generate` scripts can run only on PostgreSQL, so they cannot be used with h2 database
+
+Flyway scripts can be attached to profile by `spring.flyway.locations` property, e.g.:
+
+> spring.flyway.locations=classpath:db/migration,classpath:db/generate
+
+## Mock profile
+
+Use `mock` profile while running the application or tests to switch to h2 database in memory instead of PostgreSQL.
 
 > mvn -Pmock spring-boot:run
 
-Mocked data are located in json files in: `src/main/resources/data`.
+> mvn -Pmock test
 
--   `accounts.json` contains 100 accounts with subsequent ids.
--   `customers.json` contains 152 customers with subsequent ids, transaction list is not present here.
--   `transactions_1_1.json` contains 10 transactions per month for each month in period 01/2018 - 12/2019. For one customer and one account, i.e. the same transactions are returned regardless of requested customer and/or account.
+The h2 db in memory is populated with mocked data. Flyway script is located in a path: `src/main/resources/db/populate`.
+
+The mocked data include:
+
+- 20 customers with subsequent ids
+- 27 accounts with subsequent ids (1 or 2 account(s) per customer)
+- from 24 to 30 transactions per month (for each month in period 01/2018 - 12/2019) for first 15 accounts
+
 
 ## Serenity test reports
 
