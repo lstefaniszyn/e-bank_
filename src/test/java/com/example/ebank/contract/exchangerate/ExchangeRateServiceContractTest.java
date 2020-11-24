@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureStubRunner(ids = "com.example:exchangerate:+:stubs:8095", stubsMode = StubsMode.LOCAL)
 @SpringBootTest(classes = EBankApplication.class, webEnvironment = WebEnvironment.MOCK)
 @DirtiesContext
-@ActiveProfiles("mock")
+@ActiveProfiles({"mock","it-local"})
 public class ExchangeRateServiceContractTest {
 	
 	@Autowired
