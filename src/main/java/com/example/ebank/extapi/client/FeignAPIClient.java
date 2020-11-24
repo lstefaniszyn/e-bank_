@@ -5,10 +5,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.ebank.generated.dto.InlineResponse200Dto;
+
 @FeignClient(name = "exchangerate", url = "${service.exchangerate.url}")
 public interface FeignAPIClient {
 
     @RequestMapping(method = RequestMethod.GET, path = "/exchangeRate")
-    Double getExchangeRate(@RequestParam("baseCurrency") String baseCurrency,
+    InlineResponse200Dto getExchangeRate(@RequestParam("baseCurrency") String baseCurrency,
             @RequestParam("targetCurrency") String targetCurrency);
 }

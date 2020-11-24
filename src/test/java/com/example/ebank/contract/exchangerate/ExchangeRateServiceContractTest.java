@@ -14,6 +14,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.example.ebank.EBankApplication;
 import com.example.ebank.extapi.client.ExternalAPIClient;
+import com.example.ebank.generated.dto.InlineResponse200Dto;
+import com.example.ebank.models.Currency;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureStubRunner(ids = "com.example:exchangerate:+:stubs:8095", stubsMode = StubsMode.LOCAL)
@@ -23,11 +27,16 @@ import com.example.ebank.extapi.client.ExternalAPIClient;
 public class ExchangeRateServiceContractTest {
 	
 	@Autowired
-	@Qualifier("resttemplate")
+	@Qualifier("feign")
 	private ExternalAPIClient exchangeRateService;
 	
 	@Test
-	public void testExchangerateEndpoint() {
+	public void testExchangerateEndpoint() throws Exception {
+		InlineResponse200Dto response = exchangeRateService.getExchangeRate(Currency.EUR);
+		
+		assertThat(response).isNotNull();
+		
+		assertThat(response.getValue()).isEqualByComparingTo(Double.valueOf("0.90872"));
 		
 	}
 	
