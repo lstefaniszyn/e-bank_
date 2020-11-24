@@ -4,7 +4,7 @@ import com.example.ebank.generated.dto.PageDto;
 import org.springframework.data.domain.Page;
 
 public class PageMapper {
-
+    
     public static PageDto toDto(Page page) {
         PageDto dto = new PageDto();
         dto.setSize(page.getSize());

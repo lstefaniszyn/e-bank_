@@ -21,33 +21,33 @@ import java.util.Optional;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
-
+    
     private final TransactionRepository transactionRepository;
     private ExternalAPIClient client;
-
+    
     @Autowired
     public TransactionServiceImpl(TransactionRepository transactionRepository,
-        @Value("${service.exchangerate.client}") String clientId, ApplicationContext context) {
+            @Value("${service.exchangerate.client}") String clientId, ApplicationContext context) {
         this.transactionRepository = transactionRepository;
         this.client = (ExternalAPIClient) context.getBean(clientId);
     }
-
+    
     public Page<Transaction> getAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return transactionRepository.findAll(pageable);
     }
-
+    
     public Optional<Transaction> findOne(Long id) {
         return transactionRepository.findById(id);
     }
-
+    
     @Override
     public Page<Transaction> findInMonthPaginated(LocalDate date, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "date"));
         LocalDate startDate = date.withDayOfMonth(1);
         LocalDate endDate = date.withDayOfMonth(date.lengthOfMonth());
         Page<Transaction> transactionsPage = transactionRepository.findByDateBetween(Date.valueOf(startDate),
-            Date.valueOf(endDate), pageable);
+                Date.valueOf(endDate), pageable);
         Map<Currency, Double> exchangeRates = new HashMap<>();
         return transactionsPage.map(t -> {
             if (t.getCurrency() != client.getTargetCurrency()) {
@@ -60,14 +60,14 @@ public class TransactionServiceImpl implements TransactionService {
             return t;
         });
     }
-
+    
     @Override
     public Page<Transaction> findForAccountInMonthPaginated(Long accountId, LocalDate date, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "date"));
         LocalDate startDate = date.withDayOfMonth(1);
         LocalDate endDate = date.withDayOfMonth(date.lengthOfMonth());
         return transactionRepository.findByDateBetweenAndAccountId(Date.valueOf(startDate), Date.valueOf(endDate),
-            accountId, pageable);
+                accountId, pageable);
     }
-
+    
 }
