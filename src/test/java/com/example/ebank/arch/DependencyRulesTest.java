@@ -12,5 +12,5 @@ import com.tngtech.archunit.lang.ArchRule;
 public class DependencyRulesTest {
     
     @ArchTest
-    static final ArchRule no_accesses_to_upper_package = freeze(NO_CLASSES_SHOULD_DEPEND_UPPER_PACKAGES);
+    static final ArchRule no_accesses_to_upper_package = NO_CLASSES_SHOULD_DEPEND_UPPER_PACKAGES;
 }

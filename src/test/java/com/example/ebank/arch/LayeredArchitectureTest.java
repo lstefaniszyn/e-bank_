@@ -1,15 +1,12 @@
 package com.example.ebank.arch;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
-import com.tngtech.archunit.core.domain.JavaClasses;
-import com.tngtech.archunit.core.importer.ClassFileImporter;
+
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
-
-import org.junit.Test;
+import static com.tngtech.archunit.library.freeze.FreezingArchRule.freeze;
 
 @AnalyzeClasses(packages = "com.example.ebank", importOptions = { ImportOption.DoNotIncludeTests.class, ImportOption.DoNotIncludeJars.class, ImportOption.DoNotIncludeArchives.class })
 public class LayeredArchitectureTest {
@@ -33,7 +30,7 @@ public class LayeredArchitectureTest {
     // }
     
     @ArchTest
-    static final ArchRule layer_dependencies_are_respected = layeredArchitecture()
+    static final ArchRule layer_dependencies_are_respected = freeze(layeredArchitecture()
             .layer("Controllers")
             .definedBy("com.example.ebank.controllers..")
             .layer("Services")
@@ -45,14 +42,7 @@ public class LayeredArchitectureTest {
             .whereLayer("Services")
             .mayOnlyBeAccessedByLayers("Controllers")
             .whereLayer("Repositories")
-            .mayOnlyBeAccessedByLayers("Services");
-    
-    // .ignoreDependency(RestBase.class, AccountService.class);
-    // .ignoreDependency(origin, AppStatusController.class)
-    // AsyncTransactionService
-    // CustomerController
-    // CustomerService
-    // TransactionService
+            .mayOnlyBeAccessedByLayers("Services"));
     
     // @ArchTest
     // static final ArchRule layer_dependencies_are_respected_with_exception = layeredArchitecture()

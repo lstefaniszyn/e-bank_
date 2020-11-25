@@ -1,4 +1,4 @@
 #
-#Tue Nov 24 16:54:37 CET 2020
+#Wed Nov 25 16:12:09 CET 2020
+Layered\ architecture\ consisting\ of\r\nlayer\ 'Controllers'\ ('com.example.ebank.controllers..')\r\nlayer\ 'Services'\ ('com.example.ebank.services..')\r\nlayer\ 'Repositories'\ ('com.example.ebank.repositories..')\r\nwhere\ layer\ 'Controllers'\ may\ not\ be\ accessed\ by\ any\ layer\r\nwhere\ layer\ 'Services'\ may\ only\ be\ accessed\ by\ layers\ ['Controllers']\r\nwhere\ layer\ 'Repositories'\ may\ only\ be\ accessed\ by\ layers\ ['Services']=59a6044c-a1ac-47a6-854a-589fb3930648
 no\ classes\ should\ access\ standard\ streams=67e6f200-b7a5-4daa-a75f-87166a1d03da
-no\ classes\ should\ depend\ on\ upper\ packages,\ because\ that\ might\ prevent\ packages\ on\ that\ level\ from\ being\ split\ into\ separate\ artifacts\ in\ a\ clean\ way=e6705837-5577-4e33-a234-cbd7b6aba8ca

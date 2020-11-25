@@ -1,2 +1,0 @@
-Class <com.example.ebank.api.autogenerate.RestTest> extends class <com.example.ebank.api.RestBase> in (RestTest.java:0)
-Constructor <com.example.ebank.api.autogenerate.RestTest.<init>()> calls constructor <com.example.ebank.api.RestBase.<init>()> in (RestTest.java:17)
