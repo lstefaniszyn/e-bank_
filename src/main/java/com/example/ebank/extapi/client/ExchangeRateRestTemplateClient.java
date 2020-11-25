@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.example.ebank.generated.dto.InlineResponse200Dto;
 import com.example.ebank.models.Currency;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -29,14 +30,14 @@ public class ExchangeRateRestTemplateClient implements ExternalAPIClient {
     }
 
     @Override
-    public Double getExchangeRate(Currency currency) {
+    public InlineResponse200Dto getExchangeRate(Currency currency) {
         Map<String, String> exchangeRateParams = Map.of("baseCurrency", currency.toString(), "targetCurrency",
                 getTargetCurrency().toString());
         try {
             return restTemplate.getForObject(
                     exchangeRateServiceURL
                             + "/exchangeRate?baseCurrency={baseCurrency}&targetCurrency={targetCurrency}",
-                    Double.class, exchangeRateParams);
+                            InlineResponse200Dto.class, exchangeRateParams);
         } catch (Exception e) {
             return null;
         }

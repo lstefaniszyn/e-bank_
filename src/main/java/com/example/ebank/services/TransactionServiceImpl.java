@@ -1,6 +1,7 @@
 package com.example.ebank.services;
 
 import com.example.ebank.extapi.client.ExternalAPIClient;
+import com.example.ebank.generated.dto.InlineResponse200Dto;
 import com.example.ebank.models.Currency;
 import com.example.ebank.models.Transaction;
 import com.example.ebank.repositories.TransactionRepository;
@@ -48,13 +49,13 @@ public class TransactionServiceImpl implements TransactionService {
         LocalDate endDate = date.withDayOfMonth(date.lengthOfMonth());
         Page<Transaction> transactionsPage = transactionRepository.findByDateBetween(Date.valueOf(startDate),
             Date.valueOf(endDate), pageable);
-        Map<Currency, Double> exchangeRates = new HashMap<>();
+        Map<Currency, InlineResponse200Dto> exchangeRates = new HashMap<>();
         return transactionsPage.map(t -> {
             if (t.getCurrency() != client.getTargetCurrency()) {
-                Double exchangeRate = exchangeRates.computeIfAbsent(t.getCurrency(), client::getExchangeRate);
+            	InlineResponse200Dto exchangeRate = exchangeRates.computeIfAbsent(t.getCurrency(), client::getExchangeRate);
                 if (exchangeRate != null) {
                     t.setCurrency(client.getTargetCurrency());
-                    t.setAmount(t.getAmount() * exchangeRate);
+                    t.setAmount(t.getAmount() * exchangeRate.getValue());
                 }
             }
             return t;

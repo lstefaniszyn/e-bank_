@@ -368,3 +368,9 @@ components:
                     type: string
                 message:
                     type: string
+        InlineResponse200:
+            type: object
+            properties:
+                value:
+                    type: number
+                    format: double

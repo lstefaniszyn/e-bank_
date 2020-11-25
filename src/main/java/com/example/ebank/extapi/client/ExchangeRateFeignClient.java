@@ -1,5 +1,6 @@
 package com.example.ebank.extapi.client;
 
+import com.example.ebank.generated.dto.InlineResponse200Dto;
 import com.example.ebank.models.Currency;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ public class ExchangeRateFeignClient implements ExternalAPIClient {
     FeignAPIClient feignAPIClient;
 
     @Override
-    public Double getExchangeRate(Currency currency) {
+    public InlineResponse200Dto getExchangeRate(Currency currency) {
         try {
             return feignAPIClient.getExchangeRate(currency.toString(), getTargetCurrency().toString());
         } catch (Exception e) {
