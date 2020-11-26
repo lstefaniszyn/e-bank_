@@ -31,7 +31,7 @@ public class CodingRulesTest {
     @ArchTest
     public final ArchRule no_log4j_logging = noClasses()
             .should(USE_LOG4J)
-            .because("BFLogger should be used instead of java.util logger");
+            .because("BFLogger should be used instead of Log4J logger");
     
     @ArchTest
     private final ArchRule no_access_to_standard_streams = freeze(noClasses().should(ACCESS_STANDARD_STREAMS));
