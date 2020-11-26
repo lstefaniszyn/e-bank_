@@ -1,0 +1,3 @@
+Constructor <com.example.ebank.communication.TransactionRequestProducer.<init>(com.example.ebank.services.KafkaProducerService)> has parameter of type <com.example.ebank.services.KafkaProducerService> in (TransactionRequestProducer.java:0)
+Field <com.example.ebank.communication.TransactionRequestProducer.kafkaProducer> has type <com.example.ebank.services.KafkaProducerService> in (TransactionRequestProducer.java:0)
+Method <com.example.ebank.communication.TransactionRequestProducer.send(java.lang.Long, java.lang.Long, java.time.LocalDate)> calls method <com.example.ebank.services.KafkaProducerService.sendMessage(java.lang.Object)> in (TransactionRequestProducer.java:24)

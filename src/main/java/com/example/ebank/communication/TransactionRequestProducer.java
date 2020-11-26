@@ -7,14 +7,14 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.example.ebank.models.TransactionRequest;
-import com.example.ebank.services.KafkaProducer;
+import com.example.ebank.services.KafkaProducerService;
 
 @Service
 public class TransactionRequestProducer {
 	
-	private final KafkaProducer<TransactionRequest> kafkaProducer;
+	private final KafkaProducerService<TransactionRequest> kafkaProducer;
 	
-	public TransactionRequestProducer(KafkaProducer<TransactionRequest> kafkaProducer) {
+	public TransactionRequestProducer(KafkaProducerService<TransactionRequest> kafkaProducer) {
 		this.kafkaProducer = kafkaProducer;
 	}
 	
