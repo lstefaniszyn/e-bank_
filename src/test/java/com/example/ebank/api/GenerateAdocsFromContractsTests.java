@@ -117,7 +117,7 @@ public class GenerateAdocsFromContractsTests {
             byte[] encoded = Files.readAllBytes(path);
             return new String(encoded, StandardCharsets.UTF_8);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 }

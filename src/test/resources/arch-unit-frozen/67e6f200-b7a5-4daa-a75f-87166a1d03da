@@ -1,0 +1,5 @@
+Method <com.example.ebank.utils.logger.BFLoggerInstance.createConsoleAppender()> gets field <java.lang.System.out> in (BFLoggerInstance.java:98)
+Method <com.example.ebank.utils.logger.BFLoggerInstance.createEnvFileAppender()> gets field <java.lang.System.out> in (BFLoggerInstance.java:67)
+Method <com.example.ebank.utils.logger.BFLoggerInstance.createFileAppender()> gets field <java.lang.System.out> in (BFLoggerInstance.java:82)
+Method <com.example.ebank.utils.logger.BFLoggerInstance.dumpSeparateLog()> calls method <java.io.IOException.printStackTrace()> in (BFLoggerInstance.java:205)
+Method <com.example.ebank.utils.logger.BFLoggerInstance.startSeparateLog()> calls method <java.io.IOException.printStackTrace()> in (BFLoggerInstance.java:191)
