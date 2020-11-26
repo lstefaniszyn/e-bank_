@@ -467,6 +467,7 @@
 		    <groupId>org.springframework.cloud</groupId>
 		    <artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
 		    <version>${spring-cloud-contract.version}</version>
+		    <scope>test</scope>
 		</dependency>
 
         <!-- Serenity -->
