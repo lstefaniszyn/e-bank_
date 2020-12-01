@@ -27,6 +27,7 @@ Contract.make {
 			contentType(applicationJson())
 		}
 		def NAME = '[\\w-_\\s\\.]+'
+        def IDENTITY_KEY = 'P-\\d+'
 		body([
 			id         : fromRequest().path(3), // get {customerId}
 			givenName  : "Johnny",
@@ -41,16 +42,16 @@ Contract.make {
 			]
 		])
 		bodyMatchers {
-			jsonPath('id', byRegex(number()).asInteger())
-			jsonPath('givenName', byRegex(NAME).asString())
-			jsonPath('familyName', byRegex(NAME).asString())
-			jsonPath('identityKey', byRegex(number()).asInteger())
-			jsonPath('accounts', byType {
-				// results in verification of size of array (min 1)
-				minOccurrence(1)
-			})
-			jsonPath('balance.value', byRegex(aDouble()).asDouble())
-			jsonPath('balance.currency.code', byRegex('[A-Z]{3}').asString())
-		}
+            jsonPath('id', byRegex(number()).asInteger())
+            jsonPath('givenName', byRegex(NAME).asString())
+            jsonPath('familyName', byRegex(NAME).asString())
+            jsonPath('identityKey', byRegex(IDENTITY_KEY).asString())
+            jsonPath('accounts', byType {
+                // results in verification of size of array (min 1)
+                minOccurrence(1)
+            })
+            jsonPath('balance.value', byRegex(aDouble()).asDouble())
+            jsonPath('balance.currency.code', byRegex('[A-Z]{3}').asString())
+        }
 	}
 }

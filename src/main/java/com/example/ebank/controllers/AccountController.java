@@ -73,13 +73,13 @@ public class AccountController implements AccountApi {
     
     @Override
     public ResponseEntity<List<AccountDto>> getCustomerAccounts(Long customerId) {
-        return ResponseEntity.ok(accountMapper.toListDto(accountService.getByCustomer(customerId)));
+        return ResponseEntity.ok(accountMapper.toListDto(accountService.getAllForCustomer(customerId)));
     }
     
     @Override
     public ResponseEntity<AccountDto> getCustomerAccount(Long customerId, Long accountId) {
-        Account account = accountService.getOne(accountId);
-        validateAccessToRequestedCustomerAndAccount(customerId, account);
+        validateAccessToRequestedCustomer(customerId);
+        Account account = accountService.getOneForCustomer(accountId, customerId);
         return ResponseEntity.ok(accountMapper.toDto(account));
     }
     
@@ -89,16 +89,16 @@ public class AccountController implements AccountApi {
             String dateString,
             Integer page,
             Integer size) {
-        Account account = accountService.getOne(accountId);
-        validateAccessToRequestedCustomerAndAccount(customerId, account);
-        
+        validateAccessToRequestedCustomer(customerId);
+        Account account = accountService.getOneForCustomer(accountId, customerId);
+
         LocalDate date = LocalDate.parse(dateString, DATE_FORMATTER);
         Page<Transaction> resultPage = Page.empty();
-        
+
         if (kafkaProperties.readMockedTransactions()) {
             CompletableFuture<TransactionRequest> producer = transactionRequestProducer.send(customerId, accountId, date);
             CompletableFuture<Page<Transaction>> resultPageFuture = asyncTransactionService.findInMonthPaginated(date,
-                    page, size);
+                page, size);
             CompletableFuture.allOf(producer, resultPageFuture);
             try {
                 resultPage = resultPageFuture.get();
@@ -106,20 +106,17 @@ public class AccountController implements AccountApi {
                 BFLogger.logError("Error during reading mocked data from Kafka" + e.toString());
             }
         } else {
-            resultPage = transactionService.findForAccountInMonthPaginated(accountId, date, page, size);
+            resultPage = transactionService.findForAccountInMonthPaginated(account.getId(), date, page, size);
         }
-        
+
         return ResponseEntity.ok(transactionMapper.toTransactionPageDto(resultPage));
     }
-    
-    private void validateAccessToRequestedCustomerAndAccount(Long customerId, Account account) {
+
+    private void validateAccessToRequestedCustomer(Long customerId) {
         Customer customer = customerService.getOne(customerId);
         if (!Objects.equals(customer.getIdentityKey(), securityContextUtils.getIdentityKey())) {
             throw new IllegalArgumentException();
         }
-        if (!Objects.equals(account.getCustomer().getId(), customer.getId())) {
-            throw new IllegalArgumentException();
-        }
     }
-    
+
 }

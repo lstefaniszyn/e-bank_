@@ -73,20 +73,20 @@ import org.springframework.cloud.contract.spec.Contract
 		}
 	},
 	Contract.make {
-		name("get not autorized response while requesting for transactions")
-		request {
-			method('GET')
-			url( $(p("api/v1/customers/1/accounts/2/transactions"), c("api/v1/customers/1/accounts/2/transactions")) ){
-				queryParameters {
-					parameter('date': value(producer('2019-01'), consumer(matching("[0-9]{4}-[0-1][0-2]")) ) )
-					parameter('page': value(producer(0), consumer(matching("[0-9]*")) ) )
-					parameter('size': value(producer(2), consumer(matching("[0-9]*")) ) )
-				}
-			}
-			headers {
-				contentType(applicationJson())
-			}
-		}
+        name("get not authorized response while requesting for transactions")
+        request {
+            method('GET')
+            url($(p("api/v1/customers/2/accounts/2/transactions"), c("api/v1/customers/2/accounts/2/transactions"))) {
+                queryParameters {
+                    parameter('date': value(producer('2019-01'), consumer(matching("[0-9]{4}-[0-1][0-2]"))))
+                    parameter('page': value(producer(0), consumer(matching("[0-9]*"))))
+                    parameter('size': value(producer(2), consumer(matching("[0-9]*"))))
+                }
+            }
+            headers {
+                contentType(applicationJson())
+            }
+        }
 		response {
 			status 403
 		}
@@ -118,15 +118,34 @@ import org.springframework.cloud.contract.spec.Contract
 				queryParameters {
 					parameter('date': value(producer('2019-01'), consumer(matching("[0-9]{4}-[0-1][0-2]")) ) )
 					parameter('page': value(producer(0), consumer(matching("[0-9]*")) ) )
-					parameter('size': value(producer(2), consumer(matching("[0-9]*")) ) )
-				}
-			}
-			headers {
-				contentType(applicationJson())
-			}
-		}
-		response {
-			status 404
-		}
-	}
+                    parameter('size': value(producer(2), consumer(matching("[0-9]*"))))
+                }
+            }
+            headers {
+                contentType(applicationJson())
+            }
+        }
+        response {
+            status 404
+        }
+    },
+    Contract.make {
+        name("get get account not found for requested customer while requesting for transactions")
+        request {
+            method('GET')
+            url($(p("api/v1/customers/1/accounts/2/transactions"), c("api/v1/customers/1/accounts/2/transactions"))) {
+                queryParameters {
+                    parameter('date': value(producer('2019-01'), consumer(matching("[0-9]{4}-[0-1][0-2]"))))
+                    parameter('page': value(producer(0), consumer(matching("[0-9]*"))))
+                    parameter('size': value(producer(2), consumer(matching("[0-9]*"))))
+                }
+            }
+            headers {
+                contentType(applicationJson())
+            }
+        }
+        response {
+            status 404
+        }
+    }
 ]

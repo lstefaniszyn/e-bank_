@@ -28,31 +28,34 @@ public class AccountServiceTests {
     private AccountService accountService;
 
     @Test
-    public void testGetAll_expectOk() {
-        when(accountRepository.findAll()).thenReturn(getList());
+    public void testGetAllForCustomer_expectOk() {
+        long customerId = 68L;
+        when(accountRepository.findByCustomerId(customerId)).thenReturn(getList());
 
-        Iterable<Account> result = accountService.getAll();
+        Iterable<Account> result = accountService.getAllForCustomer(customerId);
         assertThat(result).isNotEmpty()
             .hasSize(5);
     }
 
     @Test
-    public void testFindOne_expectOk() {
+    public void testGetOneForCustomer_expectOk() {
         long id = 157L;
-        when(accountRepository.findById(id))
+        long customerId = 68L;
+        when(accountRepository.findByIdAndCustomerId(id, customerId))
             .thenReturn(Optional.of(getAccount(id, Currency.CHF)));
 
-        Account result = accountService.getOne(id);
+        Account result = accountService.getOneForCustomer(id, customerId);
 
         assertThat(result).isNotNull();
     }
 
     @Test
-    public void testFindOne_expectEntityNotFoundException() {
+    public void testGetOneForCustomer_expectEntityNotFoundException() {
         long id = 157L;
-        when(accountRepository.findById(id)).thenReturn(Optional.empty());
+        long customerId = 47L;
+        when(accountRepository.findByIdAndCustomerId(id, customerId)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> accountService.getOne(id)).isInstanceOf(EntityNotFoundException.class);
+        assertThatThrownBy(() -> accountService.getOneForCustomer(id, customerId)).isInstanceOf(EntityNotFoundException.class);
 
     }
 

@@ -6,6 +6,7 @@ import com.example.ebank.controllers.CustomerController;
 import com.example.ebank.controllers.RestResponseEntityExceptionHandler;
 import com.example.ebank.mappers.*;
 import com.example.ebank.models.*;
+import com.example.ebank.models.Currency;
 import com.example.ebank.services.AccountService;
 import com.example.ebank.services.AsyncTransactionService;
 import com.example.ebank.services.CustomerService;
@@ -36,11 +37,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
+import static java.lang.String.format;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -82,25 +81,24 @@ public abstract class RestBase {
     @InjectMocks
     AppStatusController appStatusController;
 
-    private final String identityKey = randomNumber(12);
+    private final String authorizedIdentityKey = "P-01";
 
     @Before
     public void setup() {
         // Mock security service
-        given(securityContextUtils.getIdentityKey()).willReturn(identityKey);
+        given(securityContextUtils.getIdentityKey()).willReturn(authorizedIdentityKey);
 
         // Mock customer service
-        given(customerService.getOne(1L)).willReturn(getCustomer(1L));
         given(customerService.getAll()).willReturn(getCustomers());
-
+        given(customerService.getOne(1L)).willReturn(getAuthorizedCustomer());
+        given(customerService.getOne(2L)).willReturn(getCustomer(2L));
         given(customerService.getOne(999L)).willThrow(EntityNotFoundException.class);
 
         // Mock account service
-        given(accountService.getOne(1L)).willReturn(getAccount(1L, Currency.CHF));
-        given(accountService.getOne(2L)).willReturn(getAccount(2L, Currency.CHF));
-        given(accountService.getByCustomer(1L)).willReturn(getAccounts());
-
-        given(accountService.getOne(999L)).willThrow(EntityNotFoundException.class);
+        given(accountService.getAllForCustomer(1L)).willReturn(getAccounts());
+        given(accountService.getOneForCustomer(1L, 1L)).willReturn(getAccount(1L, Currency.CHF));
+        given(accountService.getOneForCustomer(2L, 1L)).willThrow(EntityNotFoundException.class);
+        given(accountService.getOneForCustomer(999L, 1L)).willThrow(EntityNotFoundException.class);
 
         // Mock transaction service
         final String DATE_FORMAT = "yyyy-MM";
@@ -132,12 +130,23 @@ public abstract class RestBase {
                 getCustomer(4L));
     }
 
+    private Customer getAuthorizedCustomer() {
+        Customer customer = new Customer();
+        customer.setId(1L);
+        customer.setGivenName(randomString(10));
+        customer.setFamilyName(randomString(30));
+        customer.setIdentityKey(authorizedIdentityKey);
+        customer.setAccounts(getAccounts());
+        customer.setBalance(getBalance(Currency.GBP));
+        return customer;
+    }
+
     private Customer getCustomer(Long id) {
         Customer customer = new Customer();
         customer.setId(id);
         customer.setGivenName(randomString(10));
         customer.setFamilyName(randomString(30));
-        customer.setIdentityKey(identityKey);
+        customer.setIdentityKey(format("P-0%d", id));
         customer.setAccounts(getAccounts());
         customer.setBalance(getBalance(Currency.GBP));
         return customer;
@@ -158,6 +167,7 @@ public abstract class RestBase {
         account.setName(randomString(30));
         account.setIban(randomIBAN());
         account.setCurrency(currency);
+        account.setTransactions(getTransactions());
         account.setBalance(getBalance(currency));
         return account;
     }
