@@ -70,7 +70,6 @@ public class AccountServiceTests {
         account.setId(id);
         account.setIban(randomString(20));
         account.setCurrency(currency);
-        account.setCustomerId(1L);
         return account;
     }
 

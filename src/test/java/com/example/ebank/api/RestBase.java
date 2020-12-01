@@ -30,6 +30,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.persistence.EntityNotFoundException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -39,8 +40,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-
-import javax.persistence.EntityNotFoundException;
 
 import static org.mockito.BDDMockito.given;
 
@@ -93,22 +92,22 @@ public abstract class RestBase {
         // Mock customer service
         given(customerService.getOne(1L)).willReturn(getCustomer(1L));
         given(customerService.getAll()).willReturn(getCustomers());
-        
+
         given(customerService.getOne(999L)).willThrow(EntityNotFoundException.class);
 
         // Mock account service
-        given(accountService.getOne(1L)).willReturn(getAccount(1L, 1L, Currency.CHF));
-        given(accountService.getOne(2L)).willReturn(getAccount(2L, 2L, Currency.CHF));
-        given(accountService.getByCustomer(1L)).willReturn(getAccounts(1L));
+        given(accountService.getOne(1L)).willReturn(getAccount(1L, Currency.CHF));
+        given(accountService.getOne(2L)).willReturn(getAccount(2L, Currency.CHF));
+        given(accountService.getByCustomer(1L)).willReturn(getAccounts());
 
         given(accountService.getOne(999L)).willThrow(EntityNotFoundException.class);
-        
+
         // Mock transaction service
         final String DATE_FORMAT = "yyyy-MM";
         final DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder()
-                .append(DateTimeFormatter.ofPattern(DATE_FORMAT))
-                .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
-                .toFormatter();
+            .append(DateTimeFormatter.ofPattern(DATE_FORMAT))
+            .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+            .toFormatter();
         LocalDate date = LocalDate.parse("2019-01", DATE_FORMATTER);
         BFLogger.logDebug("Transactions: " + getPagedTransactions(0, 3));
 
@@ -139,27 +138,26 @@ public abstract class RestBase {
         customer.setGivenName(randomString(10));
         customer.setFamilyName(randomString(30));
         customer.setIdentityKey(identityKey);
-        customer.setAccounts(getAccounts(id));
+        customer.setAccounts(getAccounts());
         customer.setBalance(getBalance(Currency.GBP));
         return customer;
     }
 
-    private List<Account> getAccounts(Long customerId) {
+    private List<Account> getAccounts() {
         return List.of(
-            getAccount(1L, customerId, Currency.CHF),
-            getAccount(2L, customerId, Currency.GBP),
-            getAccount(3L, customerId, Currency.CHF),
-            getAccount(4L, customerId, Currency.EUR),
-            getAccount(5L, customerId, Currency.GBP));
+            getAccount(1L, Currency.CHF),
+            getAccount(2L, Currency.GBP),
+            getAccount(3L, Currency.CHF),
+            getAccount(4L, Currency.EUR),
+            getAccount(5L, Currency.GBP));
     }
 
-    private Account getAccount(Long id, Long customerId, Currency currency) {
+    private Account getAccount(Long id, Currency currency) {
         Account account = new Account();
         account.setId(id);
         account.setName(randomString(30));
         account.setIban(randomIBAN());
         account.setCurrency(currency);
-        account.setCustomerId(customerId);
         account.setBalance(getBalance(currency));
         return account;
     }

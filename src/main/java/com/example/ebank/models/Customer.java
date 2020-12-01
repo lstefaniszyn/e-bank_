@@ -1,7 +1,5 @@
 package com.example.ebank.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +20,7 @@ public class Customer {
     @Column(name = "identity_key", length = 50)
     private String identityKey;
 
-    @OneToMany(mappedBy = "customerId")
-    @JsonIgnore
+    @OneToMany(mappedBy = "customer")
     private List<Account> accounts = new ArrayList<>();
 
     @Transient
