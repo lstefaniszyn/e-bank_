@@ -9,8 +9,6 @@ import java.util.Date;
 
 public interface TransactionRepository extends PagingAndSortingRepository<Transaction, Long> {
 
-    Page<Transaction> findByDateBetween(Date startDate, Date endDate, Pageable pageable);
-
     Page<Transaction> findByDateBetweenAndAccountId(Date startDate, Date endDate, Long accountId, Pageable pageable);
 
 }

@@ -4,12 +4,12 @@ import com.example.ebank.models.Account;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AccountRepository extends PagingAndSortingRepository<Account, Long> {
 
-    @Override
-    List<Account> findAll();
+    List<Account> findByCustomerId(Long customerId);
 
-    List<Account> findByCustomerId(Long id);
+    Optional<Account> findByIdAndCustomerId(Long id, Long customerId);
 
 }

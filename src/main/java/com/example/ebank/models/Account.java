@@ -1,6 +1,7 @@
 package com.example.ebank.models;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Account {
@@ -9,8 +10,9 @@ public class Account {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "customer_id", nullable = false)
-    private Long customerId;
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 
     @Column(length = 50)
     private String iban;
@@ -20,6 +22,9 @@ public class Account {
 
     @Enumerated(EnumType.STRING)
     private Currency currency;
+
+    @OneToMany(mappedBy = "account")
+    private List<Transaction> transactions;
 
     @Transient
     private Balance balance;
@@ -32,12 +37,12 @@ public class Account {
         this.id = id;
     }
 
-    public Long getCustomerId() {
-        return customerId;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public String getIban() {
@@ -70,5 +75,13 @@ public class Account {
 
     public void setBalance(Balance balance) {
         this.balance = balance;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 }
