@@ -7,7 +7,6 @@ import com.example.ebank.communication.TransactionRequestProducer;
 import com.example.ebank.mappers.AccountMapper;
 import com.example.ebank.mappers.TransactionMapper;
 import com.example.ebank.models.Account;
-import com.example.ebank.models.Customer;
 import com.example.ebank.models.Transaction;
 import com.example.ebank.models.TransactionRequest;
 import com.example.ebank.services.AccountService;
@@ -27,46 +26,48 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 @Api(tags = "account")
 @RestController
-public class AccountController implements AccountApi {
+public class AccountController extends BasicController implements AccountApi {
 
     private final static String DATE_FORMAT = "yyyy-MM";
     private final static DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder()
             .append(DateTimeFormatter.ofPattern(DATE_FORMAT)).parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
             .toFormatter();
 
-    private final CustomerService customerService;
     private final AccountService accountService;
     private final TransactionService transactionService;
     private final AccountMapper accountMapper;
     private final TransactionMapper transactionMapper;
     private final KafkaServerProperties kafkaProperties;
     private final AsyncTransactionService asyncTransactionService;
-    private final SecurityContextUtils securityContextUtils;
     private final TransactionRequestProducer transactionRequestProducer;
 
-    public AccountController(CustomerService customerService, AccountService accountService,
-            AccountMapper accountMapper, TransactionService transactionService, TransactionMapper transactionMapper,
-            KafkaServerProperties kafkaProperties, AsyncTransactionService asyncTransactionService,
-            SecurityContextUtils securityContextUtils, TransactionRequestProducer transactionRequestProducer) {
-        this.customerService = customerService;
+    public AccountController(CustomerService customerService,
+        AccountService accountService,
+        AccountMapper accountMapper,
+        TransactionService transactionService,
+        TransactionMapper transactionMapper,
+        KafkaServerProperties kafkaProperties,
+        AsyncTransactionService asyncTransactionService,
+        SecurityContextUtils securityContextUtils,
+        TransactionRequestProducer transactionRequestProducer) {
+        super(customerService, securityContextUtils);
         this.accountService = accountService;
         this.accountMapper = accountMapper;
         this.transactionService = transactionService;
         this.transactionMapper = transactionMapper;
         this.kafkaProperties = kafkaProperties;
         this.asyncTransactionService = asyncTransactionService;
-        this.securityContextUtils = securityContextUtils;
         this.transactionRequestProducer = transactionRequestProducer;
     }
 
     @Override
     public ResponseEntity<List<AccountDto>> getCustomerAccounts(Long customerId) {
+        validateAccessToRequestedCustomer(customerId);
         return ResponseEntity.ok(accountMapper.toListDto(accountService.getAllForCustomer(customerId)));
     }
 
@@ -102,13 +103,6 @@ public class AccountController implements AccountApi {
         }
 
         return ResponseEntity.ok(transactionMapper.toTransactionPageDto(resultPage));
-    }
-
-    private void validateAccessToRequestedCustomer(Long customerId) {
-        Customer customer = customerService.getOne(customerId);
-        if (!Objects.equals(customer.getIdentityKey(), securityContextUtils.getIdentityKey())) {
-            throw new IllegalArgumentException();
-        }
     }
 
 }

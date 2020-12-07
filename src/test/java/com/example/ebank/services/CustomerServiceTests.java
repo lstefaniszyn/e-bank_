@@ -37,7 +37,7 @@ public class CustomerServiceTests {
     }
 
     @Test
-    public void testFindOne_expectOk() {
+    public void testGetOne_expectOk() {
         long id = 157L;
         when(customerRepository.findById(id))
             .thenReturn(Optional.of(getCustomer(id)));
@@ -48,11 +48,35 @@ public class CustomerServiceTests {
     }
 
     @Test
-    public void testFindOne_expectEntityNotFoundException() {
+    public void testGetOne_expectEntityNotFoundException() {
         long id = 157L;
         when(customerRepository.findById(id)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> customerService.getOne(id)).isInstanceOf(EntityNotFoundException.class);
+    }
+
+    @Test
+    public void testFindOneByIdentityKey_expectOk() {
+        long id = 157L;
+        String identityKey = "P-0157";
+        when(customerRepository.findByIdAndIdentityKey(id, identityKey))
+            .thenReturn(Optional.of(getCustomer(id)));
+
+        Optional<Customer> result = customerService.findOneByIdentityKey(id, identityKey);
+
+        assertThat(result).isPresent();
+    }
+
+    @Test
+    public void testFindOneByIdentityKey_expectEmpty() {
+        long id = 84L;
+        String identityKey = "P-0157";
+        when(customerRepository.findByIdAndIdentityKey(id, identityKey))
+            .thenReturn(Optional.empty());
+
+        Optional<Customer> result = customerService.findOneByIdentityKey(id, identityKey);
+
+        assertThat(result).isNotPresent();
     }
 
     private List<Customer> getList() {

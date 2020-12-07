@@ -5,8 +5,8 @@ import com.example.ebank.controllers.AppStatusController;
 import com.example.ebank.controllers.CustomerController;
 import com.example.ebank.controllers.RestResponseEntityExceptionHandler;
 import com.example.ebank.mappers.*;
-import com.example.ebank.models.*;
 import com.example.ebank.models.Currency;
+import com.example.ebank.models.*;
 import com.example.ebank.services.AccountService;
 import com.example.ebank.services.AsyncTransactionService;
 import com.example.ebank.services.CustomerService;
@@ -90,9 +90,8 @@ public abstract class RestBase {
 
         // Mock customer service
         given(customerService.getAll()).willReturn(getCustomers());
-        given(customerService.getOne(1L)).willReturn(getAuthorizedCustomer());
-        given(customerService.getOne(2L)).willReturn(getCustomer(2L));
-        given(customerService.getOne(999L)).willThrow(EntityNotFoundException.class);
+        given(customerService.findOneByIdentityKey(1L, authorizedIdentityKey))
+            .willReturn(Optional.of(getAuthorizedCustomer()));
 
         // Mock account service
         given(accountService.getAllForCustomer(1L)).willReturn(getAccounts());

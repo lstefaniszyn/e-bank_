@@ -92,25 +92,6 @@ import org.springframework.cloud.contract.spec.Contract
 		}
 	},
 	Contract.make {
-		name("get customer not found response while requesting for transactions")
-		request {
-			method('GET')
-			url( $(p("api/v1/customers/999/accounts/1/transactions"), c("api/v1/customers/999/accounts/${regex('[0-9]+')}/transactions")) ){
-				queryParameters {
-					parameter('date': value(producer('2019-01'), consumer(matching("[0-9]{4}-[0-1][0-2]")) ) )
-					parameter('page': value(producer(0), consumer(matching("[0-9]*")) ) )
-					parameter('size': value(producer(2), consumer(matching("[0-9]*")) ) )
-				}
-			}
-			headers {
-				contentType(applicationJson())
-			}
-		}
-		response {
-			status 404
-		}
-	},
-	Contract.make {
 		name("get account not found response while requesting for transactions")
 		request {
 			method('GET')

@@ -89,7 +89,7 @@ paths:
                             schema:
                                 $ref: "#/components/schemas/Customer"
                 "400":
-                    $ref: '#/components/responses/IvalidCustomerId'
+                    $ref: '#/components/responses/InvalidCustomerId'
                 "401":
                     $ref: '#/components/responses/UnauthorizedError'
                 "404":
@@ -240,9 +240,9 @@ components:
         CustomerOrAccountNotFound:
             description: Customer or account not found for given params
             content: {}
-        IvalidCustomerId:
+        InvalidCustomerId:
             description: Invalid customer id supplied. Must be long greater than 0.
-            content: {}
+            content: { }
     schemas:
         Currency:
             type: object
