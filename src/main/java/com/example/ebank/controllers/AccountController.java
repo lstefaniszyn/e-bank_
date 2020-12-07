@@ -34,13 +34,12 @@ import java.util.concurrent.ExecutionException;
 @Api(tags = "account")
 @RestController
 public class AccountController implements AccountApi {
-    
+
     private final static String DATE_FORMAT = "yyyy-MM";
     private final static DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder()
-            .append(DateTimeFormatter.ofPattern(DATE_FORMAT))
-            .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+            .append(DateTimeFormatter.ofPattern(DATE_FORMAT)).parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
             .toFormatter();
-    
+
     private final CustomerService customerService;
     private final AccountService accountService;
     private final TransactionService transactionService;
@@ -50,16 +49,11 @@ public class AccountController implements AccountApi {
     private final AsyncTransactionService asyncTransactionService;
     private final SecurityContextUtils securityContextUtils;
     private final TransactionRequestProducer transactionRequestProducer;
-    
-    public AccountController(CustomerService customerService,
-            AccountService accountService,
-            AccountMapper accountMapper,
-            TransactionService transactionService,
-            TransactionMapper transactionMapper,
-            KafkaServerProperties kafkaProperties,
-            AsyncTransactionService asyncTransactionService,
-            SecurityContextUtils securityContextUtils,
-            TransactionRequestProducer transactionRequestProducer) {
+
+    public AccountController(CustomerService customerService, AccountService accountService,
+            AccountMapper accountMapper, TransactionService transactionService, TransactionMapper transactionMapper,
+            KafkaServerProperties kafkaProperties, AsyncTransactionService asyncTransactionService,
+            SecurityContextUtils securityContextUtils, TransactionRequestProducer transactionRequestProducer) {
         this.customerService = customerService;
         this.accountService = accountService;
         this.accountMapper = accountMapper;
@@ -70,25 +64,22 @@ public class AccountController implements AccountApi {
         this.securityContextUtils = securityContextUtils;
         this.transactionRequestProducer = transactionRequestProducer;
     }
-    
+
     @Override
     public ResponseEntity<List<AccountDto>> getCustomerAccounts(Long customerId) {
         return ResponseEntity.ok(accountMapper.toListDto(accountService.getAllForCustomer(customerId)));
     }
-    
+
     @Override
     public ResponseEntity<AccountDto> getCustomerAccount(Long customerId, Long accountId) {
         validateAccessToRequestedCustomer(customerId);
         Account account = accountService.getOneForCustomer(accountId, customerId);
         return ResponseEntity.ok(accountMapper.toDto(account));
     }
-    
+
     @Override
-    public ResponseEntity<TransactionPageDto> getAccountTransactions(Long customerId,
-            Long accountId,
-            String dateString,
-            Integer page,
-            Integer size) {
+    public ResponseEntity<TransactionPageDto> getAccountTransactions(Long customerId, Long accountId, String dateString,
+            Integer page, Integer size) {
         validateAccessToRequestedCustomer(customerId);
         Account account = accountService.getOneForCustomer(accountId, customerId);
 
@@ -96,9 +87,10 @@ public class AccountController implements AccountApi {
         Page<Transaction> resultPage = Page.empty();
 
         if (kafkaProperties.readMockedTransactions()) {
-            CompletableFuture<TransactionRequest> producer = transactionRequestProducer.send(customerId, accountId, date);
+            CompletableFuture<TransactionRequest> producer = transactionRequestProducer.send(customerId, accountId,
+                    date);
             CompletableFuture<Page<Transaction>> resultPageFuture = asyncTransactionService.findInMonthPaginated(date,
-                page, size);
+                    page, size);
             CompletableFuture.allOf(producer, resultPageFuture);
             try {
                 resultPage = resultPageFuture.get();

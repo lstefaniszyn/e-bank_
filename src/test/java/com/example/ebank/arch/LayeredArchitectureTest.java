@@ -11,23 +11,6 @@ import static com.tngtech.archunit.library.freeze.FreezingArchRule.freeze;
 @AnalyzeClasses(packages = "com.example.ebank", importOptions = { ImportOption.DoNotIncludeTests.class, ImportOption.DoNotIncludeJars.class, ImportOption.DoNotIncludeArchives.class })
 public class LayeredArchitectureTest {
     
-    // @Test
-    // public void Services_should_only_be_accessed_by_Controllers() {
-    // // JavaClasses importedClasses = new ClassFileImporter().importPackages("com.mycompany.myapp");
-    // JavaClasses importedClasses = new ClassFileImporter()
-    // .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_JARS)
-    // .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
-    // .importClasspath();
-    
-    // ArchRule myRule = classes()
-    // .that()
-    // .resideInAPackage("..service..")
-    // .should()
-    // .onlyBeAccessed()
-    // .byAnyPackage("..controller..", "..service..");
-    
-    // myRule.check(importedClasses);
-    // }
     
     @ArchTest
     static final ArchRule layer_dependencies_are_respected = freeze(layeredArchitecture()
@@ -44,16 +27,4 @@ public class LayeredArchitectureTest {
             .whereLayer("Repositories")
             .mayOnlyBeAccessedByLayers("Services"));
     
-    // @ArchTest
-    // static final ArchRule layer_dependencies_are_respected_with_exception = layeredArchitecture()
-    
-    // .layer("Controllers").definedBy("com.tngtech.archunit.example.layers.controller..")
-    // .layer("Services").definedBy("com.tngtech.archunit.example.layers.service..")
-    // .layer("Persistence").definedBy("com.tngtech.archunit.example.layers.persistence..")
-    
-    // .whereLayer("Controllers").mayNotBeAccessedByAnyLayer()
-    // .whereLayer("Services").mayOnlyBeAccessedByLayers("Controllers")
-    // .whereLayer("Persistence").mayOnlyBeAccessedByLayers("Services")
-    
-    // .ignoreDependency(SomeMediator.class, ServiceViolatingLayerRules.class);
 }
