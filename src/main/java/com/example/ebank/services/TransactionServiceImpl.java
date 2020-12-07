@@ -21,13 +21,13 @@ import java.util.Map;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
-    
+
     private final TransactionRepository transactionRepository;
     private ExternalAPIClient client;
-    
+
     @Autowired
     public TransactionServiceImpl(TransactionRepository transactionRepository,
-        @Value("${service.exchangerate.client}") String clientId, ApplicationContext context) {
+            @Value("${service.exchangerate.client}") String clientId, ApplicationContext context) {
         this.transactionRepository = transactionRepository;
         this.client = (ExternalAPIClient) context.getBean(clientId);
     }
@@ -42,12 +42,13 @@ public class TransactionServiceImpl implements TransactionService {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "date"));
         LocalDate startDate = date.withDayOfMonth(1);
         LocalDate endDate = date.withDayOfMonth(date.lengthOfMonth());
-        Page<Transaction> transactionsPage = transactionRepository.findByDateBetweenAndAccountId(Date.valueOf(startDate), Date.valueOf(endDate),
-            accountId, pageable);
+        Page<Transaction> transactionsPage = transactionRepository
+                .findByDateBetweenAndAccountId(Date.valueOf(startDate), Date.valueOf(endDate), accountId, pageable);
         Map<Currency, InlineResponse200Dto> exchangeRates = new HashMap<>();
         return transactionsPage.map(t -> {
             if (t.getCurrency() != client.getTargetCurrency()) {
-                InlineResponse200Dto exchangeRate = exchangeRates.computeIfAbsent(t.getCurrency(), client::getExchangeRate);
+                InlineResponse200Dto exchangeRate = exchangeRates.computeIfAbsent(t.getCurrency(),
+                        client::getExchangeRate);
                 if (exchangeRate != null) {
                     t.setCurrency(client.getTargetCurrency());
                     t.setAmount(t.getAmount() * exchangeRate.getValue());
@@ -55,15 +56,6 @@ public class TransactionServiceImpl implements TransactionService {
             }
             return t;
         });
-    }
-
-    @Override
-    public Page<Transaction> findForAccountInMonthPaginated(Long accountId, LocalDate date, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "date"));
-        LocalDate startDate = date.withDayOfMonth(1);
-        LocalDate endDate = date.withDayOfMonth(date.lengthOfMonth());
-        return transactionRepository.findByDateBetweenAndAccountId(Date.valueOf(startDate), Date.valueOf(endDate),
-            accountId, pageable);
     }
 
 }
