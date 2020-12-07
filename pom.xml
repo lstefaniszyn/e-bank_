@@ -463,11 +463,12 @@
             <version>${spring-cloud-contract.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
-            <version>${spring-cloud-contract.version}</version>
-        </dependency>
+		<dependency>
+		    <groupId>org.springframework.cloud</groupId>
+		    <artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
+		    <version>${spring-cloud-contract.version}</version>
+		    <scope>test</scope>
+		</dependency>
 
         <!-- Serenity -->
         <dependency>
@@ -571,8 +572,9 @@
                 <version>3.0.0-M5</version>
                 <configuration>
                     <!-- To avoid ForkedBooter loading issue -->
-                    <useSystemClassLoader>false</useSystemClassLoader>
-                    <!-- <argLine>${argLine} -Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine> -->
+                    <forkCount>0</forkCount>
+                    <!-- <useSystemClassLoader>false</useSystemClassLoader>
+                    <argLine>${argLine} -Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine> -->
                     <systemPropertyVariables>
                         <allure.results.directory>target/allure/results/unit</allure.results.directory>
                     </systemPropertyVariables>
