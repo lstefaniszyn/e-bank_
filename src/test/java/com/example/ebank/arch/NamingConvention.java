@@ -1,6 +1,7 @@
 package com.example.ebank.arch;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
 
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 public class NamingConvention {
     
-   
     @ArchTest
     static ArchRule classes_named_controller_should_be_in_a_controller_package = classes()
             .that()
@@ -43,5 +43,12 @@ public class NamingConvention {
             .haveSimpleNameEndingWith("Service")
             .orShould()
             .haveSimpleNameEndingWith("ServiceImpl");
+    
+    @ArchTest
+    static ArchRule repository_should_be_suffixed = classes()
+            .that()
+            .resideInAPackage("..repositories..")
+            .should()
+            .haveSimpleNameEndingWith("Repository");
     
 }

@@ -25,17 +25,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DirtiesContext
 @ActiveProfiles({ "mock", "it-local" })
 public class ExchangeRateServiceContractTest {
-	
-	@Autowired
-	@Qualifier("feign")
-	private ExternalAPIClient exchangeRateService;
-	
-	@Test
-	public void testExchangerateEndpoint() throws Exception {
-		
-		InlineResponse200Dto response = exchangeRateService.getExchangeRate(Currency.EUR);
-		
-		assertThat(response).isNotNull();
-		assertThat(response.getValue()).isEqualByComparingTo(Double.valueOf("0.90872"));
-	}
+    
+    @Autowired
+    @Qualifier("feign")
+    private ExternalAPIClient exchangeRateService;
+    
+    @Test
+    public void testExchangerateEndpoint() throws Exception {
+        
+        InlineResponse200Dto response = exchangeRateService.getExchangeRate(Currency.EUR);
+        assertThat(response).isNotNull();
+        assertThat(response.getValue()).isEqualByComparingTo(Double.valueOf("0.90872"));
+    }
 }
