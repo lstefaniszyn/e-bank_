@@ -26,18 +26,5 @@ import org.springframework.cloud.contract.spec.Contract
         response {
             status 403
         }
-    },
-    Contract.make {
-        name("get customer not found response")
-        request {
-            method('GET')
-            url($(p("api/v1/customers/999"), c("api/v1/customers/999")))
-            headers {
-                contentType(applicationJson())
-            }
-        }
-        response {
-            status 404
-        }
     }
 ]

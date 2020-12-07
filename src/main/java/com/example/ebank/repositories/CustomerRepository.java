@@ -14,6 +14,5 @@ public interface CustomerRepository extends CrudRepository<Customer, Long> {
     @Override
     List<Customer> findAll();
     
-    Optional<Customer> findByIdentityKey(String identityKey);
-    
+    Optional<Customer> findByIdAndIdentityKey(Long id, String identityKey);
 }

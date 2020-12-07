@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -22,5 +23,9 @@ public class CustomerService {
 
     public Customer getOne(Long id) {
         return customerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    }
+
+    public Optional<Customer> findOneByIdentityKey(Long id, String identityKey) {
+        return customerRepository.findByIdAndIdentityKey(id, identityKey);
     }
 }

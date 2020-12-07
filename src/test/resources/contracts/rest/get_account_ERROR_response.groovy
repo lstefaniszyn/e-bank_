@@ -28,19 +28,6 @@ import org.springframework.cloud.contract.spec.Contract
         }
     },
     Contract.make {
-        name("get customer not found response while requesting for account")
-        request {
-            method('GET')
-            url($(p("api/v1/customers/999/accounts/1"), c("api/v1/customers/999/accounts/${regex('[0-9]+')}")))
-            headers {
-                contentType(applicationJson())
-            }
-        }
-        response {
-            status 404
-        }
-    },
-    Contract.make {
         name("get account not found for requested customer")
         request {
             method('GET')
