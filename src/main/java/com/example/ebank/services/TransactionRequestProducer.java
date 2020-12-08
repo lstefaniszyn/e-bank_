@@ -1,4 +1,4 @@
-package com.example.ebank.communication;
+package com.example.ebank.services;
 
 import java.time.LocalDate;
 import java.util.concurrent.CompletableFuture;
@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.example.ebank.models.TransactionRequest;
-import com.example.ebank.services.KafkaProducerService;
 
 @Service
 public class TransactionRequestProducer {
