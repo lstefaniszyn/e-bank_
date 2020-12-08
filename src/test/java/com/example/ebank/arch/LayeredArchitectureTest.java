@@ -40,7 +40,7 @@ public class LayeredArchitectureTest {
             .whereLayer("Controllers")
             .mayNotBeAccessedByAnyLayer()
             .whereLayer("Services")
-            .mayOnlyBeAccessedByLayers("Controllers", "Services")
+            .mayOnlyBeAccessedByLayers("Controllers")
             .whereLayer("Repositories")
             .mayOnlyBeAccessedByLayers("Services");
     
