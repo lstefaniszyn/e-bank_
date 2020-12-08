@@ -30,7 +30,7 @@ public class LayeredArchitectureTest {
     // }
     
     @ArchTest
-    static final ArchRule layer_dependencies_are_respected = freeze(layeredArchitecture()
+    static final ArchRule layer_dependencies_are_respected = layeredArchitecture()
             .layer("Controllers")
             .definedBy("com.example.ebank.controllers..")
             .layer("Services")
@@ -40,9 +40,9 @@ public class LayeredArchitectureTest {
             .whereLayer("Controllers")
             .mayNotBeAccessedByAnyLayer()
             .whereLayer("Services")
-            .mayOnlyBeAccessedByLayers("Controllers")
+            .mayOnlyBeAccessedByLayers("Controllers", "Services")
             .whereLayer("Repositories")
-            .mayOnlyBeAccessedByLayers("Services"));
+            .mayOnlyBeAccessedByLayers("Services");
     
     // @ArchTest
     // static final ArchRule layer_dependencies_are_respected_with_exception = layeredArchitecture()
