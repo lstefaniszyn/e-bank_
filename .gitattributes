@@ -1,0 +1,7 @@
+#Resolving Git line ending issues in containers (resulting in many modified files)
+#Linux
+* text=auto eol=lf
+
+#Windows
+*.{cmd,[cC][mM][dD]} text eol=crlf
+*.{bat,[bB][aA][tT]} text eol=crlf

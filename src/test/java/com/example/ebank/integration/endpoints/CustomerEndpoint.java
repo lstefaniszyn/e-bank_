@@ -8,20 +8,21 @@ import net.serenitybdd.rest.SerenityRest;
 
 @Component
 public class CustomerEndpoint {
-
-    private static final String RESOURCE = "/api/v1/customers/";
+    
+    private static final String RESOURCE = "/api";
     private final String endpoint;
-
+    
     public CustomerEndpoint(@Value("${it.host}") String hostToTest) {
         endpoint = hostToTest + RESOURCE;
     }
-
+    
     public Response sendGetQuery() {
-        return SerenityRest.when().get(endpoint);
+        return SerenityRest.when()
+                .get(endpoint);
     }
-
+    
     public String getEndpoint() {
         return endpoint;
     }
-
+    
 }

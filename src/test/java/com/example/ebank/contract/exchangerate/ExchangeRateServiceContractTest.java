@@ -19,21 +19,21 @@ import com.example.ebank.extapi.client.FeignAPIClient;
 import com.example.ebank.models.Currency;
 
 @RunWith(SpringRunner.class)
-@AutoConfigureStubRunner(ids = "com.example:exchangerate:+:stubs:8095", stubsMode = StubsMode.LOCAL)
-@SpringBootTest(classes = EBankApplication.class, webEnvironment = WebEnvironment.MOCK, properties = { "service.exchangerate.url=http://localhost:8095/" })
+@AutoConfigureStubRunner(ids = "com.example:exchangerate:+:stubs:8099", stubsMode = StubsMode.LOCAL)
+@SpringBootTest(classes = EBankApplication.class, webEnvironment = WebEnvironment.MOCK, properties = { "service.exchangerate.url=http://localhost:8099/" })
 @DirtiesContext
 @ActiveProfiles({ "mock", "it-local" })
 public class ExchangeRateServiceContractTest {
-	
-	@Autowired
-	private FeignAPIClient apiClient;
-	
-	@Test
-	public void testExchangerateEndpoint() throws Exception {
-		
-		InlineResponse200Dto response = apiClient.getExchangeRate(Currency.EUR.getCode(), Currency.GBP.getCode());
-		
-		assertThat(response).isNotNull();
-		assertThat(response.getValue()).isEqualByComparingTo(Double.valueOf("0.90872"));
-	}
+    
+    @Autowired
+    private FeignAPIClient apiClient;
+    
+    @Test
+    public void testExchangerateEndpoint() throws Exception {
+        
+        InlineResponse200Dto response = apiClient.getExchangeRate(Currency.EUR.getCode(), Currency.GBP.getCode());
+        
+        assertThat(response).isNotNull();
+        assertThat(response.getValue()).isEqualByComparingTo(Double.valueOf("0.90872"));
+    }
 }
