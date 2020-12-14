@@ -61,7 +61,7 @@
                         <artifactId>maven-failsafe-plugin</artifactId>
                         <configuration>
                             <systemPropertyVariables>
-                                <spring.profiles.active>dev,it-dev</spring.profiles.active>
+                                <spring.profiles.active>dev,it</spring.profiles.active>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
@@ -87,7 +87,7 @@
                         <artifactId>maven-failsafe-plugin</artifactId>
                         <configuration>
                             <systemPropertyVariables>
-                                <spring.profiles.active>local,it-local</spring.profiles.active>
+                                <spring.profiles.active>local,it</spring.profiles.active>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
@@ -107,7 +107,7 @@
                         <artifactId>maven-failsafe-plugin</artifactId>
                         <configuration>
                             <systemPropertyVariables>
-                                <spring.profiles.active>mock,it-dev</spring.profiles.active>
+                                <spring.profiles.active>mock,it</spring.profiles.active>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>

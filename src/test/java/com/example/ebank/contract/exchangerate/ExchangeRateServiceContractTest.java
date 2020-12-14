@@ -22,17 +22,17 @@ import com.example.ebank.models.Currency;
 @AutoConfigureStubRunner(ids = "com.example:exchangerate:+:stubs:8095", stubsMode = StubsMode.LOCAL)
 @SpringBootTest(classes = EBankApplication.class, webEnvironment = WebEnvironment.MOCK, properties = { "service.exchangerate.url=http://localhost:8095/" })
 @DirtiesContext
-@ActiveProfiles({ "mock", "it-local" })
+@ActiveProfiles({ "mock", "it" })
 public class ExchangeRateServiceContractTest {
-	
+
 	@Autowired
 	private FeignAPIClient apiClient;
-	
+
 	@Test
 	public void testExchangerateEndpoint() throws Exception {
-		
+
 		InlineResponse200Dto response = apiClient.getExchangeRate(Currency.EUR.getCode(), Currency.GBP.getCode());
-		
+
 		assertThat(response).isNotNull();
 		assertThat(response.getValue()).isEqualByComparingTo(Double.valueOf("0.90872"));
 	}
