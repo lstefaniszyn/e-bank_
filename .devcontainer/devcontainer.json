@@ -21,6 +21,11 @@
 		// }]
 	},
 	
+	"mounts": [
+		"source=${env:HOMEDRIVE}${env:HOMEPATH}\\.m2\\repository,target=/root/.m2/repository,type=bind,consistency=cached"
+	],
+
+
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		"vscjava.vscode-java-pack",
