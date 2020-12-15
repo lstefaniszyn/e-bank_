@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.3.4.RELEASE</version>
+  </parent>
+  <groupId>com.example</groupId>
+  <artifactId>exchangerate</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <name>e-bank-exchange-rate</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>11</java.version>
+    <spring.mainClass>com.example.exchangerate.microservice.ExchangeRateApplication</spring.mainClass>
+
+    <!-- Consumer Driven Contract -->
+    <spring-cloud-contract.version>2.2.4.RELEASE</spring-cloud-contract.version>
+    <openapitools-version>4.3.1</openapitools-version>
+    <mapstruct-version>1.4.1.Final</mapstruct-version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter</artifactId>
+      <version>2.2.6.RELEASE</version>
+    </dependency>
+
+    <!-- Consumer Driver contract  -->
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-contract-verifier</artifactId>
+      <version>${spring-cloud-contract.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.mockito</groupId>
+          <artifactId>mockito-junit-jupiter</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.mockito</groupId>
+          <artifactId>mockito-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20180130</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>3.6.0</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.openapitools</groupId>
+      <artifactId>openapi-generator</artifactId>
+      <version>${openapitools-version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.openapitools</groupId>
+      <artifactId>jackson-databind-nullable</artifactId>
+      <version>0.2.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+      <version>${mapstruct-version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct-processor</artifactId>
+      <version>${mapstruct-version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <version>${openapitools-version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <generatorName>spring</generatorName>
+              <inputSpec>${project.basedir}/docs/api/openapi.yml</inputSpec>
+              <configOptions>
+                <sourceFolder>src/main/java</sourceFolder>
+                <library>spring-boot</library>
+                <dateLibrary>java11</dateLibrary>
+                <java11>true</java11>
+                <interfaceOnly>true</interfaceOnly>
+                <skipDefaultInterface>true</skipDefaultInterface>
+                <useTags>true</useTags>
+              </configOptions>
+              <modelPackage>com.example.exchangerate.generated.dto</modelPackage>
+              <modelNameSuffix>Dto</modelNameSuffix>
+              <apiPackage>com.example.exchangerate.generated.api</apiPackage>
+              <generateSupportingFiles>false</generateSupportingFiles>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>${spring.mainClass}</mainClass>
+        </configuration>
+      </plugin>
+
+      <!-- Consumer Driver contract  -->
+      <plugin>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-contract-maven-plugin</artifactId>
+        <version>${spring-cloud-contract.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <contractsDirectory>${project.basedir}/src/test/resources/contracts</contractsDirectory>
+          <!-- Create package name for your auto-generated tests -->
+          <basePackageForTests>com.example.exchangerate.microservice.autogenerate</basePackageForTests>
+          <!-- If there’s a contract under /com/example/ebank/api/<folderName>/*.groovy` then we’ll search for a <folderName>Base.java files -->
+          <packageWithBaseClasses>com.example.exchangerate.microservice.api</packageWithBaseClasses>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0-M5</version>
+        <configuration>
+          <!-- To avoid ForkedBooter loading issue -->
+          <useSystemClassLoader>false</useSystemClassLoader>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
