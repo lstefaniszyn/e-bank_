@@ -23,14 +23,23 @@
 	
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
-		"vscjava.vscode-java-pack"
+		"vscjava.vscode-java-pack",
+		"markis.code-coverage", 
+		"streetsidesoftware.code-spell-checker",
+		"ryanluker.vscode-coverage-gutters",
+		"wesleyegberto.vscode-java-tests",
+		"sonarsource.sonarlint-vscode",
+		"emilylilylime.vscode-test-explorer-diagnostics",
+		"connorshea.vscode-test-explorer-status-bar",
+		"hbenl.vscode-test-explorer",
+		"redhat.vscode-xml"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [8080],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": ["java --version", "maven --version"],
+	// "postCreateCommand": ["java --version", "maven --version"],
 
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	// "remoteUser": "vscode"
