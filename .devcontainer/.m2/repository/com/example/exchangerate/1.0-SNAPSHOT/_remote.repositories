@@ -1,5 +1,0 @@
-#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
-#Mon Dec 14 10:56:58 CET 2020
-exchangerate-1.0-SNAPSHOT.pom>=
-exchangerate-1.0-SNAPSHOT-stubs.jar>=
-exchangerate-1.0-SNAPSHOT.jar>=
