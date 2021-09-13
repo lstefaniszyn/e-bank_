@@ -592,6 +592,8 @@
                 <version>2.10.0</version>
                 <configuration>
                     <reportVersion>${allure-cli-runner.version}</reportVersion>
+                    <installDirectory>${project.build.directory}</installDirectory>
+                    <allureDownloadUrl>file:///${project.basedir}/Utility/allure-commandline-2.10.0.zip</allureDownloadUrl>
                 </configuration>
                 <executions>
                     <execution>
