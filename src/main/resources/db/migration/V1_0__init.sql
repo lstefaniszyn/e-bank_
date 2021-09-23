@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS public.customer
     identity_key character varying(50),
     PRIMARY KEY (id)
 );
---ALTER TABLE public.customer OWNER to postgres;
+--ALTER TABLE public.customer OWNER to myadmin;
 
 CREATE TABLE IF NOT EXISTS public.account
 (
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS public.account
     PRIMARY KEY (id),
     CONSTRAINT cust_fk FOREIGN KEY (customer_id) REFERENCES public.customer (id) 
 );
---ALTER TABLE public.account  OWNER to postgres;
+--ALTER TABLE public.account  OWNER to myadmin;
 
 CREATE TABLE IF NOT EXISTS public.account_transaction
 (
@@ -32,4 +32,4 @@ CREATE TABLE IF NOT EXISTS public.account_transaction
     PRIMARY KEY (id),
     CONSTRAINT account_fk FOREIGN KEY (account_id) REFERENCES public.account (id)
 );
---ALTER TABLE public.account_transaction OWNER to postgres;
+--ALTER TABLE public.account_transaction OWNER to myadmin;
