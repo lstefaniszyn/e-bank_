@@ -590,16 +590,20 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
-                <configuration>
-                    <!-- To avoid ForkedBooter loading issue -->
-                    <forkCount>0</forkCount>
-                    <!-- <useSystemClassLoader>false</useSystemClassLoader>
-                    <argLine>${argLine} -Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine> -->
-                    <systemPropertyVariables>
-                        <allure.results.directory>target/allure/results/unit</allure.results.directory>
-                    </systemPropertyVariables>
-                    <skipTests>${skip.surefire.tests}</skipTests>
-                </configuration>
+                <executions>
+                    <execution>
+                        <id>unit-tests</id>
+                        <configuration>
+                            <!-- To avoid ForkedBooter loading issue -->
+                            <forkCount>3</forkCount>
+                            <reuseForks>true</reuseForks>
+                            <argLine>${argLine} -Xmx1024m -noverify</argLine>
+                            <systemPropertyVariables>
+                                <allure.results.directory>target/allure/results/unit</allure.results.directory>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
