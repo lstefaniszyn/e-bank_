@@ -193,7 +193,7 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.6</version>
+                        <version>0.8.7</version>
                         <executions>
                             <execution>
                                 <id>default-prepare-agent</id>
@@ -595,9 +595,10 @@
                         <id>unit-tests</id>
                         <configuration>
                             <!-- To avoid ForkedBooter loading issue -->
-                            <forkCount>3</forkCount>
-                            <reuseForks>true</reuseForks>
-                            <argLine>${argLine} -Xmx1024m -noverify</argLine>
+                            <reuseForks>false</reuseForks>
+                            <argLine>${argLine} -Xmx1024m -Dfile.encoding=UTF-8</argLine>
+                            <useSystemClassLoader>false</useSystemClassLoader>
+                            <forkedProcessExitTimeoutInSeconds>1200</forkedProcessExitTimeoutInSeconds>
                             <systemPropertyVariables>
                                 <allure.results.directory>target/allure/results/unit</allure.results.directory>
                             </systemPropertyVariables>
