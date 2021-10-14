@@ -389,3 +389,21 @@ Integration tests use additional Spring profiles `it-{environment}`. Properties 
 ## Logging
 
 For logging, simply use `com.example.ebank.utils.logger.BFLogger` class and it's static methods (`logInfo`, `logWarn`, etc.)
+
+
+## Java Spring Boot - Actuator
+
+### Environment Spring configuration 
+
+#### How to update on the fly variables 
+1. Enable variable update:
+* management.security.enabled=false
+* management.endpoint.env.post.enabled=true
+2. Update variable  
+curl -X POST localhost:8080/actuator/env -d'{"name":"info.application.name","value":"myTest"}' -H "Content-type: application/json"
+curl -X GET localhost:8080/actuator/env/info.application.name
+
+
+### Return metrics about number of API requests  
+curl localhost:8080/actuator/metrics/http.server.requests?tag=status:200 | python -m json.tool
+
