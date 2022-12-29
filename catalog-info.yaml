@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: e-bank_
+  annotations:
+    github.com/project-slug: lstefaniszyn/e-bank_
+spec:
+  type: other
+  lifecycle: unknown
+  owner: lstefaniszyn
