@@ -1,7 +1,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: e-bank_
+  name: e-bank
   annotations:
     github.com/project-slug: lstefaniszyn/e-bank_
 spec:
