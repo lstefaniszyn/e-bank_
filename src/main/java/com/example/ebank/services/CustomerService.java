@@ -28,4 +28,5 @@ public class CustomerService {
     public Optional<Customer> findOneByIdentityKey(Long id, String identityKey) {
         return customerRepository.findByIdAndIdentityKey(id, identityKey);
     }
+
 }

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Api(tags = "customer")
 @RestController
 public class CustomerController extends BasicController implements CustomerApi {
 
@@ -38,4 +37,5 @@ public class CustomerController extends BasicController implements CustomerApi {
         Customer customer = getValidatedCustomer(id);
         return ResponseEntity.ok(customerMapper.toDto(customer));
     }
+    
 }

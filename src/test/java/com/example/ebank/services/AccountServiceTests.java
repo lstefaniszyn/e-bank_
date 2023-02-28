@@ -1,24 +1,26 @@
 package com.example.ebank.services;
 
-import com.example.ebank.models.Account;
-import com.example.ebank.models.Currency;
-import com.example.ebank.repositories.AccountRepository;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-
-import javax.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.Optional;
-
 import static com.example.ebank.services.CustomerServiceTests.randomString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import com.example.ebank.models.Account;
+import com.example.ebank.models.Currency;
+import com.example.ebank.repositories.AccountRepository;
+
+@ExtendWith(SpringExtension.class)
 public class AccountServiceTests {
 
     @Mock

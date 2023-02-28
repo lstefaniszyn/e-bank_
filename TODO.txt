@@ -1,0 +1,16 @@
+DONE Use E-bank repo but move only what is needed from GC
+DONE    Allow compilation for the combined API  - Use this git history https://github.com/lstefaniszyn/e-bank_/blob/60b23155995c6cd2fa1bd36b163fae4612ce0da7/src/main/java/com/example/ebank/controllers/TransactionController.java
+TODO JWT token, how to use it 
+DONE Add SQL database into startup 
+TODO Split pom into Parents 
+TODO Separate Logger to other Parent pom.xml
+TODO Separate Authetication (JWT, Azure AD) to other Parent pom.xml
+TODO Separate Exchange API into Parent
+DONE Remove in-memory H2
+TODO Exception from 500 "internal server error"  must not be visible in response to the client
+TODO Check Unit Tests 
+
+
+TODO Pipeline  Jenkins or Azure
+TODO Decide Database type SQL and  NOSQL
+TODO Add MrChecker in the Integration tests

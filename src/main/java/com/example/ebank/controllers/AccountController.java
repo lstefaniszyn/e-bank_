@@ -7,15 +7,10 @@ import com.example.ebank.mappers.AccountMapper;
 import com.example.ebank.mappers.TransactionMapper;
 import com.example.ebank.models.Account;
 import com.example.ebank.models.Transaction;
-import com.example.ebank.models.TransactionRequest;
 import com.example.ebank.services.AccountService;
-import com.example.ebank.services.AsyncTransactionService;
 import com.example.ebank.services.CustomerService;
-import com.example.ebank.services.TransactionRequestProducer;
 import com.example.ebank.services.TransactionService;
-import com.example.ebank.utils.KafkaServerProperties;
 import com.example.ebank.utils.SecurityContextUtils;
-import com.example.ebank.utils.logger.BFLogger;
 import io.swagger.annotations.Api;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +21,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
-@Api(tags = "account")
+
 @RestController
 public class AccountController extends BasicController implements AccountApi {
 
@@ -42,27 +35,18 @@ public class AccountController extends BasicController implements AccountApi {
     private final TransactionService transactionService;
     private final AccountMapper accountMapper;
     private final TransactionMapper transactionMapper;
-    private final KafkaServerProperties kafkaProperties;
-    private final AsyncTransactionService asyncTransactionService;
-    private final TransactionRequestProducer transactionRequestProducer;
 
     public AccountController(CustomerService customerService,
-        AccountService accountService,
-        AccountMapper accountMapper,
-        TransactionService transactionService,
-        TransactionMapper transactionMapper,
-        KafkaServerProperties kafkaProperties,
-        AsyncTransactionService asyncTransactionService,
-        SecurityContextUtils securityContextUtils,
-        TransactionRequestProducer transactionRequestProducer) {
+            AccountService accountService,
+            AccountMapper accountMapper,
+            TransactionService transactionService,
+            TransactionMapper transactionMapper,
+            SecurityContextUtils securityContextUtils) {
         super(customerService, securityContextUtils);
         this.accountService = accountService;
         this.accountMapper = accountMapper;
         this.transactionService = transactionService;
         this.transactionMapper = transactionMapper;
-        this.kafkaProperties = kafkaProperties;
-        this.asyncTransactionService = asyncTransactionService;
-        this.transactionRequestProducer = transactionRequestProducer;
     }
 
     @Override
@@ -85,23 +69,9 @@ public class AccountController extends BasicController implements AccountApi {
         Account account = accountService.getOneForCustomer(accountId, customerId);
 
         LocalDate date = LocalDate.parse(dateString, DATE_FORMATTER);
-        Page<Transaction> resultPage = Page.empty();
 
-        if (kafkaProperties.readMockedTransactions()) {
-            CompletableFuture<TransactionRequest> producer = transactionRequestProducer.send(customerId, accountId,
-                    date);
-            CompletableFuture<Page<Transaction>> resultPageFuture = asyncTransactionService.findInMonthPaginated(date,
-                    page, size);
-            CompletableFuture.allOf(producer, resultPageFuture);
-            try {
-                resultPage = resultPageFuture.get();
-            } catch (InterruptedException | ExecutionException e) {
-                BFLogger.logError("Error during reading mocked data from Kafka" + e.toString());
-            }
-        } else {
-            resultPage = transactionService.findForAccountInMonthPaginated(account.getId(), date, page, size);
-        }
-
+        Page<Transaction> resultPage = transactionService.findForAccountInMonthPaginated(account.getId(), date, page,
+                size);
         return ResponseEntity.ok(transactionMapper.toTransactionPageDto(resultPage));
     }
 

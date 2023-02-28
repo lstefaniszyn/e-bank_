@@ -1,17 +1,20 @@
-openapi: "3.0.0"
+openapi: "3.0.3"
 info:
-    title: Swagger E-Banking
-    description: This is E-banking server.
+    title: "BFF-ebank API"
     termsOfService: "http://swagger.io/terms/"
-    contact:
-        email: lukasz.stefaniszyn@capgemini.com
-    license:
-        name: Apache 2.0
-        url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-    version: "1.0.0"
+    description: "This is E-banking API blueprint application."
+    version: "0.0.1"
+
 servers:
-    - url: "{protocol}://10.40.234.149:{port}/api/v1"
+    - url: "{protocol}://ebank-{env}.blueprint.com:{port}/myapi"
+      description: "Target server"
       variables:
+          env:
+              enum:
+                  - "dev"
+                  - "qa"
+                  - "pr"
+              default: "dev"
           protocol:
               enum:
                   - "http"
@@ -21,17 +24,37 @@ servers:
               enum:
                   - "8080"
                   - "8443"
+                  - "443"
               default: "8080"
+
+    - url: "https://ebank-qa.blueprint.com:443/myapi"
+      description: "QA server environment"
+
+    - url: "https://ebank-pr.blueprint.com:443/myapi"
+      description: "Production server environment"
+
+    - url: "http://localhost:{port}"
+      description: "Local server environment"
+      variables:
+           port:
+              enum:
+                  - "8080"
+                  - "8443"
+                  - "443"
+              default: "8080"
+
 tags:
-    - name: customer
+    - name: Customer
       description: Operations about customer
-    - name: account
+    - name: Account
       description: Operations about account
+    - name: App
+      description: Operations about this application
 paths:
-    "/api":
+    "/v1/api":
         get:
             tags:
-                - app
+                - App
             summary: Get API status
             operationId: getStatus
             responses:
@@ -47,10 +70,10 @@ paths:
                 "404":
                     description: Error
                     content: {}
-    "/api/v1/customers":
+    "/v1/customers":
         get:
             tags:
-                - customer
+                - Customer
             summary: Get all customers
             operationId: getCustomers
             responses:
@@ -65,10 +88,10 @@ paths:
                 "400":
                     description: Invalid request format
                     content: {}
-    "/api/v1/customers/{customerId}":
+    "/v1/customers/{customerId}":
         get:
             tags:
-                - customer
+                - Customer
             summary: Get customer by customerId
             operationId: getCustomerById
             security:
@@ -89,15 +112,15 @@ paths:
                             schema:
                                 $ref: "#/components/schemas/Customer"
                 "400":
-                    $ref: '#/components/responses/InvalidCustomerId'
+                    $ref: "#/components/responses/InvalidCustomerId"
                 "401":
-                    $ref: '#/components/responses/UnauthorizedError'
+                    $ref: "#/components/responses/UnauthorizedError"
                 "404":
-                    $ref: '#/components/responses/CustomerNotFound'
-    "/api/v1/customers/{customerId}/accounts":
+                    $ref: "#/components/responses/CustomerNotFound"
+    "/v1/customers/{customerId}/accounts":
         get:
             tags:
-                - account
+                - Account
             summary: Get customer's accounts
             operationId: getCustomerAccounts
             security:
@@ -120,15 +143,15 @@ paths:
                                 items:
                                     $ref: "#/components/schemas/Account"
                 "400":
-                    $ref: '#/components/responses/IvalidCustomerId'
+                    $ref: "#/components/responses/InvalidCustomerId"
                 "401":
-                    $ref: '#/components/responses/UnauthorizedError'
+                    $ref: "#/components/responses/UnauthorizedError"
                 "404":
-                    $ref: '#/components/responses/CustomerNotFound'
-    "/api/v1/customers/{customerId}/accounts/{accountId}":
+                    $ref: "#/components/responses/CustomerNotFound"
+    "/v1/customers/{customerId}/accounts/{accountId}":
         get:
             tags:
-                - account
+                - Account
             summary: Get customer's account
             operationId: getCustomerAccount
             security:
@@ -159,13 +182,13 @@ paths:
                     description: Invalid customer id or account id supplied. Must be long greater than 0.
                     content: {}
                 "401":
-                    $ref: '#/components/responses/UnauthorizedError'
+                    $ref: "#/components/responses/UnauthorizedError"
                 "404":
-                    $ref: '#/components/responses/CustomerOrAccountNotFound'
-    "/api/v1/customers/{customerId}/accounts/{accountId}/transactions":
+                    $ref: "#/components/responses/CustomerOrAccountNotFound"
+    "/v1/customers/{customerId}/accounts/{accountId}/transactions":
         get:
             tags:
-                - account
+                - Account
             summary: Get account's transactions
             operationId: getAccountTransactions
             security:
@@ -218,9 +241,9 @@ paths:
                     description: Bad request. One or more provided parameters are invalid.
                     content: {}
                 "401":
-                    $ref: '#/components/responses/UnauthorizedError'
+                    $ref: "#/components/responses/UnauthorizedError"
                 "404":
-                    $ref: '#/components/responses/CustomerOrAccountNotFound'
+                    $ref: "#/components/responses/CustomerOrAccountNotFound"
 components:
     securitySchemes:
         bearerAuth:
@@ -242,7 +265,7 @@ components:
             content: {}
         InvalidCustomerId:
             description: Invalid customer id supplied. Must be long greater than 0.
-            content: { }
+            content: {}
     schemas:
         Currency:
             type: object

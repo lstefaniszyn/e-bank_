@@ -1,4 +1,4 @@
-package com.example.ebank.configuration;
+package com.example.ebank.configuration.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

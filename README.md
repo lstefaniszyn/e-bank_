@@ -19,7 +19,7 @@ Section describes additional setup that is needed if you are going to contribute
 
 Import code formatter into your IDE
 
-Download: [Format_code_standards](Utility/eclipse_format_code_standards.xml)
+Download: [Format_code_standards](Utility/format_code_standards.xml)
 
 #### IntelliJ
 
@@ -50,8 +50,22 @@ Git hooks installation is required.
 ## Endpoints
 
 -   Application - http://localhost:8080/
--   Swagger UI - http://localhost:8080/swagger-ui.html
--   Application status - http://localhost:8080/api/
+-   Swagger UI - http://localhost:8080/swagger-ui/index.html
+-   Application status - http://localhost:8080/v1/api
+-   Health API - http://localhost:8080/actuator/health
+
+## Docker-compose 
+
+For profile "local" you would need to start local few component, like: 
+-   PostgreSQL
+-   SwaggerUI
+
+To run it: 
+> cd ./docker
+> docker compose up 
+
+To remove it: 
+> docker compose down --volumes
 
 ## Building & running
 
@@ -59,6 +73,8 @@ To run spring app with application-{profile_name}.properties Profile. Default is
 
 > mvn -Pmock spring-boot:run
 
+
+`Before non "mock" profile please run [Docker-Compose](#Docker-compose)`
 > mvn -Plocal spring-boot:run
 
 > mvn -Pdev spring-boot:run
@@ -237,6 +253,29 @@ Please be aware that
 Flyway scripts can be attached to profile by `spring.flyway.locations` property, e.g.:
 
 > spring.flyway.locations=classpath:db/migration,classpath:db/generate
+
+
+### Manually Repair the Database State
+
+
+https://www.baeldung.com/spring-boot-flyway-repair#manually-repair-the-database-state
+
+This will automatically remove any failed entry from the Flyway state history, whenever a migration error occurs.
+> DELETE FROM flyway_schema_history WHERE success=false;
+
+### Migration checksum mismatch
+
+Error message like:
+
+> Migration checksum mismatch for migration version 1.1
+> -> Applied to database : 314944264
+> -> Resolved locally    : 1304013179
+
+This happens because we altered an already applied migration and Flyway detects an inconsistency.
+
+In order to realign the checksums, we can use the same flyway:repair command. However, this time no migration will be executed. Only the checksum of the version 1.1 entry in the flyway_schema_history table will be updated to reflect the updated migration file.
+
+> mvn flyway:repair -Dflyway.url=jdbc:postgresql://localhost:5432/postgres -Dflyway.user=postgres -Dflyway.password=postgres
 
 ## Mock profile
 

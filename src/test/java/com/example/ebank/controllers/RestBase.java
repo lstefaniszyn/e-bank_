@@ -1,4 +1,4 @@
-package com.example.ebank.api;
+package com.example.ebank.controllers;
 
 import com.example.ebank.controllers.AccountController;
 import com.example.ebank.controllers.AppStatusController;
@@ -8,18 +8,14 @@ import com.example.ebank.mappers.*;
 import com.example.ebank.models.Currency;
 import com.example.ebank.models.*;
 import com.example.ebank.services.AccountService;
-import com.example.ebank.services.AsyncTransactionService;
 import com.example.ebank.services.CustomerService;
 import com.example.ebank.services.TransactionService;
-import com.example.ebank.utils.KafkaServerProperties;
 import com.example.ebank.utils.SecurityContextUtils;
-import com.example.ebank.utils.logger.BFLogger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import org.apache.commons.lang.RandomStringUtils;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.apache.commons.lang3.RandomStringUtils;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -39,11 +35,25 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.*;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+
 import static java.lang.String.format;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public abstract class RestBase {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Mock
     AccountService accountService;
@@ -66,12 +76,6 @@ public abstract class RestBase {
     @Spy
     TransactionMapper transactionMapper = new TransactionMapperImpl();
 
-    @Mock
-    KafkaServerProperties kafkaProperties;
-
-    @Mock
-    AsyncTransactionService asyncTransactionService;
-
     @InjectMocks
     CustomerController customerController;
 
@@ -83,15 +87,15 @@ public abstract class RestBase {
 
     private final String authorizedIdentityKey = "P-01";
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    public void setup(TestInfo info) {
         // Mock security service
         given(securityContextUtils.getIdentityKey()).willReturn(authorizedIdentityKey);
 
         // Mock customer service
         given(customerService.getAll()).willReturn(getCustomers());
         given(customerService.findOneByIdentityKey(1L, authorizedIdentityKey))
-            .willReturn(Optional.of(getAuthorizedCustomer()));
+                .willReturn(Optional.of(getAuthorizedCustomer()));
 
         // Mock account service
         given(accountService.getAllForCustomer(1L)).willReturn(getAccounts());
@@ -102,11 +106,11 @@ public abstract class RestBase {
         // Mock transaction service
         final String DATE_FORMAT = "yyyy-MM";
         final DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder()
-            .append(DateTimeFormatter.ofPattern(DATE_FORMAT))
-            .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
-            .toFormatter();
+                .append(DateTimeFormatter.ofPattern(DATE_FORMAT))
+                .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+                .toFormatter();
         LocalDate date = LocalDate.parse("2019-01", DATE_FORMATTER);
-        BFLogger.logDebug("Transactions: " + getPagedTransactions(0, 3));
+        log.debug("Transactions: " + getPagedTransactions(0, 3));
 
         given(transactionService.findForAccountInMonthPaginated(1L, date, 0, 2)).willReturn(getPagedTransactions(0, 2));
         MappingJackson2HttpMessageConverter transactionMessageConverter = new MappingJackson2HttpMessageConverter();
@@ -117,8 +121,7 @@ public abstract class RestBase {
         RestAssuredMockMvc.standaloneSetup(
                 MockMvcBuilders.standaloneSetup(appStatusController, customerController, accountController)
                         .setMessageConverters(transactionMessageConverter)
-                        .setControllerAdvice(responseEntityExceptionHandler)
-                        );
+                        .setControllerAdvice(responseEntityExceptionHandler));
     }
 
     private List<Customer> getCustomers() {
@@ -153,11 +156,11 @@ public abstract class RestBase {
 
     private List<Account> getAccounts() {
         return List.of(
-            getAccount(1L, Currency.CHF),
-            getAccount(2L, Currency.GBP),
-            getAccount(3L, Currency.CHF),
-            getAccount(4L, Currency.EUR),
-            getAccount(5L, Currency.GBP));
+                getAccount(1L, Currency.CHF),
+                getAccount(2L, Currency.GBP),
+                getAccount(3L, Currency.CHF),
+                getAccount(4L, Currency.EUR),
+                getAccount(5L, Currency.GBP));
     }
 
     private Account getAccount(Long id, Currency currency) {

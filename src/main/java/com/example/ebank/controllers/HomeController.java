@@ -1,4 +1,4 @@
-package com.example.ebank.configuration;
+package com.example.ebank.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +11,7 @@ public class HomeController {
     
     @RequestMapping(value = "/")
     public String index() {
-        return "redirect:swagger-ui.html";
+        return "redirect:swagger-ui/index.html";
     }
+    
 }
